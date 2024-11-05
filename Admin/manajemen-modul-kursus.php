@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>List Data Pengguna</title>
+    <title>SISFO - Mata Kuliah List</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -67,9 +67,9 @@
         Manajemen Pengguna
       </a>
       <div class="collapse" id="manajemenPengguna">
-        <a href="data-pengguna.html">Data Pengguna</a>
-        <a href="monitoring-aktivitas.html">Monitoring Aktivitas Pengguna</a>
-        <a href="manajemen-sertifikat.html">Sertifikat Pengguna</a>
+        <a href="data-pengguna.php">Data Pengguna</a>
+        <a href="monitoring-aktivitas.php">Monitoring Aktivitas Pengguna</a>
+        <a href="manajemen-sertifikat.php">Sertifikat Pengguna</a>
       </div>
 
       <!-- Dropdown Manajemen Kursus -->
@@ -84,9 +84,9 @@
         Manajemen Kursus
       </a>
       <div class="collapse" id="manajemenKursus">
-        <a href="manajemen-jadwal-kursus.html">Jadwal Kursus</a>
-        <a href="manajemen-materi-kursus.html">Materi Kursus</a>
-        <a href="manajemen-modul-kursus.html">Modul Kursus</a>
+        <a href="manajemen-jadwal-kursus.php">Jadwal Kursus</a>
+        <a href="manajemen-materi-kursus.php">Materi Kursus</a>
+        <a href="manajemen-modul-kursus.php">Modul Kursus</a>
       </div>
 
       <!-- Dropdown Manajemen Pembayaran -->
@@ -101,10 +101,10 @@
         Manajemen Pembayaran
       </a>
       <div class="collapse" id="manajemenPembayaran">
-        <a href="manajemen-pembayaran.html">Riwayat Pembayaran</a>
+        <a href="manajemen-pembayaran.php">Riwayat Pembayaran</a>
       </div>
 
-      <a href="index.html">Logout</a>
+      <a href="index.php">Logout</a>
     </div>
 
     <!-- Header/Navbar -->
@@ -144,13 +144,17 @@
         </div>
       </div>
     </nav>
-
     <!-- Main Content -->
     <div class="content pt-5 mt-3">
       <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-          <h3>List Data Pengguna</h3>
-          <!-- .ikm               -->
+          <h3>MODUL KURSUS</h3>
+          <div>
+            <button class="btn btn-danger me-2">Create</button>
+            <button class="btn btn-primary me-2">Excel</button>
+            <button class="btn btn-primary me-2">Word</button>
+            <button class="btn btn-primary">PDF</button>
+          </div>
         </div>
 
         <div class="table-responsive">
@@ -158,21 +162,20 @@
             <thead>
               <tr>
                 <th>No</th>
-                <th>ID</th>
-                <th>Nama</th>
-                <th>Username</th>
-                <th>Password</th>
-                <th>Email</th>
+                <th>ID Materi</th>
+                <th>Nama Materi</th>
+                <th>ID Modul</th>
+                <th>Nama Modul</th>
+                <th>Aksi</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>1</td>
-                <td>001</td>
-                <td>Intan Aulia Rosydah</td>
-                <td>Intan Aulia</td>
-                <td>89skw!</td>
-                <td>intan@gmail.com</td>
+                <td>K001</td>
+                <td>Belajar Dasar AI</td>
+                <td>M101</td>
+                <td>Pengenalan Kecerdasan Buatan</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
@@ -180,11 +183,10 @@
               </tr>
               <tr>
                 <td>2</td>
-                <td>002</td>
-                <td>Agniesa Junica Putri</td>
-                <td>Agniesa Junica</td>
-                <td>kad90*1</td>
-                <td>Agniesa@gmail.com</td>
+                <td>K001</td>
+                <td>Belajar Dasar AI</td>
+                <td>M102</td>
+                <td>Komponen Utama Kecerdasan Buatan</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
@@ -192,11 +194,10 @@
               </tr>
               <tr>
                 <td>3</td>
-                <td>003</td>
-                <td>Fitri Aisyah Ramadhani</td>
-                <td>Fitri Aisyah</td>
-                <td>ow76#!</td>
-                <td>Fitri@gmail.com</td>
+                <td>K001</td>
+                <td>Belajar Dasar AI</td>
+                <td>M103</td>
+                <td>Implementasi AI Sederhana</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
@@ -204,11 +205,10 @@
               </tr>
               <tr>
                 <td>4</td>
-                <td>004</td>
-                <td>M. Yasir Rahmatullah</td>
-                <td>M. Yasir</td>
-                <td>oaa723!</td>
-                <td>Yasir@gmail.com</td>
+                <td>K002</td>
+                <td>Belajar Dasar Machine Learning</td>
+                <td>M201</td>
+                <td>Pengenalan Machine Learning</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
@@ -216,11 +216,10 @@
               </tr>
               <tr>
                 <td>5</td>
-                <td>005</td>
-                <td>Michael Fernando</td>
-                <td>Fernando</td>
-                <td>iswe34#!</td>
-                <td>Fernando@gmail.com</td>
+                <td>K002</td>
+                <td>Belajar Dasar Machine Learning</td>
+                <td>M202</td>
+                <td>Dataset dan Preprocessing</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
@@ -228,23 +227,22 @@
               </tr>
               <tr>
                 <td>6</td>
-                <td>006</td>
-                <td>Michael Fernando</td>
-                <td>Fernando</td>
-                <td>iswe34#!</td>
-                <td>Fernando@gmail.com</td>
+                <td>K002</td>
+                <td>Belajar Dasar Machine Learning</td>
+                <td>M203</td>
+                <td>Membangun Model Machine Learning Pertama</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
                 </td>
               </tr>
+              <tr></tr>
               <tr>
                 <td>7</td>
-                <td>007</td>
-                <td>Michael Fernando</td>
-                <td>Fernando</td>
-                <td>iswe34#!</td>
-                <td>Fernando@gmail.com</td>
+                <td>K003</td>
+                <td>Belajar Dasar Pemrograman</td>
+                <td>M301</td>
+                <td>Pengenalan Konsep Dasar Pemrograman</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
@@ -252,11 +250,10 @@
               </tr>
               <tr>
                 <td>8</td>
-                <td>008</td>
-                <td>Michael Fernando</td>
-                <td>Fernando</td>
-                <td>iswe34#!</td>
-                <td>Fernando@gmail.com</td>
+                <td>K003</td>
+                <td>Belajar Dasar Pemrograman</td>
+                <td>M302</td>
+                <td>Penggunaan Kondisi dan Perulangan</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
@@ -264,11 +261,10 @@
               </tr>
               <tr>
                 <td>9</td>
-                <td>009</td>
-                <td>Michael Fernando</td>
-                <td>Fernando</td>
-                <td>iswe34#!</td>
-                <td>Fernando@gmail.com</td>
+                <td>K003</td>
+                <td>Belajar Dasar Pemrograman</td>
+                <td>M303</td>
+                <td>Fungsi dan Modularitas</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
@@ -276,11 +272,65 @@
               </tr>
               <tr>
                 <td>10</td>
-                <td>010</td>
-                <td>Michael Fernando</td>
-                <td>Fernando</td>
-                <td>iswe34#!</td>
-                <td>Fernando@gmail.com</td>
+                <td>K004</td>
+                <td>Belajar Dasar Pemrograman Web</td>
+                <td>M401</td>
+                <td>HTML dan Struktur Dasar Web</td>
+                <td>
+                  <button class="btn btn-warning btn-sm me-2">Edit</button>
+                  <button class="btn btn-danger btn-sm">Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <td>11</td>
+                <td>K004</td>
+                <td>Belajar Dasar Pemrograman Web</td>
+                <td>M402</td>
+                <td>CSS untuk Styling Website</td>
+                <td>
+                  <button class="btn btn-warning btn-sm me-2">Edit</button>
+                  <button class="btn btn-danger btn-sm">Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <td>12</td>
+                <td>K004</td>
+                <td>Belajar Dasar Pemrograman Web</td>
+                <td>M403</td>
+                <td>Membuat Website Responsif dengan Bootstrap</td>
+                <td>
+                  <button class="btn btn-warning btn-sm me-2">Edit</button>
+                  <button class="btn btn-danger btn-sm">Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <td>13</td>
+                <td>K005</td>
+                <td>Belajar Dasar Pemrograman Game</td>
+                <td>M501</td>
+                <td>Pengenalan Pemrograman Game</td>
+                <td>
+                  <button class="btn btn-warning btn-sm me-2">Edit</button>
+                  <button class="btn btn-danger btn-sm">Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <td>14</td>
+                <td>K005</td>
+                <td>Belajar Dasar Pemrograman Game</td>
+                <td>M502</td>
+                <td>Membuat Game Sederhana</td>
+                <td>
+                  <button class="btn btn-warning btn-sm me-2">Edit</button>
+                  <button class="btn btn-danger btn-sm">Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <td>15</td>
+                <td>K005</td>
+                <td>Belajar Dasar Pemrograman Game</td>
+                <td>M503</td>
+                <td>Pengolahan Grafik dan Animasi</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>

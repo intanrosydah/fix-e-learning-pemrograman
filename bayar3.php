@@ -44,11 +44,11 @@
           <div class="col-md-6 text-end">Rp 5,100,000</div>
         </div>
         <div class="d-flex justify-content-between mt-4">
-          <a href="product.html" class="btn btn-outline-dark">Kembali</a>
+          <a href="product.php" class="btn btn-outline-dark">Kembali</a>
           <button
             type="button"
             class="btn btn-dark"
-            onclick="window.location.href='metode-pembayaran.html'"
+            onclick="window.location.href='metode-pembayaran.php'"
           >
             Bayar
           </button>
@@ -68,9 +68,9 @@
         </div>
         <nav>
           <a href="index.php" class="me-3 text-decoration-none">Home</a>
-          <a href="aboutUs.html" class="me-3 text-decoration-none">About Us</a>
-          <a href="product.html" class="me-3 text-decoration-none">Product</a>
-          <a href="profil.html" class="text-decoration-none">Login</a>
+          <a href="aboutUs.php" class="me-3 text-decoration-none">About Us</a>
+          <a href="product.php" class="me-3 text-decoration-none">Product</a>
+          <a href="profil.php" class="text-decoration-none">Login</a>
         </nav>
         <p class="mt-3">
           &copy; 2024 AIFYCODE Learning | All Rights Reserved. Made With Love

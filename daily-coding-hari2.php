@@ -74,7 +74,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container">
-        <a class="navbar-brand" href="index.html">
+        <a class="navbar-brand" href="index.php">
           <img src="images/new-logo.png" alt="Logo" />
         </a>
         <button
@@ -91,18 +91,18 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="index.html">Home</a>
+              <a class="nav-link" href="index.php">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="progress.html">Progress</a>
+              <a class="nav-link" href="progress.php">Progress</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="daily-coding.html"
+              <a class="nav-link active" href="daily-coding.php"
                 >Daily Coding</a
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="profil.html">Profil</a>
+              <a class="nav-link" href="profil.php">Profil</a>
             </li>
           </ul>
         </div>
@@ -122,7 +122,7 @@
         >
           <h1 class="mb-0">Api Saya</h1>
           <div class="d-flex align-items-center gap-3">
-            <a href="tukar-api.html" class="btn btn-danger">Tukar Api</a>
+            <a href="tukar-api.php" class="btn btn-danger">Tukar Api</a>
             <span class="fs-4 fw-bold">1</span>
           </div>
         </div>
@@ -165,7 +165,7 @@
         <div class="text-center text-dark mt-5">
           <h2>Tantangan Harian - Hari Ke-2</h2>
           <p>Tingkatkan kemampuan coding Anda dengan tantangan harian</p>
-          <a href="daily-coding-hari2-tantangan.html" class="btn btn-dark"
+          <a href="daily-coding-hari2-tantangan.php" class="btn btn-dark"
             >Mulai Tantangan</a
           >
         </div>
@@ -184,10 +184,10 @@
           /></a>
         </div>
         <nav>
-          <a href="index.html" class="me-3 text-decoration-none">Home</a>
-          <a href="aboutUs.html" class="me-3 text-decoration-none">About Us</a>
-          <a href="product.html" class="me-3 text-decoration-none">Product</a>
-          <a href="profil.html" class="text-decoration-none">Login</a>
+          <a href="index.php" class="me-3 text-decoration-none">Home</a>
+          <a href="aboutUs.php" class="me-3 text-decoration-none">About Us</a>
+          <a href="product.php" class="me-3 text-decoration-none">Product</a>
+          <a href="profil.php" class="text-decoration-none">Login</a>
         </nav>
         <p class="mt-3">
           &copy; 2024 AIFYCODE Learning | All Rights Reserved. Made With Love
