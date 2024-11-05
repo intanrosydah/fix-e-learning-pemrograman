@@ -1,0 +1,54 @@
+body {
+  background-color: #092635;
+}
+
+.navbar {
+  padding: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.9);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  transform-origin: center top;
+}
+
+.navbar:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.navbar.zoom-in {
+  transform: scale(1.05);
+}
+
+.navbar.zoom-out {
+  transform: scale(1) translateY(-10px);
+}
+
+.navbar-brand img {
+  max-width: 200px;
+}
+
+.navbar-nav .nav-link {
+  padding: 8px 15px;
+}
+
+footer {
+  background-color: #092635;
+  color: white;
+  padding: 20px;
+}
+
+/* Modal Styling */
+.modal-header {
+  border-bottom: none;
+}
+
+.modal-content {
+  background-color: #092635;
+  color: white;
+}
+
+.modal-title {
+  font-weight: bold;
+}
