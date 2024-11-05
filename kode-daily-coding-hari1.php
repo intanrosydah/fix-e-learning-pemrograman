@@ -76,7 +76,7 @@
    <!-- Navbar -->
    <nav class="navbar navbar-expand-lg navbar-dark">
      <div class="container">
-       <a class="navbar-brand" href="index.html">
+       <a class="navbar-brand" href="index.php">
          <img src="images/new-logo.png" alt="Logo" />
        </a>
        <button
@@ -93,18 +93,18 @@
        <div class="collapse navbar-collapse" id="navbarNav">
          <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link" href="index.html">Home</a>
+            <a class="nav-link" href="index.php">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="progress.html">Progress</a>
+            <a class="nav-link" href="progress.php">Progress</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="daily-coding.html"
+            <a class="nav-link active" href="daily-coding.php"
               >Daily Coding</a
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="profil.html">Profil</a>
+            <a class="nav-link" href="profil.php">Profil</a>
           </li>
          </ul>
        </div>
@@ -132,7 +132,7 @@
 
         <!-- Tombol Kembali ke Tantangan -->
         <div class="mt-4">
-          <a href="daily-coding-hari2.html" class="btn btn-dark">Kembali ke Tantangan</a>
+          <a href="daily-coding-hari2.php" class="btn btn-dark">Kembali ke Tantangan</a>
         </div>
       </section>
     </main>

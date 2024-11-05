@@ -189,7 +189,7 @@
 
           if (name && username && email && password) {
             alert("Login successful!");
-            window.location.href = "profil.html"; // Redirect ke profil.html
+            window.location.href = "profil.php"; // Redirect ke profil.php
           } else {
             alert("Please fill in all fields.");
           }

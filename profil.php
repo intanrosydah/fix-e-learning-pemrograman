@@ -72,7 +72,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container">
-        <a class="navbar-brand" href="profil.html">
+        <a class="navbar-brand" href="profil.php">
           <img src="images/new-logo.png" alt="Logo" />
         </a>
         <button
@@ -89,16 +89,16 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="index.html">Home</a>
+              <a class="nav-link" href="index.php">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="progress.html">Progress</a>
+              <a class="nav-link" href="progress.php">Progress</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="daily-coding.html">Daily Coding</a>
+              <a class="nav-link" href="daily-coding.php">Daily Coding</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="profil.html">Profil</a>
+              <a class="nav-link active" href="profil.php">Profil</a>
             </li>
           </ul>
         </div>
@@ -158,10 +158,10 @@
           /></a>
         </div>
         <nav>
-          <a href="index.html" class="me-3 text-decoration-none">Home</a>
-          <a href="aboutUs.html" class="me-3 text-decoration-none">About Us</a>
-          <a href="product.html" class="me-3 text-decoration-none">Product</a>
-          <a href="profil.html" class="text-decoration-none">Login</a>
+          <a href="index.php" class="me-3 text-decoration-none">Home</a>
+          <a href="aboutUs.php" class="me-3 text-decoration-none">About Us</a>
+          <a href="product.php" class="me-3 text-decoration-none">Product</a>
+          <a href="profil.php" class="text-decoration-none">Login</a>
         </nav>
         <p class="mt-3">
           &copy; 2024 AIFYCODE Learning | All Rights Reserved. Made With Love

@@ -68,7 +68,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
       <div class="container">
-        <a class="navbar-brand" href="index.html">
+        <a class="navbar-brand" href="index.php">
           <img src="images/new-logo.png" alt="Logo" />
         </a>
         <button
@@ -85,16 +85,16 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="index.html">Home</a>
+              <a class="nav-link" href="index.php">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" href="progress.html">Progress</a>
+              <a class="nav-link active" href="progress.php">Progress</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="daily-coding.html">Daily Coding</a>
+              <a class="nav-link" href="daily-coding.php">Daily Coding</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="profil.html">Profil</a>
+              <a class="nav-link" href="profil.php">Profil</a>
             </li>
           </ul>
         </div>
@@ -111,11 +111,11 @@
           class="card-body d-flex justify-content-between align-items-center"
         >
           <h4 class="card-title mb-0">Belajar Dasar Pemrograman</h4>
-          <a href="belajar.html" class="btn btn-dark">Belajar Lagi</a>
+          <a href="belajar.php" class="btn btn-dark">Belajar Lagi</a>
         </div>
         <div class="card-footer">
           <p class="mb-2 mt-2">Selamat, kamu lulus kelas ini!</p>
-          <a href="sertifikat.html" class="btn btn-dark mt-3 mb-4"
+          <a href="sertifikat.php" class="btn btn-dark mt-3 mb-4"
             >Lihat Sertifikat</a
           >
         </div>
@@ -134,10 +134,10 @@
           /></a>
         </div>
         <nav>
-          <a href="index.html" class="me-3 text-decoration-none">Home</a>
-          <a href="aboutUs.html" class="me-3 text-decoration-none">About Us</a>
-          <a href="product.html" class="me-3 text-decoration-none">Product</a>
-          <a href="profil.html" class="text-decoration-none">Login</a>
+          <a href="index.php" class="me-3 text-decoration-none">Home</a>
+          <a href="aboutUs.php" class="me-3 text-decoration-none">About Us</a>
+          <a href="product.php" class="me-3 text-decoration-none">Product</a>
+          <a href="profil.php" class="text-decoration-none">Login</a>
         </nav>
         <p class="mt-3">
           &copy; 2024 AIFYCODE Learning | All Rights Reserved. Made With Love

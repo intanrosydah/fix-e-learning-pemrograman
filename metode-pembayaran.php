@@ -102,7 +102,7 @@
 
         <!-- Tombol Pembayaran -->
         <div class="payment-button my-4">
-          <a href="bayar-sekarang.html" class="btn btn-dark btn-md"
+          <a href="bayar-sekarang.php" class="btn btn-dark btn-md"
             >Bayar Sekarang</a
           >
         </div>
@@ -124,7 +124,7 @@
 
     <!-- Tombol Kembali -->
     <div class="container text-center my-5">
-      <a href="bayar1.html" class="btn btn-outline-light">Kembali</a>
+      <a href="bayar1.php" class="btn btn-outline-light">Kembali</a>
     </div>
 
     <!-- Footer -->
@@ -139,10 +139,10 @@
           /></a>
         </div>
         <nav>
-          <a href="index.html" class="me-3 text-decoration-none">Home</a>
-          <a href="aboutUs.html" class="me-3 text-decoration-none">About Us</a>
-          <a href="product.html" class="me-3 text-decoration-none">Product</a>
-          <a href="profil.html" class="text-decoration-none">Login</a>
+          <a href="index.php" class="me-3 text-decoration-none">Home</a>
+          <a href="aboutUs.php" class="me-3 text-decoration-none">About Us</a>
+          <a href="product.php" class="me-3 text-decoration-none">Product</a>
+          <a href="profil.php" class="text-decoration-none">Login</a>
         </nav>
         <p class="mt-3">
           &copy; 2024 AIFYCODE Learning | All Rights Reserved. Made With Love

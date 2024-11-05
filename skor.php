@@ -83,7 +83,7 @@
           <h1>100</h1>
           <button
             class="btn btn-custom"
-            onclick="window.location.href='belajar.html'"
+            onclick="window.location.href='belajar.php'"
           >
             Lanjut
           </button>

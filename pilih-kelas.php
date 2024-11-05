@@ -205,10 +205,10 @@
           /></a>
         </div>
         <nav>
-          <a href="index.html" class="me-3 text-decoration-none">Home</a>
-          <a href="aboutUs.html" class="me-3 text-decoration-none">About Us</a>
-          <a href="product.html" class="me-3 text-decoration-none">Product</a>
-          <a href="profil.html" class="text-decoration-none">Login</a>
+          <a href="index.php" class="me-3 text-decoration-none">Home</a>
+          <a href="aboutUs.php" class="me-3 text-decoration-none">About Us</a>
+          <a href="product.php" class="me-3 text-decoration-none">Product</a>
+          <a href="profil.php" class="text-decoration-none">Login</a>
         </nav>
         <p class="mt-3">
           &copy; 2024 AIFYCODE Learning | All Rights Reserved. Made With Love
@@ -237,7 +237,7 @@
       function submitKelas() {
         const checkboxes = document.querySelectorAll(".pilihan:checked");
         if (checkboxes.length === 3) {
-          window.location.href = "progress.html"; // Mengarahkan ke halaman progress setelah konfirmasi
+          window.location.href = "progress.php"; // Mengarahkan ke halaman progress setelah konfirmasi
         }
       }
     </script>

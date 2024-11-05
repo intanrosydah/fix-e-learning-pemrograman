@@ -96,7 +96,7 @@
   <body>
     <!-- Header -->
     <div class="header">
-      <a href="modul-kuis.html">Modul 1</a>
+      <a href="modul-kuis.php">Modul 1</a>
     </div>
 
     <!-- Question Section -->
@@ -122,7 +122,7 @@
         <div class="submit-button">
           <button
             class="btn btn-primary"
-            onclick="window.location.href='skor.html'"
+            onclick="window.location.href='skor.php'"
           >
             Submit
           </button>

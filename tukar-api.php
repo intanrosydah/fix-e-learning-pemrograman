@@ -90,16 +90,16 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="index.html">Home</a>
+              <a class="nav-link" href="index.php">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="aboutUs.html">About Us</a>
+              <a class="nav-link" href="aboutUs.php">About Us</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="product.html">Product</a>
+              <a class="nav-link" href="product.php">Product</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="profil.html">Login</a>
+              <a class="nav-link" href="profil.php">Login</a>
             </li>
           </ul>
         </div>
@@ -159,10 +159,10 @@
           <a href="#"><img src="images/instagram-icon.png" alt="Instagram" /></a>
         </div>
         <nav>
-          <a href="index.html" class="me-3 text-decoration-none">Home</a>
-          <a href="aboutUs.html" class="me-3 text-decoration-none">About Us</a>
-          <a href="product.html" class="me-3 text-decoration-none">Product</a>
-          <a href="profil.html" class="text-decoration-none">Login</a>
+          <a href="index.php" class="me-3 text-decoration-none">Home</a>
+          <a href="aboutUs.php" class="me-3 text-decoration-none">About Us</a>
+          <a href="product.php" class="me-3 text-decoration-none">Product</a>
+          <a href="profil.php" class="text-decoration-none">Login</a>
         </nav>
         <p class="mt-3">
           &copy; 2024 AIFYCODE Learning | All Rights Reserved. Made With Love

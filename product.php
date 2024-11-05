@@ -103,7 +103,7 @@
      <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
-      <a class="navbar-brand" href="index.html">
+      <a class="navbar-brand" href="index.php">
         <img src="images/new-logo.png" alt="Logo" />
       </a>
       <button
@@ -120,16 +120,16 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link" href="index.html">Home</a>
+            <a class="nav-link" href="index.php">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#about">About</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" href="product.html">Product</a>
+            <a class="nav-link active" href="product.php">Product</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="loginfix.html">Login</a>
+            <a class="nav-link" href="loginfix.php">Login</a>
           </li>
         </ul>
       </div>
@@ -147,7 +147,7 @@
         <h2>PAKET KURSUS ONLINE 1</h2>
         <p>Langganan 1 bulan</p>
         <p>Rp 1,000,000</p>
-        <button onclick="window.location.href='bayar1.html'" type="button" class="btn btn-dark">Pilih</button>
+        <button onclick="window.location.href='bayar1.php'" type="button" class="btn btn-dark">Pilih</button>
       </div>
 
       <!-- Paket Kursus 2 -->
@@ -160,7 +160,7 @@
         <h2>PAKET KURSUS ONLINE 2</h2>
         <p>Langganan 3 bulan</p>
         <p>Rp 3,000,000</p>
-        <button onclick="window.location.href='bayar2.html'" type="button" class="btn btn-dark">Pilih</button>
+        <button onclick="window.location.href='bayar2.php'" type="button" class="btn btn-dark">Pilih</button>
       </div>
 
       <!-- Paket Kursus 3 -->
@@ -177,7 +177,7 @@
               <del class="text-muted">Rp 6,000,000</del> 
               <span class="font-weight-bold">Rp 5,100,000</span>
           </p>
-          <button onclick="window.location.href='bayar3.html'" type="button" class="btn btn-dark">Pilih</button>
+          <button onclick="window.location.href='bayar3.php'" type="button" class="btn btn-dark">Pilih</button>
       </div>
     </div>
   </main>
@@ -194,10 +194,10 @@
           /></a>
         </div>
         <nav>
-          <a href="index.html" class="me-3 text-decoration-none">Home</a>
-          <a href="aboutUs.html" class="me-3 text-decoration-none">About Us</a>
-          <a href="product.html" class="me-3 text-decoration-none">Product</a>
-          <a href="profil.html" class="text-decoration-none">Login</a>
+          <a href="index.php" class="me-3 text-decoration-none">Home</a>
+          <a href="aboutUs.php" class="me-3 text-decoration-none">About Us</a>
+          <a href="product.php" class="me-3 text-decoration-none">Product</a>
+          <a href="profil.php" class="text-decoration-none">Login</a>
         </nav>
         <p class="mt-3">
           &copy; 2024 AIFYCODE Learning | All Rights Reserved. Made With Love

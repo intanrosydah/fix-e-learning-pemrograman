@@ -156,7 +156,7 @@
                 </button>
                 <p class="small fw-bold mt-2 pt-1 mb-0">
                   Don't have an account?
-                  <a href="regist.html" class="link-danger">Register</a>
+                  <a href="regist.php" class="link-danger">Register</a>
                 </p>
               </div>
             </form>
@@ -206,12 +206,12 @@
           // Login admin
           if (email === "admin@gmail.com" && password === "admin123") {
             alert("Admin login successful!");
-            window.location.href = "Admin/data-pengguna.html"; // Redirect ke halaman data-pengguna
+            window.location.href = "Admin/data-pengguna.php"; // Redirect ke halaman data-pengguna
           }
           // Login pengguna umum
           else if (email === "user@gmail.com" && password === "user123") {
             alert("User login successful!");
-            window.location.href = "profil.html"; // Redirect ke halaman home
+            window.location.href = "profil.php"; // Redirect ke halaman home
           }
           // Jika login tidak valid
           else {

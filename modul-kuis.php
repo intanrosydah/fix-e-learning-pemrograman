@@ -109,7 +109,7 @@
       <!-- Tombol Kembali ke Koridor Kelas -->
       <button
         class="btn back-btn"
-        onclick="window.location.href='koridor-dipelajari.html'"
+        onclick="window.location.href='koridor-dipelajari.php'"
       >
         Koridor Kelas
       </button>
@@ -146,7 +146,7 @@
                 onclick="selectModule('Modul 1', 'Bab 3')"
                 >Bab 3</a
               >
-              <a href="modul-kuis.html">Kuis</a>
+              <a href="modul-kuis.php">Kuis</a>
             </div>
           </div>
 
@@ -174,7 +174,7 @@
                 onclick="selectModule('Modul 2', 'Bab 3')"
                 >Bab 3</a
               >
-              <a href="modul-kuis.html">Kuis</a>
+              <a href="modul-kuis.php">Kuis</a>
             </div>
           </div>
 
@@ -202,7 +202,7 @@
                 onclick="selectModule('Modul 3', 'Bab 3')"
                 >Bab 3</a
               >
-              <a href="modul-kuis.html">Kuis</a>
+              <a href="modul-kuis.php">Kuis</a>
             </div>
           </div>
         </div>
@@ -212,7 +212,7 @@
           <div class="border p-3">
             <h3 >Judul Kuis</h3>
   <p>Deskripsi singkat mengenai kuis akan ditampilkan di sini.</p>
-  <button class="back-btn" onclick="window.location.href='kuis.html'">
+  <button class="back-btn" onclick="window.location.href='kuis.php'">
     Mulai Kuis
   </button>
           </div>
@@ -226,7 +226,7 @@
         <button class="btn navigation-buttons">← Sebelumnya</button>
         <button
           class="btn navigation-buttons"
-          onclick="window.location.href='koridor-diselesaikan.html'"
+          onclick="window.location.href='koridor-diselesaikan.php'"
         >
           Selanjutnya →
         </button>

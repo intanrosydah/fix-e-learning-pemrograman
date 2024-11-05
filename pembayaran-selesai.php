@@ -55,7 +55,7 @@
 
         <!-- Tombol mulai belajar -->
         <div class="my-4">
-          <a href="pilih-kelas.html" class="btn btn-dark btn-md"
+          <a href="pilih-kelas.php" class="btn btn-dark btn-md"
             >Mulai Belajar</a
           >
         </div>
@@ -74,10 +74,10 @@
           /></a>
         </div>
         <nav>
-          <a href="index.html" class="me-3 text-decoration-none">Home</a>
-          <a href="aboutUs.html" class="me-3 text-decoration-none">About Us</a>
-          <a href="product.html" class="me-3 text-decoration-none">Product</a>
-          <a href="profil.html" class="text-decoration-none">Login</a>
+          <a href="index.php" class="me-3 text-decoration-none">Home</a>
+          <a href="aboutUs.php" class="me-3 text-decoration-none">About Us</a>
+          <a href="product.php" class="me-3 text-decoration-none">Product</a>
+          <a href="profil.php" class="text-decoration-none">Login</a>
         </nav>
         <p class="mt-3">
           &copy; 2024 AIFYCODE Learning | All Rights Reserved. Made With Love
