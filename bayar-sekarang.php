@@ -56,7 +56,7 @@
 
         <!-- Tombol untuk Menyelesaikan -->
         <div class="text-center mt-4 mb-4">
-          <a href="pembayaran-selesai.html" class="btn btn-dark btn-md"
+          <a href="pembayaran-selesai.php" class="btn btn-dark btn-md"
             >Selesaikan Pembayaran</a
           >
         </div>
@@ -92,9 +92,9 @@
         </div>
         <nav>
           <a href="index.php" class="me-3 text-decoration-none">Home</a>
-          <a href="aboutUs.html" class="me-3 text-decoration-none">About Us</a>
-          <a href="product.html" class="me-3 text-decoration-none">Product</a>
-          <a href="profil.html" class="text-decoration-none">Login</a>
+          <a href="aboutUs.php" class="me-3 text-decoration-none">About Us</a>
+          <a href="product.php" class="me-3 text-decoration-none">Product</a>
+          <a href="profil.php" class="text-decoration-none">Login</a>
         </nav>
         <p class="mt-3">
           &copy; 2024 AIFYCODE Learning | All Rights Reserved. Made With Love

@@ -67,9 +67,9 @@
         Manajemen Pengguna
       </a>
       <div class="collapse" id="manajemenPengguna">
-        <a href="data-pengguna.html">Data Pengguna</a>
-        <a href="monitoring-aktivitas.html">Monitoring Aktivitas Pengguna</a>
-        <a href="manajemen-sertifikat.html">Sertifikat Pengguna</a>
+        <a href="data-pengguna.php">Data Pengguna</a>
+        <a href="monitoring-aktivitas.php">Monitoring Aktivitas Pengguna</a>
+        <a href="manajemen-sertifikat.php">Sertifikat Pengguna</a>
       </div>
 
       <!-- Dropdown Manajemen Kursus -->
@@ -84,9 +84,9 @@
         Manajemen Kursus
       </a>
       <div class="collapse" id="manajemenKursus">
-        <a href="manajemen-jadwal-kursus.html">Jadwal Kursus</a>
-        <a href="manajemen-materi-kursus.html">Materi Kursus</a>
-        <a href="manajemen-modul-kursus.html">Modul Kursus</a>
+        <a href="manajemen-jadwal-kursus.php">Jadwal Kursus</a>
+        <a href="manajemen-materi-kursus.php">Materi Kursus</a>
+        <a href="manajemen-modul-kursus.php">Modul Kursus</a>
       </div>
 
       <!-- Dropdown Manajemen Pembayaran -->
@@ -101,10 +101,10 @@
         Manajemen Pembayaran
       </a>
       <div class="collapse" id="manajemenPembayaran">
-        <a href="manajemen-pembayaran.html">Riwayat Pembayaran</a>
+        <a href="manajemen-pembayaran.php">Riwayat Pembayaran</a>
       </div>
 
-      <a href="index.html">Logout</a>
+      <a href="index.php">Logout</a>
     </div>
 
     <!-- Header/Navbar -->
@@ -149,7 +149,7 @@
     <div class="content pt-5 mt-3">
       <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-          <h3>MATERI KURSUS</h3>
+          <h3>JADWAL KURSUS</h3>
           <div>
             <button class="btn btn-danger me-2">Create</button>
             <button class="btn btn-primary me-2">Excel</button>
@@ -163,16 +163,25 @@
             <thead>
               <tr>
                 <th>No</th>
-                <th>ID Materi</th>
-                <th>Nama Materi</th>
+                <th>ID Pengguna</th>
+                <th>Nama Pengguna</th>
+                <th>Paket Kursus</th>
+                <th>Tanggal Mulai</th>
+                <th>Tanggal Selesai</th>
+                <th>Status</th>
                 <th>Aksi</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>1</td>
-                <td>K001</td>
-                <td>Belajar Dasar AI</td>
+                <td>001</td>
+                <td>Intan Aulia Rosydah</td>
+                <td>1 Bulan</td>
+                <td>09/03/2024</td>
+                <td>09/04/2024</td>
+                <td>1 Bulan</td>
+                <td>Selesai</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
@@ -180,8 +189,12 @@
               </tr>
               <tr>
                 <td>2</td>
-                <td>K002</td>
-                <td>Belajar Dasar Machine Learning</td>
+                <td>002</td>
+                <td>Agniesa Junica Putri</td>
+                <td>1 Bulan</td>
+                <td>12/03/2024</td>
+                <td>12/04/2024</td>
+                <td>Selesai</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
@@ -189,8 +202,12 @@
               </tr>
               <tr>
                 <td>3</td>
-                <td>K003</td>
-                <td>Belajar Dasar Pemrograman</td>
+                <td>003</td>
+                <td>Fitri Aisyah Ramadhani</td>
+                <td>3 Bulan</td>
+                <td>21/08/2024</td>
+                <td>21/11/2024</td>
+                <td>Aktif</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
@@ -198,8 +215,12 @@
               </tr>
               <tr>
                 <td>4</td>
-                <td>K004</td>
-                <td>Belajar Dasar Pemrograman Web</td>
+                <td>004</td>
+                <td>M. Yasir Rahmatullah</td>
+                <td>3 Bulan</td>
+                <td>17/06/2024</td>
+                <td>17/09/2024</td>
+                <td>Selesai</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
@@ -207,8 +228,12 @@
               </tr>
               <tr>
                 <td>5</td>
-                <td>K005</td>
-                <td>Belajar Dasar Pemrograman Game</td>
+                <td>005</td>
+                <td>Michael Fernando</td>
+                <td>3 Bulan</td>
+                <td>14/02/2024</td>
+                <td>14/05/2024</td>
+                <td>Selesai</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>

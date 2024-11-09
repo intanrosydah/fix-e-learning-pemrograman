@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SISFO - Manajamen Sertifikat</title>
+    <title>List Data Pengguna</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -67,9 +67,9 @@
         Manajemen Pengguna
       </a>
       <div class="collapse" id="manajemenPengguna">
-        <a href="data-pengguna.html">Data Pengguna</a>
-        <a href="monitoring-aktivitas.html">Monitoring Aktivitas Pengguna</a>
-        <a href="manajemen-sertifikat.html">Sertifikat Pengguna</a>
+        <a href="data-pengguna.php">Data Pengguna</a>
+        <a href="monitoring-aktivitas.php">Monitoring Aktivitas Pengguna</a>
+        <a href="manajemen-sertifikat.php">Sertifikat Pengguna</a>
       </div>
 
       <!-- Dropdown Manajemen Kursus -->
@@ -84,9 +84,9 @@
         Manajemen Kursus
       </a>
       <div class="collapse" id="manajemenKursus">
-        <a href="manajemen-jadwal-kursus.html">Jadwal Kursus</a>
-        <a href="manajemen-materi-kursus.html">Materi Kursus</a>
-        <a href="manajemen-modul-kursus.html">Modul Kursus</a>
+        <a href="manajemen-jadwal-kursus.php">Jadwal Kursus</a>
+        <a href="manajemen-materi-kursus.php">Materi Kursus</a>
+        <a href="manajemen-modul-kursus.php">Modul Kursus</a>
       </div>
 
       <!-- Dropdown Manajemen Pembayaran -->
@@ -101,10 +101,10 @@
         Manajemen Pembayaran
       </a>
       <div class="collapse" id="manajemenPembayaran">
-        <a href="manajemen-pembayaran.html">Riwayat Pembayaran</a>
+        <a href="manajemen-pembayaran.php">Riwayat Pembayaran</a>
       </div>
 
-      <a href="index.html">Logout</a>
+      <a href="index.php">Logout</a>
     </div>
 
     <!-- Header/Navbar -->
@@ -149,13 +149,8 @@
     <div class="content pt-5 mt-3">
       <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-          <h3>MANAJEMEN SERTIFIKAT</h3>
-          <!-- <div>
-            <button class="btn btn-danger me-2">Create</button>
-            <button class="btn btn-primary me-2">Excel</button>
-            <button class="btn btn-primary me-2">Word</button>
-            <button class="btn btn-primary">PDF</button>
-          </div> -->
+          <h3>List Data Pengguna</h3>
+          <!-- .ikm               -->
         </div>
 
         <div class="table-responsive">
@@ -165,9 +160,9 @@
                 <th>No</th>
                 <th>ID</th>
                 <th>Nama</th>
-                <th>Periode</th>
-                <th>Nilai Kuis</th>
-                <th>Kategeri</th>
+                <th>Username</th>
+                <th>Password</th>
+                <th>Email</th>
               </tr>
             </thead>
             <tbody>
@@ -175,9 +170,9 @@
                 <td>1</td>
                 <td>001</td>
                 <td>Intan Aulia Rosydah</td>
-                <td>21/04/21 - 07/06/24</td>
-                <td>89</td>
-                <td>LULUS</td>
+                <td>Intan Aulia</td>
+                <td>89skw!</td>
+                <td>intan@gmail.com</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
@@ -187,9 +182,9 @@
                 <td>2</td>
                 <td>002</td>
                 <td>Agniesa Junica Putri</td>
-                <td>22/10/20 - 17/10/24</td>
-                <td>90</td>
-                <td>LULUS</td>
+                <td>Agniesa Junica</td>
+                <td>kad90*1</td>
+                <td>Agniesa@gmail.com</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
@@ -199,9 +194,9 @@
                 <td>3</td>
                 <td>003</td>
                 <td>Fitri Aisyah Ramadhani</td>
-                <td>10/10/21 - 28/10/23</td>
-                <td>85</td>
-                <td>LULUS</td>
+                <td>Fitri Aisyah</td>
+                <td>ow76#!</td>
+                <td>Fitri@gmail.com</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
@@ -211,9 +206,9 @@
                 <td>4</td>
                 <td>004</td>
                 <td>M. Yasir Rahmatullah</td>
-                <td>18/07/22 - 12/11/20</td>
-                <td>88</td>
-                <td>LULUS</td>
+                <td>M. Yasir</td>
+                <td>oaa723!</td>
+                <td>Yasir@gmail.com</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
@@ -222,10 +217,70 @@
               <tr>
                 <td>5</td>
                 <td>005</td>
-                <td>Micheal Fernando</td>
-                <td>21/05/20 - 10/12/20</td>
-                <td>91</td>
-                <td>LULUS</td>
+                <td>Michael Fernando</td>
+                <td>Fernando</td>
+                <td>iswe34#!</td>
+                <td>Fernando@gmail.com</td>
+                <td>
+                  <button class="btn btn-warning btn-sm me-2">Edit</button>
+                  <button class="btn btn-danger btn-sm">Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <td>6</td>
+                <td>006</td>
+                <td>Michael Fernando</td>
+                <td>Fernando</td>
+                <td>iswe34#!</td>
+                <td>Fernando@gmail.com</td>
+                <td>
+                  <button class="btn btn-warning btn-sm me-2">Edit</button>
+                  <button class="btn btn-danger btn-sm">Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <td>7</td>
+                <td>007</td>
+                <td>Michael Fernando</td>
+                <td>Fernando</td>
+                <td>iswe34#!</td>
+                <td>Fernando@gmail.com</td>
+                <td>
+                  <button class="btn btn-warning btn-sm me-2">Edit</button>
+                  <button class="btn btn-danger btn-sm">Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <td>8</td>
+                <td>008</td>
+                <td>Michael Fernando</td>
+                <td>Fernando</td>
+                <td>iswe34#!</td>
+                <td>Fernando@gmail.com</td>
+                <td>
+                  <button class="btn btn-warning btn-sm me-2">Edit</button>
+                  <button class="btn btn-danger btn-sm">Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <td>9</td>
+                <td>009</td>
+                <td>Michael Fernando</td>
+                <td>Fernando</td>
+                <td>iswe34#!</td>
+                <td>Fernando@gmail.com</td>
+                <td>
+                  <button class="btn btn-warning btn-sm me-2">Edit</button>
+                  <button class="btn btn-danger btn-sm">Delete</button>
+                </td>
+              </tr>
+              <tr>
+                <td>10</td>
+                <td>010</td>
+                <td>Michael Fernando</td>
+                <td>Fernando</td>
+                <td>iswe34#!</td>
+                <td>Fernando@gmail.com</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SISFO - Monitoring aktivitas</title>
+    <title>SISFO - Mata Kuliah List</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -67,9 +67,9 @@
         Manajemen Pengguna
       </a>
       <div class="collapse" id="manajemenPengguna">
-        <a href="data-pengguna.html">Data Pengguna</a>
-        <a href="monitoring-aktivitas.html">Monitoring Aktivitas Pengguna</a>
-        <a href="manajemen-sertifikat.html">Sertifikat Pengguna</a>
+        <a href="data-pengguna.php">Data Pengguna</a>
+        <a href="monitoring-aktivitas.php">Monitoring Aktivitas Pengguna</a>
+        <a href="manajemen-sertifikat.php">Sertifikat Pengguna</a>
       </div>
 
       <!-- Dropdown Manajemen Kursus -->
@@ -84,9 +84,9 @@
         Manajemen Kursus
       </a>
       <div class="collapse" id="manajemenKursus">
-        <a href="manajemen-jadwal-kursus.html">Jadwal Kursus</a>
-        <a href="manajemen-materi-kursus.html">Materi Kursus</a>
-        <a href="manajemen-modul-kursus.html">Modul Kursus</a>
+        <a href="manajemen-jadwal-kursus.php">Jadwal Kursus</a>
+        <a href="manajemen-materi-kursus.php">Materi Kursus</a>
+        <a href="manajemen-modul-kursus.php">Modul Kursus</a>
       </div>
 
       <!-- Dropdown Manajemen Pembayaran -->
@@ -101,10 +101,10 @@
         Manajemen Pembayaran
       </a>
       <div class="collapse" id="manajemenPembayaran">
-        <a href="manajemen-pembayaran.html">Riwayat Pembayaran</a>
+        <a href="manajemen-pembayaran.php">Riwayat Pembayaran</a>
       </div>
 
-      <a href="index.html">Logout</a>
+      <a href="index.php">Logout</a>
     </div>
 
     <!-- Header/Navbar -->
@@ -149,13 +149,13 @@
     <div class="content pt-5 mt-3">
       <div class="container mt-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-          <h3>MENTORING AKTIVITAS</h3>
-          <!-- <div>
+          <h3>MATERI KURSUS</h3>
+          <div>
             <button class="btn btn-danger me-2">Create</button>
             <button class="btn btn-primary me-2">Excel</button>
             <button class="btn btn-primary me-2">Word</button>
             <button class="btn btn-primary">PDF</button>
-          </div> -->
+          </div>
         </div>
 
         <div class="table-responsive">
@@ -163,23 +163,16 @@
             <thead>
               <tr>
                 <th>No</th>
-                <th>ID</th>
-                <th>Login</th>
-                <th>Tanggal/Waktu</th>
-                <th>Progres Pembelajaran</th>
-                <th>Poin Daily Coding</th>
-                <th>Nilai Kuis</th>
+                <th>ID Materi</th>
+                <th>Nama Materi</th>
+                <th>Aksi</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>1</td>
-                <th>001</th>
-                <td>intan@gmail.com</td>
-                <td>20/10/2024 11:32</td>
-                <td>Dasar AI</td>
-                <td>34</td>
-                <td>80</td>
+                <td>K001</td>
+                <td>Belajar Dasar AI</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
@@ -187,12 +180,8 @@
               </tr>
               <tr>
                 <td>2</td>
-                <th>002</th>
-                <td>Agniesa@gmail.com</td>
-                <td>21/11/2024 10:22</td>
-                <td>Bahasa Pyhton</td>
-                <td>20</td>
-                <td>70</td>
+                <td>K002</td>
+                <td>Belajar Dasar Machine Learning</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
@@ -200,12 +189,8 @@
               </tr>
               <tr>
                 <td>3</td>
-                <th>003</th>
-                <td>Fitri@gmail.com</td>
-                <td>31/09/2024 09:20</td>
-                <td>Bahasa Java</td>
-                <td>10</td>
-                <td>89</td>
+                <td>K003</td>
+                <td>Belajar Dasar Pemrograman</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
@@ -213,12 +198,8 @@
               </tr>
               <tr>
                 <td>4</td>
-                <th>004</th>
-                <td>Yasir@gmail.com</td>
-                <td>31/09/2024 09:20</td>
-                <td>Bahasa Java</td>
-                <td>10</td>
-                <td>89</td>
+                <td>K004</td>
+                <td>Belajar Dasar Pemrograman Web</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
@@ -226,12 +207,8 @@
               </tr>
               <tr>
                 <td>5</td>
-                <th>005</th>
-                <td>Fernando@gmail.com</td>
-                <td>06/07/2024 08:20</td>
-                <td>Bahasa C++</td>
-                <td>40</td>
-                <td>60</td>
+                <td>K005</td>
+                <td>Belajar Dasar Pemrograman Game</td>
                 <td>
                   <button class="btn btn-warning btn-sm me-2">Edit</button>
                   <button class="btn btn-danger btn-sm">Delete</button>
