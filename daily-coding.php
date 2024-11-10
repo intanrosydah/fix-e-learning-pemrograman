@@ -1,197 +1,328 @@
+<?php
+require 'header-login.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Daily Coding</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tantangan Harian</title>
 
     <!-- Bootstrap CSS -->
-    <link
-     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-     rel="stylesheet"
-   />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
-   <!-- Google Font -->
-   <link
-     href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap"
-     rel="stylesheet"
-   />
-
-   <style>
-     body {
-        font-family: "Montserrat", sans-serif;
-        background-color: #092635;
-        color: white;
-      }
-
-      .navbar {
-        padding: 0;
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 1000;
-        background-color: rgba(9, 38, 53, 0.5); /* Transparansi */
-        backdrop-filter: blur(10px); /* Efek blur */
-        transition: background-color 0.3s ease, transform 0.3s ease;
-        transform-origin: center top;
-      }
-
-      /* Navbar menjadi lebih transparan saat di-hover */
-      .navbar:hover {
-        background-color: rgba(0, 0, 0, 0.5);
-      }
-
-      /* Efek zoom in dan zoom out */
-      .navbar.zoom-in {
-        transform: scale(1.05);
-      }
-
-      .navbar.zoom-out {
-        transform: scale(1) translateY(-10px); /* Tetap full-width dan turun sedikit */
-      }
-
-      .navbar-brand img {
-        max-width: 200px;
-      }
-
-      .navbar-nav .nav-link {
-        padding: 8px 15px;
-      }
-
-
-     footer {
-       background-color: #092635;
-       color: white;
-       padding: 20px;
-     }
-
-     .social-icons a img {
-       width: 30px;
-       margin-right: 10px;
-     }
-   </style>
- </head>
- <body>
-
-   <!-- Navbar -->
-   <nav class="navbar navbar-expand-lg navbar-dark ">
-     <div class="container">
-       <a class="navbar-brand" href="index.php">
-         <img src="images/new-logo.png" alt="Logo" />
-       </a>
-       <button
-         class="navbar-toggler"
-         type="button"
-         data-bs-toggle="collapse"
-         data-bs-target="#navbarNav"
-         aria-controls="navbarNav"
-         aria-expanded="false"
-         aria-label="Toggle navigation"
-       >
-         <span class="navbar-toggler-icon"></span>
-       </button>
-       <div class="collapse navbar-collapse" id="navbarNav">
-         <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="index.php">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="progress.php">Progress</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="daily-coding.php"
-              >Daily Coding</a
-            >
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="profil.php">Profil</a>
-          </li>
-         </ul>
-       </div>
-     </div>
-   </nav>
-
-  <!-- Main Content -->
-  <div class="text-center mt-5 pt-5">
-    <h1>Daily Coding</h1>
-  </div>
-
-  <main class="container my-5">
-    <div class="card bg-white p-4 rounded shadow-sm mx-auto col-12 col-md-8">
-      <section class="container my-2 p-3 bg-white">
-            <h2 class="text-center text-dark">APA ITU DAILY CODING ?</h2>
-            <p class="text-center text-dark">
-              Daily Coding adalah rutinitas latihan pemrograman harian yang bertujuan
-              untuk meningkatkan keterampilan coding dan pemecahan masalah. Melalui
-              daily coding, seseorang mengasah kemampuan logika, memahami
-              konsep-konsep pemrograman baru, serta memperkuat pemahaman algoritma
-              dan struktur data. Biasanya, kegiatan ini melibatkan penyelesaian
-              soal-soal dengan tingkat kesulitan yang bervariasi setiap hari, baik
-              dalam bahasa pemrograman tertentu maupun dalam bahasa yang berbeda.
-              Dengan konsistensi, daily coding membantu pengembangan keahlian teknis
-              dan meningkatkan efisiensi dalam menulis kode.
-            </p>
-            <h2 class="text-center text-dark">BAGAIMANA CARA KERJA DAILY CODING ?</h2>
-            <p class="text-center text-dark">
-              1. Klik tombol mulai<br />
-              2. Selesaikan tantangan harian, setiap menyelesaikan tantangan dapat 1
-              api.<br />
-              3. Kumpulkan api untuk ditukarkan Paket Kursus Online
-            </p>
-            <section class="d-flex justify-content-center">
-              <a href="daily-coding-hari1.php" id="startButton" class="btn btn-dark">MULAI</a>
-            </section>          
-          </section>
-        </main>
-    
-  <!-- Footer -->
-    <footer class="text-center">
-      <div class="container">
-        <div class="social-icons mb-3">
-          <a href="#"><img src="images/facebook-icon.png" alt="Facebook" /></a>
-          <a href="#"><img src="images/x-icon.png" alt="Twitter" /></a>
-          <a href="#"><img src="images/linkedin-icon.png" alt="LinkedIn" /></a>
-          <a href="#"
-            ><img src="images/instagram-icon.png" alt="Instagram"
-          /></a>
-        </div>
-        <nav>
-          <a href="index.php" class="me-3 text-decoration-none">Home</a>
-          <a href="aboutUs.php" class="me-3 text-decoration-none">About Us</a>
-          <a href="product.php" class="me-3 text-decoration-none">Product</a>
-          <a href="profil.php" class="text-decoration-none">Login</a>
-        </nav>
-        <p class="mt-3">
-          &copy; 2024 AIFYCODE Learning | All Rights Reserved. Made With Love
-        </p>
-      </div>
-    </footer>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-      // Event listener for the button
-      document.getElementById("startButton").addEventListener("click", function () {
-        console.log("Tombol MULAI diklik!");
-        alert("Selamat datang! Anda telah memulai daily coding.");
-      });
-    </script>
-
-    <script>
-      const navbar = document.querySelector(".navbar");
-
-      window.addEventListener("scroll", () => {
-        const scrollPos = window.scrollY;
-
-        if (scrollPos > 50) {
-          navbar.classList.add("zoom-out");
-          navbar.classList.remove("zoom-in");
-        } else {
-          navbar.classList.add("zoom-in");
-          navbar.classList.remove("zoom-out");
+    <style>
+        body {
+            font-family: "Montserrat", sans-serif;
+            background-color: #092635;
+            color: white;
         }
-      });
-    </script>
-  </body>
+        .content { margin-top: 150px; }
+        .card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .soal-harian {
+            color: #007bff; /* Warna biru untuk soal */
+        }
+        .reward-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+    background-color: rgba(9, 38, 53, 0.7);
+    border-radius: 8px;
+    .reward-header .btn {
+    padding: 10px 20px;
+}
+
+}
+
+        
+    </style>
+</head>
+<body>
+
+<div class="content">
+    <h1 class="text-center my-4">Tantangan Harian</h1>
+ <!-- Reward Header -->
+ <div class="d-flex justify-content-between align-items-center  p-5 rounded">
+ <div class="reward-header mx-auto mb-4">
+    <a href="tukar-api.php" class="btn btn-danger">Tukar Api</a>
+    <span class="fs-4 fw-bold">6</span>
+</div>
+
+      </div>
+    <!-- Nav Pills -->
+    <ul class="nav nav-pills justify-content-center mb-4">
+        <li class="nav-item">
+            <a class="nav-link active" id="day1-tab" data-bs-toggle="pill" href="#day1">Hari 1</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="day2-tab" data-bs-toggle="pill" href="#day2">Hari 2</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="day3-tab" data-bs-toggle="pill" href="#day3">Hari 3</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="day4-tab" data-bs-toggle="pill" href="#day4">Hari 4</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="day5-tab" data-bs-toggle="pill" href="#day5">Hari 5</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="day6-tab" data-bs-toggle="pill" href="#day6">Hari 6</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="day7-tab" data-bs-toggle="pill" href="#day7">Hari 7</a>
+        </li>
+    </ul>
+
+    <!-- Tab Content -->
+    <div class="tab-content container">
+
+        <!-- Hari 1 -->
+        <div class="tab-pane fade show active" id="day1">
+        <div class="card ">
+                <h3 class="soal-harian">Soal Hari Ke-1</h3>
+                <p class="fw-bold soal-harian">Buat program untuk menghitung faktorial dari sebuah angka yang dimasukkan oleh pengguna.</p>
+                <textarea class="form-control mb-3" placeholder="Tulis kode Anda..." style="height: 150px">
+// Program untuk menghitung faktorial
+n = int(input("Masukkan angka: "))
+faktorial = 1
+for i in range(1, n + 1):
+    faktorial *= i
+print(f"Faktorial dari {n} adalah {faktorial}")
+                </textarea>
+                <div class="mt-2">
+            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">kirim kode</button>
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content text-center">
+                  <div class="modal-body">
+                    <h2 class="text-warning fw-bold">Selamat!</h2>
+                    <img src="https://img.icons8.com/emoji/48/fire.png" alt="Fire" width="60" class="fire-icon mt-4 gap-5">
+                    <p class="text-center text-dark fs-3">Anda telah menyelesaikan tantangan hari ini!</p>
+                  </div>
+                  <div class="modal-footer justify-content-center">
+                    <a href="daily-coding.php" class="btn btn-success">Lanjut</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+            </div>
+        </div>
+
+        <!-- Hari 2 -->
+        <div class="tab-pane fade" id="day2">
+            <div class="card">
+                <h3 class="soal-harian">Soal Hari Ke-2</h3>
+                <p class="fw-bold soal-harian">Buat program untuk menentukan apakah sebuah angka adalah bilangan prima atau bukan.</p>
+                <textarea class="form-control mb-3" placeholder="Tulis kode Anda..." style="height: 150px">
+// Program untuk cek bilangan prima
+n = int(input("Masukkan angka: "))
+prima = True
+for i in range(2, int(n / 2) + 1):
+    if n % i == 0:
+        prima = False
+        break
+if prima:
+    print(f"{n} adalah bilangan prima.")
+else:
+    print(f"{n} bukan bilangan prima.")
+                </textarea>
+                <div class="mt-2">
+            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">kirim kode</button>
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content text-center">
+                  <div class="modal-body">
+                    <h2 class="text-warning fw-bold">Selamat!</h2>
+                    <img src="https://img.icons8.com/emoji/48/fire.png" alt="Fire" width="60" class="fire-icon mt-4 gap-5">
+                    <p class="text-center text-dark fs-3">Anda telah menyelesaikan tantangan hari ini!</p>
+                  </div>
+                  <div class="modal-footer justify-content-center">
+                    <a href="daily-coding.php" class="btn btn-success">Lanjut</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+            </div>
+        </div>
+
+        <!-- Hari 3 -->
+        <div class="tab-pane fade" id="day3">
+            <div class="card">
+                <h3 class="soal-harian">Soal Hari Ke-3</h3>
+                <p class="fw-bold soal-harian">Buat program untuk menampilkan angka Fibonacci ke-n yang dimasukkan oleh pengguna.</p>
+                <textarea class="form-control mb-3" placeholder="Tulis kode Anda..." style="height: 150px">
+// Program untuk menampilkan angka Fibonacci
+n = int(input("Masukkan angka n: "))
+a, b = 0, 1
+for i in range(n):
+    print(a, end=" ")
+    a, b = b, a + b
+                </textarea>
+                <div class="mt-2">
+            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">kirim kode</button>
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content text-center">
+                  <div class="modal-body">
+                    <h2 class="text-warning fw-bold">Selamat!</h2>
+                    <img src="https://img.icons8.com/emoji/48/fire.png" alt="Fire" width="60" class="fire-icon mt-4 gap-5">
+                    <p class="text-center text-dark fs-3">Anda telah menyelesaikan tantangan hari ini!</p>
+                  </div>
+                  <div class="modal-footer justify-content-center">
+                    <a href="daily-coding.php" class="btn btn-success">Lanjut</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+            </div>
+        </div>
+
+        <!-- Hari 4 -->
+        <div class="tab-pane fade" id="day4">
+            <div class="card">
+                <h3 class="soal-harian">Soal Hari Ke-4</h3>
+                <p class="fw-bold soal-harian">Buat program untuk menghitung angka terbesar dalam sebuah daftar.</p>
+                <textarea class="form-control mb-3" placeholder="Tulis kode Anda..." style="height: 150px">
+// Program untuk mencari angka terbesar dalam daftar
+daftar = [1, 3, 5, 7, 9]
+print("Angka terbesar:", max(daftar))
+                </textarea>
+                <div class="mt-2">
+            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">kirim kode</button>
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content text-center">
+                  <div class="modal-body">
+                    <h2 class="text-warning fw-bold">Selamat!</h2>
+                    <img src="https://img.icons8.com/emoji/48/fire.png" alt="Fire" width="60" class="fire-icon mt-4 gap-5">
+                    <p class="text-center text-dark fs-3">Anda telah menyelesaikan tantangan hari ini!</p>
+                  </div>
+                  <div class="modal-footer justify-content-center">
+                    <a href="daily-coding.php" class="btn btn-success">Lanjut</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+            </div>
+        </div>
+
+        <!-- Hari 5 -->
+        <div class="tab-pane fade" id="day5">
+            <div class="card">
+                <h3 class="soal-harian">Soal Hari Ke-5</h3>
+                <p class="fw-bold soal-harian">Buat program untuk mengurutkan daftar angka.</p>
+                <textarea class="form-control mb-3" placeholder="Tulis kode Anda..." style="height: 150px">
+// Program untuk mengurutkan angka
+daftar = [5, 2, 9, 1, 5, 6]
+daftar.sort()
+print("Daftar angka yang diurutkan:", daftar)
+                </textarea>
+                <div class="mt-2">
+            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">kirim kode</button>
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content text-center">
+                  <div class="modal-body">
+                    <h2 class="text-warning fw-bold">Selamat!</h2>
+                    <img src="https://img.icons8.com/emoji/48/fire.png" alt="Fire" width="60" class="fire-icon mt-4 gap-5">
+                    <p class="text-center text-dark fs-3">Anda telah menyelesaikan tantangan hari ini!</p>
+                  </div>
+                  <div class="modal-footer justify-content-center">
+                    <a href="daily-coding.php" class="btn btn-success">Lanjut</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+            </div>
+        </div>
+
+        <!-- Hari 6 -->
+        <div class="tab-pane fade" id="day6">
+            <div class="card">
+                <h3 class="soal-harian">Soal Hari Ke-6</h3>
+                <p class="fw-bold soal-harian">Buat program untuk menentukan angka ganjil atau genap.</p>
+                <textarea class="form-control mb-3" placeholder="Tulis kode Anda..." style="height: 150px">
+// Program untuk cek ganjil atau genap
+n = int(input("Masukkan angka: "))
+if n % 2 == 0:
+    print(f"{n} adalah angka genap.")
+else:
+    print(f"{n} adalah angka ganjil.")
+                </textarea>
+                <div class="mt-2">
+            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">kirim kode</button>
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content text-center">
+                  <div class="modal-body">
+                    <h2 class="text-warning fw-bold">Selamat!</h2>
+                    <img src="https://img.icons8.com/emoji/48/fire.png" alt="Fire" width="60" class="fire-icon mt-4 gap-5">
+                    <p class="text-center text-dark fs-3">Anda telah menyelesaikan tantangan hari ini!</p>
+                  </div>
+                  <div class="modal-footer justify-content-center">
+                    <a href="daily-coding.php" class="btn btn-success">Lanjut</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+            </div>
+        </div>
+
+        <!-- Hari 7 -->
+        <div class="tab-pane fade" id="day7">
+            <div class="card">
+                <h3 class="soal-harian">Soal Hari Ke-7</h3>
+                <p class="fw-bold soal-harian">Buat program untuk mencari nilai rata-rata dari sebuah daftar angka.</p>
+                <textarea class="form-control mb-3" placeholder="Tulis kode Anda..." style="height: 150px">
+// Program untuk mencari rata-rata
+daftar = [1, 2, 3, 4, 5]
+rata_rata = sum(daftar) / len(daftar)
+print("Rata-rata angka:", rata_rata)
+                </textarea>
+                <div class="mt-2">
+            <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal">kirim kode</button>
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content text-center">
+                  <div class="modal-body">
+                    <h2 class="text-warning fw-bold">Selamat!</h2>
+                    <img src="https://img.icons8.com/emoji/48/fire.png" alt="Fire" width="60" class="fire-icon mt-4 gap-5">
+                    <p class="text-center text-dark fs-3">Anda telah menyelesaikan tantangan hari ini!</p>
+                  </div>
+                  <div class="modal-footer justify-content-center">
+                    <a href="daily-coding.php" class="btn btn-success">Lanjut</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<?php
+require 'footer.php';
+?>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

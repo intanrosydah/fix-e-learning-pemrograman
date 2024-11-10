@@ -41,9 +41,9 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link active" href="index.php">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="product.php">Product</a></li>
-                <li class="nav-item"><a class="nav-link" href="loginfix.php">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="progress.php">Progress</a></li>
+                <li class="nav-item"><a class="nav-link" href="daily-coding.php">Daily Coding</a></li>
+                <li class="nav-item"><a class="nav-link" href="profil.php">Profil</a></li>
             </ul>
         </div>
     </div>
