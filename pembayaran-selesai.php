@@ -62,28 +62,10 @@
       </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="text-center">
-      <div class="container">
-        <div class="social-icons mb-3">
-          <a href="#"><img src="images/facebook-icon.png" alt="Facebook" /></a>
-          <a href="#"><img src="images/x-icon.png" alt="Twitter" /></a>
-          <a href="#"><img src="images/linkedin-icon.png" alt="LinkedIn" /></a>
-          <a href="#"
-            ><img src="images/instagram-icon.png" alt="Instagram"
-          /></a>
-        </div>
-        <nav>
-          <a href="index.php" class="me-3 text-decoration-none">Home</a>
-          <a href="aboutUs.php" class="me-3 text-decoration-none">About Us</a>
-          <a href="product.php" class="me-3 text-decoration-none">Product</a>
-          <a href="profil.php" class="text-decoration-none">Login</a>
-        </nav>
-        <p class="mt-3">
-          &copy; 2024 AIFYCODE Learning | All Rights Reserved. Made With Love
-        </p>
-      </div>
-    </footer>
+    <?php
+    require 'footer.php';
+    ?>
+    
     <script src="bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
