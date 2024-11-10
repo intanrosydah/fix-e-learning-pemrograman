@@ -12,23 +12,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        body { font-family: "Montserrat", sans-serif; background-color: #092635; color: white; }
-        .navbar { padding: 0; position: fixed; top: 0; width: 100%; z-index: 1000; background-color: rgba(9, 38, 53, 0.5); backdrop-filter: blur(10px); transition: background-color 0.3s ease, transform 0.3s ease; }
-        .navbar:hover { background-color: rgba(0, 0, 0, 0.5); }
-        .navbar.zoom-in { transform: scale(1.05); }
-        .navbar.zoom-out { transform: scale(1) translateY(-10px); }
-        .navbar-brand img { max-width: 200px; }
-        .navbar-nav .nav-link { padding: 8px 15px; }
-        .carousel-item img { width: 100%; height: 500px; object-fit: cover; }
-        .team-member img { width: 100px; height: 100px; border-radius: 50%; transition: transform 0.3s ease; }
-        .team-member img:hover { transform: scale(1.1); }
-        .modal-content { background-color: #092635; color: white; }
-        footer { background-color: #092635; color: white; padding: 20px; }
-        .content { margin-top: 70px; }
-        .bg-light { background-color: #092635 !important; color: white !important; }
-        .logo-hover { transition: transform 0.3s ease; }
-        .logo-hover:hover { transform: scale(1.2); }
-    </style>
+    body { font-family: "Montserrat", sans-serif; background-color: #092635; color: white; }
+    .navbar { padding: 0; position: fixed; top: 0; width: 100%; z-index: 1000; background-color: rgba(9, 38, 53, 0.5); backdrop-filter: blur(10px); transition: background-color 0.3s ease, transform 0.3s ease; }
+    .navbar:hover { background-color: rgba(0, 0, 0, 0.5); }
+    .navbar.zoom-in { transform: scale(1.05); }
+    .navbar.zoom-out { transform: scale(1) translateY(-10px); }
+    .navbar-brand img { max-width: 200px; }
+    .navbar-nav .nav-link { padding: 8px 15px; }
+    footer { background-color: #092635; color: white; padding: 20px; }
+    .bg-light { background-color: #092635 !important; color: white !important; }
+</style>
+
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark">

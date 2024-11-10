@@ -1,6 +1,15 @@
 <?php
 require 'header.php';
 ?>
+<style>
+    .content { margin-top: 70px; }
+    .carousel-item img { width: 100%; height: 500px; object-fit: cover; }
+    .team-member img { width: 100px; height: 100px; border-radius: 50%; transition: transform 0.3s ease; }
+    .team-member img:hover { transform: scale(1.1); }
+    .modal-content { background-color: #092635; color: white; }
+    .logo-hover { transition: transform 0.3s ease; }
+    .logo-hover:hover { transform: scale(1.2); }
+</style>
 
     <!-- Carousel (Image Slider) -->
     <div
