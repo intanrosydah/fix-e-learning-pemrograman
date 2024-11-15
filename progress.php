@@ -1,102 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Progress Belajar</title>
-    <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <style>
-    body {
-     font-family: "Montserrat", sans-serif;
-     background-color: #092635;
-     color: white;
-   }
 
-   .navbar {
-     padding: 0;
-     position: fixed;
-     top: 0;
-     width: 100%;
-     z-index: 1000;
-     background-color: rgba(9, 38, 53, 0.5); /* Transparansi */
-     backdrop-filter: blur(10px); /* Efek blur */
-     transition: background-color 0.3s ease, transform 0.3s ease;
-     transform-origin: center top;
-   }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Progress Belajar</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
 
-   /* Navbar menjadi lebih transparan saat di-hover */
-   .navbar:hover {
-     background-color: rgba(0, 0, 0, 0.5);
-   }
+<style>
+  body {
+    font-family: "Montserrat", sans-serif;
+    background-color: #092635;
+    color: white;
+  }
 
-   /* Efek zoom in dan zoom out */
-   .navbar.zoom-in {
-     transform: scale(1.05);
-   }
+  .navbar {
+    padding: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: rgba(9, 38, 53, 0.5);
+    backdrop-filter: blur(10px);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    transform-origin: center top;
+  }
 
-   .navbar.zoom-out {
-     transform: scale(1) translateY(-10px); /* Tetap full-width dan turun sedikit */
-   }
+  .navbar:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
 
-   .navbar-brand img {
-     max-width: 200px;
-   }
+  .navbar.zoom-in {
+    transform: scale(1.05);
+  }
 
-   .navbar-nav .nav-link {
-     padding: 8px 15px;
-   }
- 
-   .class-section {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 20px;
+  .navbar.zoom-out {
+    transform: scale(1) translateY(-10px);
+  }
+
+  .navbar-brand img {
+    max-width: 200px;
+  }
+
+  .navbar-nav .nav-link {
+    padding: 8px 15px;
+  }
+
+  .class-section {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 50px;
+    flex-wrap: wrap;
+  }
+
+  .class-box {
+    width: 45%;
+    margin-bottom: 20px;
+  }
+
+  /* Class Item Styles */
+  .class-item {
+    margin-bottom: 20px;
+  }
+
+  .class-item-wrapper {
+    position: relative;
+    background-color: #fff;
+    color: #000;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .class-item-wrapper span {
+    display: block;
+    text-align: left;
+    /* Align class title to the left */
+  }
+
+  .class-item-wrapper button {
+    margin-top: 10px;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+  }
+
+  footer {
+    background-color: #092635;
+    color: white;
+    padding: 20px;
+  }
+
+  .social-icons a img {
+    width: 30px;
+    margin-right: 10px;
+  }
+
+  /* Media Query for responsiveness */
+  @media (max-width: 768px) {
+    .class-section {
+      flex-direction: column;
+      align-items: center;
     }
+
     .class-box {
-      width: 45%; /* Adjust width as needed */
+      width: 90%;
+      /* Make boxes take full width on smaller screens */
     }
-     .class-item {
-      margin-bottom: 15px;
-    }
+  }
+</style>
 
-   body {
-     font-family: "Montserrat", sans-serif;
-     background-color: #092635;
-   }
-   .class-item {
-     margin-bottom: 20px; /* Jarak antar kelas */
-   }
-   .class-item button {
-     margin-top: 10px; /* Jarak antara teks dan tombol */
-   }
-   .class-section {
-     display: flex;
-     justify-content: space-between; /* Untuk meratakan kotak */
-   }
-   .class-section .class-box {
-     flex: 1; /* Membuat setiap kotak mengambil ruang yang sama */
-     margin: 0 10px; /* Jarak antar kotak */
-   }
-   footer {
-      background-color: #092635;
-      color: white;
-      padding: 20px;
-    }
-
-    .social-icons a img {
-      width: 30px;
-      margin-right: 10px;
-    }
- </style>
- 
-  <body class="py-5">
+<body class="py-5">
 
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark">
@@ -104,15 +120,8 @@
       <a class="navbar-brand" href="index.php">
         <img src="images/new-logo.png" alt="Logo" />
       </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
@@ -133,46 +142,39 @@
       </div>
     </div>
   </nav>
-  <body class="text-white">
-    <div class="container text-center py-5">
-        <div class="class-section">
-          <!-- Kelas yang Dipelajari -->
-          <div class="class-box">
-            <h3>Kelas yang Dipelajari</h3>
-            <div class="class-item">
-              <div class="bg-white text-dark rounded shadow p-4">
-                <span>Belajar Dasar Penggunaan AI</span>
-                <button class="btn btn-primary mt-2" onclick="window.location.href='koridor-dipelajari.php'">Koridor Kelas</button>
-              </div>
-            </div>
-            <div class="class-item">
-              <div class="bg-white text-dark rounded shadow p-4">
-                <span>Belajar Dasar Pemrograman Web</span>
-                <button class="btn btn-primary mt-2" onclick="window.location.href='koridor-diselesaikan.php'">Koridor Kelas</button>
-              </div>
-            </div>
-            <div class="class-item">
-              <div class="bg-white text-dark rounded shadow p-4">
-                <span>Belajar Dasar Machine Learning</span>
-                <button class="btn btn-primary mt-2" onclick="window.location.href='koridor-machine-learning.php'">Koridor Kelas</button>
-              </div>
+
+  <div class="container text-center py-5">
+    <?php
+    // Pastikan variabel $kelasDipilih selalu berupa array
+    $kelasDipilih = isset($_GET['kelas']) ? $_GET['kelas'] : [];
+    ?>
+    <div class="class-section">
+      <!-- Kelas yang Dipelajari -->
+      <div class="class-box">
+        <h3>Kelas yang Dipelajari</h3>
+        <?php foreach ($kelasDipilih as $kelas): ?>
+          <div class="class-item">
+            <div class="class-item-wrapper">
+              <span><?php echo htmlspecialchars($kelas); ?></span>
+              <button class="btn btn-dark" onclick="window.location.href='koridor-dipelajari.php'">Koridor Kelas</button>
             </div>
           </div>
-  
-          <!-- Kelas yang Diselesaikan -->
-          <div class="class-box">
-            <h3>Kelas yang Diselesaikan</h3>
-            <div class="class-item">
-              <div class="bg-white text-dark rounded shadow p-4">
-                <span>Belajar Dasar Pemrograman</span>
-                <button class="btn btn-primary mt-2" onclick="window.location.href='koridor-diselesaikan.php'">Koridor Kelas</button>
-              </div>
-            </div>
+        <?php endforeach; ?>
+      </div>
+
+      <!-- Kelas yang Diselesaikan -->
+      <div class="class-box">
+        <h3>Kelas yang Diselesaikan</h3>
+        <div class="class-item">
+          <div class="class-item-wrapper">
+            <span>Belajar Dasar Pemrograman</span>
+            <button class="btn btn-dark" onclick="window.location.href='koridor-diselesaikan.php'">Koridor Kelas</button>
           </div>
         </div>
       </div>
     </div>
-  </body>
+  </div>
+
   <!-- Footer -->
   <footer class="text-center">
     <div class="container">
@@ -180,9 +182,7 @@
         <a href="#"><img src="images/facebook-icon.png" alt="Facebook" /></a>
         <a href="#"><img src="images/x-icon.png" alt="Twitter" /></a>
         <a href="#"><img src="images/linkedin-icon.png" alt="LinkedIn" /></a>
-        <a href="#"
-          ><img src="images/instagram-icon.png" alt="Instagram"
-        /></a>
+        <a href="#"><img src="images/instagram-icon.png" alt="Instagram" /></a>
       </div>
       <nav>
         <a href="index.php" class="me-3 text-decoration-none">Home</a>
@@ -196,26 +196,8 @@
     </div>
   </footer>
 
- <!-- Bootstrap JS -->
- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
- <script>
-   const navbar = document.querySelector(".navbar");
-
-   window.addEventListener("scroll", () => {
-     const scrollPos = window.scrollY;
-
-     if (scrollPos > 50) {
-       navbar.classList.add("zoom-out");
-       navbar.classList.remove("zoom-in");
-     } else {
-       navbar.classList.add("zoom-in");
-       navbar.classList.remove("zoom-out");
-     }
-   });
- </script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
-      
