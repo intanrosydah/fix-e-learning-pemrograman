@@ -64,7 +64,7 @@
             $password = password_hash($_POST['password'], PASSWORD_BCRYPT); // Hash password
 
             // Query untuk menyimpan data
-            $sql = "INSERT INTO users (name, username, email, password) VALUES (:name, :username, :email, :password)";
+            $sql = "INSERT INTO user (name, username, email, password) VALUES (:name, :username, :email, :password)";
             $stmt = $pdo->prepare($sql);
 
             // Bind parameter
