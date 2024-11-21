@@ -1,3 +1,27 @@
+<?php
+require 'config.php'; // Include database connection
+
+// Tangkap parameter package dari URL tanpa pengecekan manual
+$package = isset($_GET['package']) ? (int)$_GET['package'] : 1;
+
+// Query untuk mengambil data paket berdasarkan ID
+$query = "SELECT * FROM paket WHERE id_paket = :id_paket";
+$stmt = $pdo->prepare($query);
+$stmt->bindParam(':id_paket', $package, PDO::PARAM_INT);
+$stmt->execute();
+$paket = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Jika paket tidak ditemukan, redirect ke halaman lain atau tampilkan error
+if (!$paket) {
+  die("Paket tidak ditemukan.");
+}
+
+// Query untuk mengambil metode pembayaran
+$query_metode = "SELECT * FROM metode_pembayaran";
+$stmt_metode = $pdo->prepare($query_metode);
+$stmt_metode->execute();
+$metode_pembayaran = $stmt_metode->fetchAll(PDO::FETCH_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,23 +52,10 @@
 </head>
 
 <body>
-  <?php
-  // Tangkap nilai package dari halaman sebelumnya (POST atau GET)
-  $package = isset($_POST['package']) && in_array($_POST['package'], [1, 2, 3]) ? (int)$_POST['package'] : (isset($_GET['package']) ? (int)$_GET['package'] : 1);
-
-  // Daftar nama dan harga paket
-  $namaPaket = ["1 Bulan", "3 Bulan", "6 Bulan"];
-  $hargaPaket = ["1.000.000", "3.000.000", "5.100.000"];
-
-  // Tentukan nama dan harga sesuai pilihan
-  $nama = $namaPaket[$package - 1];
-  $harga = $hargaPaket[$package - 1];
-  ?>
-
   <!-- Paket Langganan dan Biaya -->
   <div class="container text-center text-white py-5">
-    <h1 class="display-6">Paket Langganan <?php echo $nama; ?></h1>
-    <p class="fs-3">Biaya: <strong>Rp <?php echo $harga; ?></strong></p>
+    <h1 class="display-6">Paket Langganan <?php echo htmlspecialchars($paket['nama_paket']); ?></h1>
+    <p class="fs-3">Biaya: <strong>Rp <?php echo number_format($paket['harga_paket'], 0, ',', '.'); ?></strong></p>
   </div>
 
   <!-- Konten Utama -->
@@ -54,30 +65,20 @@
       <div class="payment-method mb-4 text-dark">
         <h3 class="my-4">Metode Pembayaran</h3>
         <div class="d-flex flex-column align-items-center">
-          <div class="form-check mb-2">
-            <input class="form-check-input" type="radio" id="va_bca" name="payment_method" />
-            <label class="form-check-label" for="va_bca">
-              <img src="images/logobca.png" alt="BCA Logo" class="img-fluid" style="width: 100px; transition: transform 0.2s" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'" />
-            </label>
-          </div>
-          <div class="form-check mb-2">
-            <input class="form-check-input" type="radio" id="va_bni" name="payment_method" />
-            <label class="form-check-label" for="va_bni">
-              <img src="images/logobni.png" alt="BNI Logo" class="img-fluid" style="width: 100px; transition: transform 0.2s" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'" />
-            </label>
-          </div>
-          <div class="form-check mb-2">
-            <input class="form-check-input" type="radio" id="va_mandiri" name="payment_method" />
-            <label class="form-check-label" for="va_mandiri">
-              <img src="images/logomandiri.png" alt="Mandiri Logo" class="img-fluid" style="width: 100px; transition: transform 0.2s" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'" />
-            </label>
-          </div>
+          <?php foreach ($metode_pembayaran as $metode): ?>
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="radio" id="payment_method_<?php echo $metode['id_metode_pembayaran']; ?>" name="payment_method" />
+              <label class="form-check-label" for="payment_method_<?php echo $metode['id_metode_pembayaran']; ?>">
+                <img src="data:image/jpeg;base64,<?php echo base64_encode($metode['logo_metode_pembayaran']); ?>" alt="Logo Pembayaran" class="img-fluid" style="width: 100px; transition: transform 0.2s" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'" />
+              </label>
+            </div>
+          <?php endforeach; ?>
         </div>
       </div>
 
       <!-- Tombol Pembayaran -->
       <div class="payment-button my-4">
-        <a href="bayar-sekarang.php?package=<?php echo $package; ?>" class="btn btn-dark btn-md">Bayar Sekarang</a>
+        <a href="bayar-sekarang.php?package=<?php echo $paket['id_paket']; ?>" class="btn btn-dark btn-md">Bayar Sekarang</a>
       </div>
 
       <!-- Instruksi Pembayaran -->

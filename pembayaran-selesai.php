@@ -1,3 +1,40 @@
+<?php
+require 'config.php'; // Koneksi database
+
+// Tangkap parameter package dari URL
+$package = isset($_GET['package']) ? (int)$_GET['package'] : 1;
+
+// Query untuk mengambil data paket berdasarkan ID
+$query = "SELECT * FROM paket WHERE id_paket = :id_paket";
+$stmt = $pdo->prepare($query);
+$stmt->bindParam(':id_paket', $package, PDO::PARAM_INT);
+$stmt->execute();
+$paket = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Jika paket tidak ditemukan, redirect ke halaman lain atau tampilkan error
+if (!$paket) {
+  die("Paket tidak ditemukan.");
+}
+
+$nama = htmlspecialchars($paket['nama_paket']);  // Menampilkan nama paket
+$harga = number_format($paket['harga_paket'], 0, ',', '.');  // Menampilkan harga paket dengan format
+
+// Menghitung tanggal mulai dan tanggal berakhir
+$tanggalMulai = new DateTime();
+$tanggalBerakhir = clone $tanggalMulai;
+
+if ($package == 1) {
+  $tanggalBerakhir->modify('+1 month');
+} elseif ($package == 2) {
+  $tanggalBerakhir->modify('+3 months');
+} elseif ($package == 3) {
+  $tanggalBerakhir->modify('+6 months');
+}
+
+$tanggalMulaiFormatted = $tanggalMulai->format('d F Y');
+$tanggalBerakhirFormatted = $tanggalBerakhir->format('d F Y');
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,9 +44,7 @@
   <title>Pembayaran Selesai</title>
   <link rel="stylesheet" href="bootstrap-5.0.2-dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="css/footer.css" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet" />
 </head>
 <style>
   body {
@@ -30,34 +65,6 @@
 </style>
 
 <body>
-  <?php
-  // Tangkap parameter package dari URL
-  $package = isset($_GET['package']) && in_array($_GET['package'], [1, 2, 3]) ? (int)$_GET['package'] : 1;
-
-  // Daftar harga dan nama paket
-  $namaPaket = ["1 Bulan", "3 Bulan", "6 Bulan"];
-  $hargaPaket = ["1.000.000", "3.000.000", "5.100.000"];
-
-  // Tentukan harga dan nama paket sesuai pilihan
-  $nama = $namaPaket[$package - 1];
-  $harga = $hargaPaket[$package - 1];
-
-  // Menghitung tanggal mulai dan tanggal berakhir
-  $tanggalMulai = new DateTime();
-  $tanggalBerakhir = clone $tanggalMulai;
-
-  if ($package == 1) {
-    $tanggalBerakhir->modify('+1 month');
-  } elseif ($package == 2) {
-    $tanggalBerakhir->modify('+3 months');
-  } elseif ($package == 3) {
-    $tanggalBerakhir->modify('+6 months');
-  }
-
-  $tanggalMulaiFormatted = $tanggalMulai->format('d F Y');
-  $tanggalBerakhirFormatted = $tanggalBerakhir->format('d F Y');
-  ?>
-
   <div class="container text-center text-white py-5">
     <h1 class="display-6">Terima Kasih</h1>
   </div>
@@ -74,9 +81,7 @@
       </p>
 
       <!-- Informasi Langganan -->
-      <div
-        class="shadow bg-light text-dark rounded-3 p-3 my-5 mx-auto"
-        style="max-width: 400px">
+      <div class="shadow bg-light text-dark rounded-3 p-3 my-5 mx-auto" style="max-width: 400px">
         <h3>Detail Langganan</h3>
         <p>Paket Langganan: <strong><?php echo $nama; ?></strong></p>
         <p>Tanggal Mulai: <strong><?php echo $tanggalMulaiFormatted; ?></strong></p>
@@ -91,9 +96,7 @@
     </section>
   </main>
 
-  <?php
-  require 'footer.php';
-  ?>
+  <?php require 'footer.php'; ?>
 
   <script src="bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
 </body>
