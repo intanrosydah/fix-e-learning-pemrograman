@@ -41,14 +41,19 @@ $paket_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
         color: #092635;
         border: none;
         border-radius: 8px;
-        padding: 50px 70px;
-        margin-bottom: 20px;
+        padding: 70px 200px;
+        /* Sesuaikan ukuran padding */
         font-size: 1.2rem;
         font-weight: 500;
         text-transform: uppercase;
-        width: 100%;
         transition: all 0.3s ease;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        text-decoration: none;
+        /* Hilangkan garis bawah */
+        margin: 0 auto;
+        /* Pusatkan tombol */
+        max-width: 100%;
+        /* Tombol tidak melebihi kontainer */
     }
 
     .btn-package:hover {
@@ -57,34 +62,15 @@ $paket_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     }
 
-    .btn-package.active {
-        background-color: #a8a7a7;
-        color: #092635;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+    .d-flex.flex-column.gap-3 {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        /* Jarak antar tombol */
+        align-items: center;
+        /* Pusatkan tombol secara horizontal */
     }
 
-    .btn-package:focus {
-        outline: none;
-    }
-
-    .btn-dark {
-        background-color: #092635;
-        border: none;
-        padding: 15px;
-        font-size: 1.1rem;
-        border-radius: 8px;
-        text-transform: uppercase;
-        transition: background 0.3s ease;
-    }
-
-    .btn-dark:disabled {
-        background: #ccc;
-        cursor: not-allowed;
-    }
-
-    .btn-dark:hover:not(:disabled) {
-        background-color: #092635;
-    }
 
     footer {
         background-color: #092635;
@@ -126,15 +112,13 @@ $paket_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <div class="main-container">
     <div class="product-container">
         <h2>Pilih Paket Kursus</h2>
-        <form id="paketForm" action="pembayaran.php" method="POST">
+        <div class="d-flex flex-column gap-3">
             <?php foreach ($paket_list as $paket) : ?>
-                <button type="button" class="btn-package" data-value="<?= $paket['id_paket'] ?>">
+                <a href="pembayaran.php?package=<?= $paket['id_paket'] ?>" class="btn-package text-center">
                     <?= htmlspecialchars($paket['nama_paket']) ?> - Rp <?= number_format($paket['harga_paket'], 0, ',', '.') ?>
-                </button>
+                </a>
             <?php endforeach; ?>
-            <input type="hidden" name="package" id="selectedPackage">
-            <button type="submit" class="btn btn-dark w-100 mt-3" disabled id="submitButton">Pilih</button>
-        </form>
+        </div>
     </div>
 </div>
 
@@ -171,26 +155,5 @@ $paket_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
             navbar.classList.add("zoom-in");
             navbar.classList.remove("zoom-out");
         }
-    });
-</script>
-<script>
-    const buttons = document.querySelectorAll('.btn-package');
-    const selectedPackageInput = document.getElementById('selectedPackage');
-    const submitButton = document.getElementById('submitButton');
-
-    buttons.forEach(button => {
-        button.addEventListener('click', () => {
-            // Hapus class active dari semua tombol
-            buttons.forEach(btn => btn.classList.remove('active'));
-
-            // Tambahkan class active ke tombol yang dipilih
-            button.classList.add('active');
-
-            // Set value paket yang dipilih
-            selectedPackageInput.value = button.getAttribute('data-value');
-
-            // Aktifkan tombol submit
-            submitButton.disabled = false;
-        });
     });
 </script>

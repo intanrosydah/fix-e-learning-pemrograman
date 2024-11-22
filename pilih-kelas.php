@@ -1,3 +1,25 @@
+<?php
+require 'config.php'; // Include the database connection file
+
+// Tangkap parameter package dari URL
+$package = isset($_GET['package']) && in_array($_GET['package'], [1, 2, 3]) ? (int)$_GET['package'] : 1;
+
+// Tentukan jumlah kelas yang bisa dipilih berdasarkan paket
+$jumlahKelas = [3, 6, 9];  // 1 bulan = 3 kelas, 3 bulan = 6 kelas, 6 bulan = 9 kelas
+$kelasMax = $jumlahKelas[$package - 1];  // Sesuaikan jumlah kelas yang bisa dipilih
+
+// Query untuk mengambil data kelas dari database
+$query = "SELECT id_kelas, nama_kelas FROM kelas";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
+$kelas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Jika tidak ada kelas yang ditemukan, beri pesan error
+if (!$kelas) {
+  die("Kelas tidak ditemukan.");
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,48 +52,28 @@
 </style>
 
 <body>
-  <?php
-  // Tangkap parameter package dari URL
-  $package = isset($_GET['package']) && in_array($_GET['package'], [1, 2, 3]) ? (int)$_GET['package'] : 1;
-
-  // Tentukan jumlah kelas yang bisa dipilih berdasarkan paket
-  $jumlahKelas = [3, 6, 9];  // 1 bulan = 3 kelas, 3 bulan = 6 kelas, 6 bulan = 9 kelas
-  $kelasMax = $jumlahKelas[$package - 1];  // Sesuaikan jumlah kelas yang bisa dipilih
-  ?>
-
   <div class="container text-center text-white py-5">
     <h1 class="display-6">Pilih Kelas</h1>
     <p class="fs-5 mt-3">
       Silakan pilih maksimal <strong><?php echo $kelasMax; ?> Kelas</strong> dari daftar berikut.
     </p>
   </div>
+
   <!-- Konten Utama -->
   <main class="container mb-4">
     <section
       class="bg-white rounded-3 shadow p-4 mx-auto"
       style="max-width: 600px">
       <h2 class="text-center mt-3 mb-3">Daftar Kelas</h2>
+
       <!-- Pilihan Kelas -->
       <div class="bg-light shadow rounded-3 p-3 mx-auto">
         <?php
-        // Daftar kelas yang tersedia
-        $kelas = [
-          "Belajar Dasar AI",
-          "Belajar Dasar Machine Learning",
-          "Belajar Dasar Pemrograman",
-          "Belajar Dasar Pemrograman Web",
-          "Belajar Dasar Pemrograman Game",
-          "Belajar Bahasa Python",
-          "Belajar Bahasa CSS",
-          "Belajar Bahasa Java",
-          "Belajar Bahasa C++"
-        ];
-
         // Loop untuk menampilkan checkbox kelas
-        foreach ($kelas as $index => $kelasName) {
+        foreach ($kelas as $index => $kelasItem) {
           echo '<div class="form-check">
-                    <input type="checkbox" class="form-check-input pilihan" id="kelas' . ($index + 1) . '" />
-                    <label class="form-check-label" for="kelas' . ($index + 1) . '">' . $kelasName . '</label>
+                    <input type="checkbox" class="form-check-input pilihan" id="kelas' . $kelasItem['id_kelas'] . '" />
+                    <label class="form-check-label" for="kelas' . $kelasItem['id_kelas'] . '">' . $kelasItem['nama_kelas'] . '</label>
                   </div>';
         }
         ?>
@@ -130,10 +132,6 @@
     </div>
   </div>
 
-  <?php
-  require 'footer.php';
-  ?>
-
   <script src="bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
   <script>
     function prepareSubmission() {
@@ -149,26 +147,32 @@
       // Validasi jumlah kelas yang dipilih
       if (checkboxes.length > <?php echo $kelasMax; ?>) {
         message = "Anda hanya boleh memilih maksimal <?php echo $kelasMax; ?> Kelas.";
+        // Nonaktifkan tombol konfirmasi jika lebih dari kelas maksimal
+        document.getElementById("confirmModal").querySelector(".btn-primary").disabled = true;
       } else if (checkboxes.length < <?php echo $kelasMax; ?>) {
         message = "Silakan pilih <?php echo $kelasMax; ?> Kelas.";
+        // Nonaktifkan tombol konfirmasi jika kurang dari kelas maksimal
+        document.getElementById("confirmModal").querySelector(".btn-primary").disabled = true;
       } else {
         message = "Kelas berhasil diambil!";
+        // Aktifkan tombol konfirmasi jika jumlah kelas yang dipilih sesuai
+        document.getElementById("confirmModal").querySelector(".btn-primary").disabled = false;
       }
 
       // Tampilkan pesan di modal
       document.getElementById("modalBody").innerText = message;
 
-      // Menyimpan kelas yang dipilih ke dalam query string
-      const queryString = selectedClasses.map(item => `kelas[]=${encodeURIComponent(item)}`).join("&");
-      const url = `progress.php?${queryString}`;
+      // Jika kelas berhasil diambil, siapkan pengalihan ke progress.php dengan query string
+      if (checkboxes.length >= <?php echo $kelasMax; ?>) {
+        document.getElementById("confirmModal").querySelector(".btn-primary").onclick = function() {
+          // Membuat query string dengan kelas yang dipilih
+          const queryString = selectedClasses.map(item => `kelas[]=${encodeURIComponent(item)}`).join("&");
 
-      // Mengarahkan ke halaman progress dengan query string
-      document.getElementById("confirmModal").querySelector(".btn-primary").onclick = function() {
-        window.location.href = url; // Arahkan ke halaman progress dengan kelas yang dipilih
-      };
+          // Mengarahkan ke halaman progress.php dengan query string
+          window.location.href = "progress.php?" + queryString;
+        };
+      }
     }
-  </script>
-
   </script>
 </body>
 

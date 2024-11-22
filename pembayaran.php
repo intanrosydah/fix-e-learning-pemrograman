@@ -1,3 +1,25 @@
+<?php
+require 'config.php'; // Koneksi database
+
+// Tangkap nilai package dari URL
+$package = isset($_GET['package']) ? (int)$_GET['package'] : 1;
+
+// Query untuk mengambil data paket berdasarkan ID
+$query = "SELECT * FROM paket WHERE id_paket = :id_paket";
+$stmt = $pdo->prepare($query);
+$stmt->bindParam(':id_paket', $package, PDO::PARAM_INT);
+$stmt->execute();
+$paket = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Jika paket tidak ditemukan, redirect ke halaman lain atau tampilkan error
+if (!$paket) {
+  die("Paket tidak ditemukan.");
+}
+
+$nama = htmlspecialchars($paket['nama_paket']);  // Menampilkan nama paket
+$harga = number_format($paket['harga_paket'], 0, ',', '.');  // Menampilkan harga paket dengan format
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -45,19 +67,6 @@
 <body>
   <div class="content-container">
     <div class="package-info text-center">
-      <?php
-      // Tangkap nilai package, default ke 1 jika tidak ada atau tidak valid
-      $package = isset($_POST['package']) && in_array($_POST['package'], [1, 2, 3]) ? (int)$_POST['package'] : 1;
-
-      // Daftar nama dan harga paket
-      $namaPaket = ["1 Bulan", "3 Bulan", "6 Bulan"];
-      $hargaPaket = ["1.000.000", "3.000.000", "5.100.000"];
-
-      // Tentukan nama dan harga sesuai pilihan
-      $nama = $namaPaket[$package - 1];
-      $harga = $hargaPaket[$package - 1];
-      ?>
-
       <h2>Pembayaran untuk Paket Kursus Online: <?php echo $nama; ?></h2>
       <div class="text-start mt-4">
         <div class="d-flex justify-content-between">
@@ -73,7 +82,6 @@
       <div class="d-flex justify-content-between mt-4">
         <a href="product-login.php" class="btn btn-outline-dark">Kembali</a>
         <a href="metode-pembayaran.php?package=<?php echo $package; ?>" class="btn btn-dark">Bayar</a>
-
       </div>
     </div>
   </div>

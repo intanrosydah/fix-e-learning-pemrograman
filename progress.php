@@ -145,21 +145,25 @@
 
   <div class="container text-center py-5">
     <?php
-    // Pastikan variabel $kelasDipilih selalu berupa array
+    // Ambil kelas yang dipilih dari URL (jika ada)
     $kelasDipilih = isset($_GET['kelas']) ? $_GET['kelas'] : [];
     ?>
     <div class="class-section">
       <!-- Kelas yang Dipelajari -->
       <div class="class-box">
         <h3>Kelas yang Dipelajari</h3>
-        <?php foreach ($kelasDipilih as $kelas): ?>
-          <div class="class-item">
-            <div class="class-item-wrapper">
-              <span><?php echo htmlspecialchars($kelas); ?></span>
-              <button class="btn btn-dark" onclick="window.location.href='koridor-dipelajari.php'">Koridor Kelas</button>
+        <?php if (empty($kelasDipilih)): ?>
+          <p>Tidak ada kelas yang dipilih.</p>
+        <?php else: ?>
+          <?php foreach ($kelasDipilih as $kelas): ?>
+            <div class="class-item">
+              <div class="class-item-wrapper">
+                <span><?php echo htmlspecialchars($kelas); ?></span>
+                <button class="btn btn-dark" onclick="window.location.href='koridor-dipelajari.php?kelas=<?php echo urlencode($kelas); ?>'">Koridor Kelas</button>
+              </div>
             </div>
-          </div>
-        <?php endforeach; ?>
+          <?php endforeach; ?>
+        <?php endif; ?>
       </div>
 
       <!-- Kelas yang Diselesaikan -->

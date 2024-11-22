@@ -1,249 +1,159 @@
-<!DOCTYPE html>
-<html lang="en">
+<?php
+require 'header.php';
+include 'config.php'; // Koneksi database
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Product Page</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-    rel="stylesheet" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap"
-    rel="stylesheet" />
-  <style>
-    /* Body background image */
-    body {
-      background-image: url("images/bg_produk.jpg");
-      /* Ganti path dengan path gambar */
-      background-size: cover;
-      /* Membuat gambar menyesuaikan ukuran halaman */
-      background-position: center;
-      /* Memposisikan gambar di tengah */
-      background-repeat: no-repeat;
-      /* Mencegah pengulangan gambar */
-      margin: 0;
-      font-family: "Montserrat", sans-serif;
-      color: #000;
-    }
+// Query untuk mengambil data paket kursus
+$query = "SELECT * FROM paket";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
+$paket_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+<style>
+  /* Body background */
+  body {
+    background-image: url("images/bg_produk.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0;
+    font-family: "Montserrat", sans-serif;
+    color: #fff;
+  }
 
-    .navbar {
-      padding: 0;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 1000;
-      background-color: rgba(9, 38, 53, 0.5);
-      /* Transparansi */
-      backdrop-filter: blur(10px);
-      /* Efek blur */
-      transition: background-color 0.3s ease, transform 0.3s ease;
-      transform-origin: center top;
-    }
+  .main-container {
+    padding-top: 100px;
+  }
 
-    /* Navbar menjadi lebih transparan saat di-hover */
-    .navbar:hover {
-      background-color: rgba(0, 0, 0, 0.5);
-    }
+  .product-container {
+    padding: 60px 15px;
+    text-align: center;
+    max-width: 800px;
+    margin: auto;
+  }
 
-    /* Efek zoom in dan zoom out */
-    .navbar.zoom-in {
-      transform: scale(1.05);
-    }
+  .product-container h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+  }
 
-    .navbar.zoom-out {
-      transform: scale(1) translateY(-10px);
-      /* Tetap full-width dan turun sedikit */
-    }
+  .btn-package {
+    background-color: #fff;
+    color: #092635;
+    border: none;
+    border-radius: 8px;
+    padding: 70px 200px;
+    /* Sesuaikan ukuran padding */
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    /* Hilangkan garis bawah */
+    margin: 0 auto;
+    /* Pusatkan tombol */
+    max-width: 100%;
+    /* Tombol tidak melebihi kontainer */
+  }
 
-    .navbar-brand img {
-      max-width: 200px;
-    }
+  .btn-package:hover {
+    background-color: #e6e6e6;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  }
 
-    .navbar-nav .nav-link {
-      padding: 8px 15px;
-    }
+  .d-flex.flex-column.gap-3 {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    /* Jarak antar tombol */
+    align-items: center;
+    /* Pusatkan tombol secara horizontal */
+  }
 
 
-    .class-section {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 20px;
-    }
+  footer {
+    background-color: #092635;
+    color: #fff;
+    padding: 40px 0;
+    position: relative;
+  }
 
-    .class-box {
-      width: 45%;
-      /* Adjust width as needed */
-    }
+  .social-icons a img {
+    width: 35px;
+    margin: 0 10px;
+    transition: transform 0.3s;
+  }
 
-    .class-item {
-      margin-bottom: 15px;
-    }
+  .social-icons a:hover img {
+    transform: scale(1.1);
+  }
 
-    body {
-      font-family: "Montserrat", sans-serif;
-      background-color: #092635;
-    }
+  .footer-nav a {
+    color: #fff;
+    margin: 0 15px;
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
 
-    .class-item {
-      margin-bottom: 20px;
-      /* Jarak antar kelas */
-    }
+  .footer-nav a:hover {
+    color: #0d6efd;
+  }
 
-    .class-item button {
-      margin-top: 10px;
-      /* Jarak antara teks dan tombol */
-    }
+  .footer-text {
+    font-size: 0.9rem;
+    margin-top: 15px;
+  }
+</style>
 
-    .class-section {
-      display: flex;
-      justify-content: space-between;
-      /* Untuk meratakan kotak */
-    }
 
-    .class-section .class-box {
-      flex: 1;
-      /* Membuat setiap kotak mengambil ruang yang sama */
-      margin: 0 10px;
-      /* Jarak antar kotak */
-    }
-
-    footer {
-      background-color: #092635;
-      color: white;
-      padding: 20px;
-    }
-
-    .social-icons a img {
-      width: 30px;
-      margin-right: 10px;
-    }
-  </style>
-</head>
-
-<body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container">
-      <a class="navbar-brand" href="index.php">
-        <img src="images/new-logo.png" alt="Logo" />
-      </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="index.php">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#about">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="product.php">Product</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="loginfix.php">Login</a>
-          </li>
-        </ul>
-      </div>
+<!-- Main Content -->
+<div class="main-container">
+  <div class="product-container">
+    <h2>Pilih Paket Kursus</h2>
+    <div class="d-flex flex-column gap-3">
+      <?php foreach ($paket_list as $paket) : ?>
+        <a href="regist.php?package=<?= $paket['id_paket'] ?>" class="btn-package text-center">
+          <?= htmlspecialchars($paket['nama_paket']) ?> - Rp <?= number_format($paket['harga_paket'], 0, ',', '.') ?>
+        </a>
+      <?php endforeach; ?>
     </div>
-  </nav>
-  <!-- Main Content -->
-  <main>
-    <div class="product-container py-5">
-      <!-- Paket Kursus 1 -->
-      <div class="course-package">
-        <div class="grid">
+  </div>
+</div>
 
-          <body class="bg-dark text-white">
-            <div class="container text-center py-5">
-              <div class="bg-white text-dark rounded shadow p-4">
-                <h2>PAKET KURSUS ONLINE 1</h2>
-                <p>Langganan 1 bulan</p>
-                <p>Rp 1,000,000</p>
-                <button onclick="window.location.href='regist.php'" type="button" class="btn btn-dark">Pilih</button>
-              </div>
-
-              <!-- Paket Kursus 2 -->
-              <div class="course-package">
-                <div class="course-package">
-                  <div class="grid">
-
-                    <body class="bg-dark text-white">
-                      <div class="container text-center py-5">
-                        <div class="bg-white text-dark rounded shadow p-4">
-                          <h2>PAKET KURSUS ONLINE 2</h2>
-                          <p>Langganan 3 bulan</p>
-                          <p>Rp 3,000,000</p>
-                          <button onclick="window.location.href='regist.php'" type="button" class="btn btn-dark">Pilih</button>
-                        </div>
-
-                        <!-- Paket Kursus 3 -->
-                        <div class="course-package">
-                          <div class="course-package">
-                            <div class="grid">
-
-                              <body class="bg-dark text-white">
-                                <div class="container text-center py-5">
-                                  <div class="bg-white text-dark rounded shadow p-4">
-                                    <h2>PAKET KURSUS ONLINE 3</h2>
-                                    <p>Langganan 6 bulan</p>
-                                    <div class="container text-center">
-                                      <p>
-                                        <del class="text-muted">Rp 6,000,000</del>
-                                        <span class="font-weight-bold">Rp 5,100,000</span>
-                                      </p>
-                                      <button onclick="window.location.href='regist.php'" type="button" class="btn btn-dark">Pilih</button>
-                                    </div>
-                                  </div>
-  </main>
-
-  <!-- Footer -->
-  <footer class="text-center">
-    <div class="container">
-      <div class="social-icons mb-3">
-        <a href="#"><img src="images/facebook-icon.png" alt="Facebook" /></a>
-        <a href="#"><img src="images/x-icon.png" alt="Twitter" /></a>
-        <a href="#"><img src="images/linkedin-icon.png" alt="LinkedIn" /></a>
-        <a href="#"><img src="images/instagram-icon.png" alt="Instagram" /></a>
-      </div>
-      <nav>
-        <a href="index.php" class="me-3 text-decoration-none">Home</a>
-        <a href="aboutUs.php" class="me-3 text-decoration-none">About Us</a>
-        <a href="product.php" class="me-3 text-decoration-none">Product</a>
-        <a href="profil.php" class="text-decoration-none">Login</a>
-      </nav>
-      <p class="mt-3">
-        &copy; 2024 AIFYCODE Learning | All Rights Reserved. Made With Love
-      </p>
+<!-- Footer -->
+<footer>
+  <div class="container text-center">
+    <div class="social-icons mb-4">
+      <a href="#"><img src="images/facebook-icon.png" alt="Facebook" /></a>
+      <a href="#"><img src="images/x-icon.png" alt="Twitter" /></a>
+      <a href="#"><img src="images/linkedin-icon.png" alt="LinkedIn" /></a>
+      <a href="#"><img src="images/instagram-icon.png" alt="Instagram" /></a>
     </div>
-  </footer>
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="footer-nav">
+      <a href="index.php">Home</a>
+      <a href="aboutUs.php">About Us</a>
+      <a href="product.php">Product</a>
+      <a href="profil.php">Login</a>
+    </div>
+    <p class="footer-text mt-3">&copy; 2024 AIFYCODE Learning | All Rights Reserved. Made With Love</p>
+  </div>
+</footer>
 
-  <script>
-    const navbar = document.querySelector(".navbar");
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const navbar = document.querySelector(".navbar");
 
-    window.addEventListener("scroll", () => {
-      const scrollPos = window.scrollY;
-
-      if (scrollPos > 50) {
-        navbar.classList.add("zoom-out");
-        navbar.classList.remove("zoom-in");
-      } else {
-        navbar.classList.add("zoom-in");
-        navbar.classList.remove("zoom-out");
-      }
-    });
-  </script>
-</body>
-
-</html>
+  window.addEventListener("scroll", () => {
+    const scrollPos = window.scrollY;
+    if (scrollPos > 50) {
+      navbar.classList.add("zoom-out");
+      navbar.classList.remove("zoom-in");
+    } else {
+      navbar.classList.add("zoom-in");
+      navbar.classList.remove("zoom-out");
+    }
+  });
+</script>
