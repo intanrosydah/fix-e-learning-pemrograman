@@ -133,28 +133,54 @@
               object-fit: cover;
               /* Memastikan gambar tidak terdistorsi */
             }
-          </style>
-          <img
-            src="images/foto_profil.jpg"
-            alt="Foto Profil"
-            class="profile-image rounded" />
-          <p>FOTO PROFIL</p>
-          <div class="mb-3">
-            <label for="emailInput" class="form-label">EMAIL</label>
-            <input type="email" class="form-control" id="emailInput" placeholder="Alamat Email">
-          </div>
-          <div class="mb-3">
-            <label for="nameInput" class="form-label">NAMA</label>
-            <input type="text" class="form-control" id="nameInput" placeholder="Nama Lengkap">
-          </div>
-          <div class="mb-3">
-            <label for="packageInput" class="form-label">PAKET</label>
-            <input type="text" class="form-control" id="packageInput" placeholder="Paket Anda">
-          </div>
-        </div>
-      </div>
-    </body>
+            </style>
+
+<div class="container">
+  <div class="profile-section">
+    <h2>Profil Pengguna</h2>
+
+    <!-- Foto Profil -->
+    <div class="text-center">
+      <img
+        id="profileImage"
+        src="images/default_profile.jpg"
+        alt="Foto Profil"
+        class="profile-image rounded" />
+      <p>FOTO PROFIL</p>
+      <input type="file" id="imageInput" accept="image/*" class="form-control mb-3" />
+    </div>
+
+    <!-- Formulir Informasi Pengguna -->
+    <div class="mb-3">
+      <label for="emailInput" class="form-label">EMAIL</label>
+      <input type="email" class="form-control" id="emailInput" placeholder="Alamat Email">
+    </div>
+    <div class="mb-3">
+      <label for="nameInput" class="form-label">NAMA</label>
+      <input type="text" class="form-control" id="nameInput" placeholder="Nama Lengkap">
+    </div>
+    <div class="mb-3">
+      <label for="packageInput" class="form-label">PAKET</label>
+      <input type="text" class="form-control" id="packageInput" placeholder="Paket Anda">
+    </div>
   </div>
+</div>
+
+<script>
+  const imageInput = document.getElementById("imageInput");
+  const profileImage = document.getElementById("profileImage");
+
+  imageInput.addEventListener("change", function (event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        profileImage.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+</script>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
