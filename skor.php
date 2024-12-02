@@ -1,3 +1,24 @@
+<?php
+require_once 'config.php'; // Memasukkan koneksi database
+
+$answers = $_POST['answer']; // Jawaban pengguna dari halaman kuis
+$total_questions = count($answers); // Total soal yang dijawab
+$score = 0;
+
+// Proses penilaian
+foreach ($answers as $id_soal => $jawaban) {
+    $query = $pdo->prepare("SELECT jawaban_benar FROM soal_kuis WHERE id_soal = ?");
+    $query->execute([$id_soal]);
+    $jawaban_benar = $query->fetchColumn();
+
+    if ($jawaban === $jawaban_benar) {
+        $score += 100 / $total_questions; // Skor setiap soal benar
+    }
+}
+
+$final_score = round($score, 2); // Membulatkan skor
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -80,7 +101,8 @@
             <img src="images/jempol.png" alt="Jempol 3" />
           </div>
           <h2>SCORE</h2>
-          <h1>100</h1>
+          <!-- Menampilkan skor akhir -->
+          <h1><?= $final_score; ?></h1>
           <button
             class="btn btn-custom"
             onclick="window.location.href='belajar.php'"
