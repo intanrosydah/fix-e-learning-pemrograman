@@ -1,25 +1,11 @@
 <?php
-include 'config2.php'; // Koneksi database
+include 'config2.php'; // File koneksi database
 
-$sql = "SELECT 
-            langganan.id_langganan AS id_langganan, 
-            user.name AS nama_pelanggan, 
-            paket.nama_paket AS nama_paket, 
-            metode_pembayaran.nama_metode_pembayaran AS nama_metode_pembayaran, 
-            langganan.nomor_va, 
-            langganan.tanggal_mulai, 
-            langganan.tanggal_selesai
-        FROM langganan
-        JOIN user ON langganan.id_user = user.id_user
-        JOIN paket ON langganan.id_paket = paket.id_paket
-        JOIN metode_pembayaran ON langganan.id_metode_pembayaran = metode_pembayaran.id_metode_pembayaran";
-
-// Eksekusi query menggunakan PDO
+// Query untuk mendapatkan data pembayaran
+$sql = "SELECT id_langganan, id, id_paket, id_metode_pembayaran, nomor_va, tanggal_mulai, tanggal_selesai FROM langganan";
 $result = $pdo->query($sql);
-
 ?>
 
-<style></style>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -81,53 +67,7 @@ $result = $pdo->query($sql);
       <p>Admin</p>
     </div>
     <a href="#">Home</a>
-
-    <!-- Dropdown Manajemen Pengguna -->
-    <a
-      class="dropdown-toggle"
-      data-bs-toggle="collapse"
-      href="#manajemenPengguna"
-      role="button"
-      aria-expanded="false"
-      aria-controls="manajemenPengguna">
-      Manajemen Pengguna
-    </a>
-    <div class="collapse" id="manajemenPengguna">
-      <a href="data-pengguna.php">Data Pengguna</a>
-      <a href="monitoring-aktivitas.php">Monitoring Aktivitas Pengguna</a>
-      <a href="manajemen-sertifikat.php">Sertifikat Pengguna</a>
-    </div>
-
-    <!-- Dropdown Manajemen Kursus -->
-    <a
-      class="dropdown-toggle"
-      data-bs-toggle="collapse"
-      href="#manajemenKursus"
-      role="button"
-      aria-expanded="false"
-      aria-controls="manajemenKursus">
-      Manajemen Kursus
-    </a>
-    <div class="collapse" id="manajemenKursus">
-      <a href="manajemen-jadwal-kursus.php">Jadwal Kursus</a>
-      <a href="manajemen-materi-kursus.php">Materi Kursus</a>
-      <a href="manajemen-modul-kursus.php">Modul Kursus</a>
-    </div>
-
-    <!-- Dropdown Manajemen Pembayaran -->
-    <a
-      class="dropdown-toggle"
-      data-bs-toggle="collapse"
-      href="#manajemenPembayaran"
-      role="button"
-      aria-expanded="false"
-      aria-controls="manajemenPembayaran">
-      Manajemen Pembayaran
-    </a>
-    <div class="collapse" id="manajemenPembayaran">
-      <a href="manajemen-pembayaran.php">Riwayat Pembayaran</a>
-    </div>
-
+    <a href="manajemen-pembayaran.php">Riwayat Pembayaran</a>
     <a href="index.php">Logout</a>
   </div>
 
@@ -172,17 +112,18 @@ $result = $pdo->query($sql);
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h3>RIWAYAT PEMBAYARAN</h3>
       </div>
+
       <div class="table-responsive">
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>No</th>
-              <th>Nama Pengguna</th>
-              <th>Nama Paket</th>
-              <th>Periode</th>
-              <th>Metode Pembayaran</th>
+              <th>ID Langganan</th>
+              <th>ID User</th>
+              <th>ID Paket</th>
+              <th>ID Metode Pembayaran</th>
               <th>Nomor VA</th>
-              <th>Aksi</th>
+              <th>Tanggal Mulai</th>
+              <th>Tanggal Selesai</th>
             </tr>
           </thead>
           <tbody>
@@ -192,12 +133,12 @@ $result = $pdo->query($sql);
               while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                 echo "<tr>";
                 echo "<td>" . $no++ . "</td>";
-                echo "<td>" . $row['nama_pengguna'] . "</td>";
-                echo "<td>" . $row['nama_paket'] . "</td>";
-                echo "<td>" . $row['tanggal_mulai'] . " - " . $row['tanggal_selesai'] . "</td>";
-                echo "<td>" . $row['nama_metode'] . "</td>";
-                echo "<td>" . $row['nomor_va'] . "</td>";
-                echo "<td><button class='btn btn-primary btn-sm'>Cetak</button></td>";
+                echo "<td>" . htmlspecialchars($row['id']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['id_paket']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['id_metode_pembayaran']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['nomor_va']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['tanggal_mulai']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['tanggal_selesai']) . "</td>";
                 echo "</tr>";
               }
             } else {
@@ -207,21 +148,20 @@ $result = $pdo->query($sql);
           </tbody>
         </table>
       </div>
-    </div>
 
-    <nav aria-label="Page navigation">
-      <ul class="pagination justify-content-center">
-        <li class="page-item disabled">
-          <a class="page-link" href="#" tabindex="-1">Previous</a>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item">
-          <a class="page-link" href="#">Next</a>
-        </li>
-      </ul>
-    </nav>
-  </div>
+      <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Previous</a>
+          </li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
