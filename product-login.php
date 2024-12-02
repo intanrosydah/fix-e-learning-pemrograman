@@ -106,7 +106,43 @@ $paket_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
         margin-top: 15px;
     }
 </style>
-
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="profil.php">
+            <img src="images/new-logo.png" alt="Logo" />
+        </a>
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.php">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="product-login.php">Product</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="progress.php">Progress</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="daily-coding.php">Daily Coding</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profil.php">Profil</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
 <!-- Main Content -->
 <div class="main-container">
