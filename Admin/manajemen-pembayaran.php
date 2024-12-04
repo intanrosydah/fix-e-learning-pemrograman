@@ -2,7 +2,12 @@
 include 'config2.php'; // File koneksi database
 
 // Query untuk mendapatkan data pembayaran
-$sql = "SELECT id_langganan, id, id_paket, id_metode_pembayaran, nomor_va, tanggal_mulai, tanggal_selesai FROM langganan";
+$sql = "SELECT langganan.id_langganan, langganan.id, langganan.id_paket, langganan.id_metode_pembayaran, langganan.nomor_va, langganan.tanggal_mulai, langganan.tanggal_selesai, user.name AS nama_pelanggan, paket.nama_paket AS nama_paket, paket.harga_paket AS harga_paket, metode_pembayaran.nama_metode_pembayaran AS nama_metode_pembayaran
+        FROM langganan
+        JOIN user ON langganan.id = user.id
+        JOIN paket ON langganan.id_paket = paket.id_paket
+        JOIN metode_pembayaran ON langganan.id_metode_pembayaran = metode_pembayaran.id_metode_pembayaran";
+
 $result = $pdo->query($sql);
 ?>
 
@@ -67,7 +72,53 @@ $result = $pdo->query($sql);
       <p>Admin</p>
     </div>
     <a href="#">Home</a>
-    <a href="manajemen-pembayaran.php">Riwayat Pembayaran</a>
+
+    <!-- Dropdown Manajemen Pengguna -->
+    <a
+      class="dropdown-toggle"
+      data-bs-toggle="collapse"
+      href="#manajemenPengguna"
+      role="button"
+      aria-expanded="false"
+      aria-controls="manajemenPengguna">
+      Manajemen Pengguna
+    </a>
+    <div class="collapse" id="manajemenPengguna">
+      <a href="data-pengguna.php">Data Pengguna</a>
+      <a href="monitoring-aktivitas.php">Monitoring Aktivitas Pengguna</a>
+      <a href="manajemen-sertifikat.php">Sertifikat Pengguna</a>
+    </div>
+
+    <!-- Dropdown Manajemen Kursus -->
+    <a
+      class="dropdown-toggle"
+      data-bs-toggle="collapse"
+      href="#manajemenKursus"
+      role="button"
+      aria-expanded="false"
+      aria-controls="manajemenKursus">
+      Manajemen Kursus
+    </a>
+    <div class="collapse" id="manajemenKursus">
+      <a href="manajemen-jadwal-kursus.php">Jadwal Kursus</a>
+      <a href="manajemen-materi-kursus.php">Materi Kursus</a>
+      <a href="manajemen-modul-kursus.php">Modul Kursus</a>
+    </div>
+
+    <!-- Dropdown Manajemen Pembayaran -->
+    <a
+      class="dropdown-toggle"
+      data-bs-toggle="collapse"
+      href="#manajemenPembayaran"
+      role="button"
+      aria-expanded="false"
+      aria-controls="manajemenPembayaran">
+      Manajemen Pembayaran
+    </a>
+    <div class="collapse" id="manajemenPembayaran">
+      <a href="manajemen-pembayaran.php">Riwayat Pembayaran</a>
+    </div>
+
     <a href="index.php">Logout</a>
   </div>
 
@@ -118,9 +169,10 @@ $result = $pdo->query($sql);
           <thead>
             <tr>
               <th>ID Langganan</th>
-              <th>ID User</th>
-              <th>ID Paket</th>
-              <th>ID Metode Pembayaran</th>
+              <th>Nama Pelanggan</th> <!-- Menambahkan kolom untuk nama pelanggan -->
+              <th>Paket</th>
+              <th>Harga Paket</th>
+              <th>Metode Pembayaran</th>
               <th>Nomor VA</th>
               <th>Tanggal Mulai</th>
               <th>Tanggal Selesai</th>
@@ -133,9 +185,10 @@ $result = $pdo->query($sql);
               while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                 echo "<tr>";
                 echo "<td>" . $no++ . "</td>";
-                echo "<td>" . htmlspecialchars($row['id']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['id_paket']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['id_metode_pembayaran']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['nama_pelanggan']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['nama_paket']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['harga_paket']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['nama_metode_pembayaran']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['nomor_va']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['tanggal_mulai']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['tanggal_selesai']) . "</td>";
