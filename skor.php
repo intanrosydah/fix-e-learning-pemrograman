@@ -79,14 +79,20 @@ $final_score = round($score, 2); // Membulatkan skor
       }
 
       .btn-custom {
-        padding: 10px 40px;
-        font-size: 16px;
-        background-color: #2a3a5b;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-      }
+  padding: 10px 40px;
+  font-size: 16px;
+  background-color: #2a3a5b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-custom:hover {
+  background-color: grey; /* Warna hover menjadi grey */
+}
+
     </style>
   </head>
   <body>
