@@ -2,18 +2,11 @@
 require 'header-login.php'; // Memasukkan header
 require 'config.php'; // File koneksi database
 
-// Jawaban benar untuk setiap soal
-$solutions = [
-    "for i in range(1, n + 1):\n    faktorial *= i",
-    "for i in range(2, int(n / 2) + 1):\n    if n % i == 0:\n        prima = False\n        break",
-    "a, b = b, a + b",
-    "max_value = max(daftar)\nreturn max_value",
-    "sorted_list = sorted(daftar)\nreturn sorted_list",
-    "if n % 2 == 0:\n    return 'genap'\nelse:\n    return 'ganjil'",
-    "total = sum(daftar) / len(daftar)\nreturn total"
-];
+// Query untuk mengambil data dari daily_coding
+$query = "SELECT * FROM daily_coding";
+$stmt = $pdo->prepare($query);
+$stmt->execute();
 
-// Variabel pesan
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -22,9 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $kode_soal = $_POST['kode_soal'];
         $jawaban_user = $_POST['jawaban_user'];
 
-        // Ambil jawaban yang benar berdasarkan kode soal
-        $index_soal = intval(substr($kode_soal, 0, 2)) - 1;  // Misal, "soal1" jadi 0
-        $jawaban_benar = $solutions[$index_soal];
+        // Ambil jawaban yang benar berdasarkan kode soal dari database
+        $query = "SELECT jawaban_benar FROM daily_coding WHERE kode_soal = :kode_soal";
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam(':kode_soal', $kode_soal);
+        $stmt->execute();
+        $jawaban_benar = $stmt->fetchColumn();
 
         // Validasi jawaban user
         if (trim($jawaban_benar) === trim($jawaban_user)) {
@@ -57,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Return response as JSON
     echo json_encode([
-        'success' => $status_tantangan === 'selesa',
+        'success' => $status_tantangan === 'selesai',
         'apiPoints' => $poin_didapatkan,
         'message' => $message,
     ]);
@@ -145,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h1 class="text-center my-4">Tantangan Harian</h1>
 
         <!-- Reward Header -->
-        <div class="reward-header mx-auto mb-4">
+        <div class="reward-header text-center my-4">
             <a href="tukar-api.php" class="btn btn-danger">Tukar Api</a>
             <span id="api-points" class="fs-4 fw-bold text-white">0</span> <!-- Poin Api -->
         </div>
@@ -159,38 +155,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endfor; ?>
         </ul>
 
-        <!-- Tab Content -->
-        <div class="tab-content">
-            <?php 
-            $questions = [
-                "Lengkapi code berikut untuk menghitung faktorial dari sebuah bilangan!\n\n# Fungsi untuk menghitung faktorial\n def hitung_faktorial(n):\n    faktorial = 1\n    for i in range(1, ___):  # Lengkapi batas perulangan\n        faktorial *= ___  # Lengkapi operasi\n    return faktorial\n\n# Input bilangan\nbilangan = 5\n\n# Output\nprint(\"Faktorial dari\", bilangan, \"adalah\", hitung_faktorial(bilangan))",
-                "Lengkapi code berikut untuk menentukan apakah sebuah angka adalah bilangan prima atau bukan!\n\n# Fungsi untuk menentukan apakah bilangan prima\n def cek_prima(n):\n    prima = True\n    for i in range(2, ___):  # Lengkapi batas perulangan\n        if n % ___ == 0:  # Lengkapi operasi\n            prima = False\n            break\n    return prima\n\n# Input bilangan\nbilangan = 7\n\n# Output\nif cek_prima(bilangan):\n    print(bilangan, \"adalah bilangan prima\")\nelse:\n    print(bilangan, \"bukan bilangan prima\")",
-                "Lengkapi code berikut untuk menampilkan angka Fibonacci ke-n yang dimasukkan oleh pengguna!\n\n# Fungsi untuk menampilkan angka Fibonacci\n def fibonacci(n):\n    a, b = 0, 1\n    for i in range(n):\n        print(a, end=\" \")\n        a, b = ___, ___  # Lengkapi operasi\n    return\n\n# Input bilangan\nbilangan = 5\n\n# Output\nfibonacci(bilangan)",
-                "Lengkapi code berikut untuk menghitung angka terbesar dalam sebuah daftar!\n\n# Fungsi untuk mencari angka terbesar\n def angka_terbesar(daftar):\n    ___\n    return ___\n\n# Input\nangka = [1, 3, 5, 7, 9]\nprint(\"Angka terbesar adalah\", angka_terbesar(angka))",
-                "Lengkapi code berikut untuk mengurutkan daftar angka!\n\n# Fungsi untuk mengurutkan angka\n def urutkan_daftar(daftar):\n    ___\n    return ___\n\n# Input\nangka = [5, 3, 8, 1, 4]\nprint(\"Daftar yang diurutkan:\", urutkan_daftar(angka))",
-                "Lengkapi code berikut untuk menentukan angka ganjil atau genap!\n\n# Fungsi untuk mengecek genap atau ganjil\n def cek_genap_ganjil(n):\n    ___\n    ___\n\n# Input\nbilangan = 10\nprint(\"Bilangan\", bilangan, \"adalah\", cek_genap_ganjil(bilangan))",
-                "Lengkapi code berikut untuk menghitung nilai rata-rata dari sebuah daftar angka!\n\n# Fungsi untuk menghitung rata-rata\n def hitung_rata_rata(daftar):\n    ___\n    return ___\n\n# Input\nangka = [5, 10, 15, 20]\nprint(\"Rata-rata adalah\", hitung_rata_rata(angka))"
-            ];            
-            foreach ($questions as $index => $question): 
-            ?>
-                <div class="tab-pane fade <?= $index === 0 ? 'show active' : '' ?>" id="day<?= $index + 1 ?>">
-                    <div class="card md-grid gap-2 d-md-block">
-                        <h3 class="soal-harian">Soal Hari Ke-<?= $index + 1 ?></h3>
-                        <pre class="fw-bold soal-harian" style="background-color: #f8f9fa; padding: 10px; border-radius: 5px;">
-<?= $question ?>
-                        </pre>
-                        <textarea id="user-code-<?= $index ?>" class="form-control mb-3" placeholder="Tulis kode Anda..." style="height: 120px"></textarea>
-                        <button type="button" class="btn btn-dark" onclick="checkAnswer(<?= $index ?>)">Kirim Kode</button>
-                        <div id="feedback-<?= $index ?>" class="feedback"></div>
-                    </div>
+<!-- Tab Content -->
+<div class="tab-content">
+    <?php $day = 1; ?>
+    <?php foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row): ?>
+        <div class="tab-pane fade <?= $day === 1 ? 'show active' : '' ?>" id="day<?= $day ?>" role="tabpanel">
+            <div class="card mb-4 question-box md-grid gap-2 d-md-block">
+                <h3 class="soal-harian">Soal Hari Ke-<?= $day ?></h3>
+                <pre class="bg-light p-3 rounded text-dark"><?= htmlspecialchars($row['deskripsi_tantangan']) ?></pre>
+                <div class="question-option text-dark">
+                    <input type="radio" id="answer1_<?= $day ?>" name="answer[<?= $day ?>]" value="A" required>
+                    <label for="answer1_<?= $day ?>"><?= htmlspecialchars($row['opsi_a']); ?></label>
                 </div>
-            <?php endforeach; ?>
+                <div class="question-option text-dark">
+                    <input type="radio" id="answer2_<?= $day ?>" name="answer[<?= $day ?>]" value="B">
+                    <label for="answer2_<?= $day ?>"><?= htmlspecialchars($row['opsi_b']); ?></label>
+                </div>
+                <div class="question-option text-dark">
+                    <input type="radio" id="answer3_<?= $day ?>" name="answer[<?= $day ?>]" value="C">
+                    <label for="answer3_<?= $day ?>"><?= htmlspecialchars($row['opsi_c']); ?></label>
+                </div>
+                <div class="question-option text-dark">
+                    <input type="radio" id="answer4_<?= $day ?>" name="answer[<?= $day ?>]" value="D">
+                    <label for="answer4_<?= $day ?>"><?= htmlspecialchars($row['opsi_d']); ?></label>
+                </div>
+                <div class="submit-button mt-4">
+                    <button type="button" class="btn btn-primary" onclick="checkAnswer(<?= $day ?>)">Kirim Jawaban</button>
+                    <div id="feedback-<?= $day ?>" class="feedback"></div>
+                </div>
+            </div>
         </div>
-    </div>
+        <?php $day++; ?>
+    <?php endforeach; ?>
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content text-center">
             <div class="modal-body">
@@ -210,7 +210,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!-- JavaScript -->
 <script>
-    const solutions = <?= json_encode($solutions) ?>;
     let apiPoints = 0; // Inisialisasi Poin Api
 
     // Tampilkan bagian Daily Coding setelah tombol mulai diklik
@@ -219,23 +218,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         document.getElementById('daily-coding-section').style.display = 'block';
     });
 
-    function checkAnswer(index) {
-        const userCode = document.getElementById(`user-code-${index}`).value.trim();
-        const feedback = document.getElementById(`feedback-${index}`);
-        const kodeSoal = `${String(index + 1).padStart(2, '0')}A`; // Format: 01A, 02A, etc.
-        const idUser = 1;
+    function checkAnswer(day) {
+    const userAnswer = document.querySelector(`input[name="answer[${day}]"]:checked`)?.value;
+    const feedback = document.getElementById(`feedback-${day}`);
+    const kodeSoal = `${String(day).padStart(2, '0')}A`; // Format day as two digits and append 'A'
+    const idUser = 1; // Example user ID
 
-        fetch('daily-coding.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({
-                id_user: idUser,
-                kode_soal: kodeSoal,
-                jawaban_user: userCode,
-            }),
-        })
-        
-        if (userCode === solutions[index].trim()) {
+    // Pastikan jawaban dipilih
+    if (!userAnswer) {
+        feedback.textContent = "Pilih jawaban terlebih dahulu!";
+        feedback.className = "feedback incorrect";
+        return;
+    }
+
+    fetch('daily-coding.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+            id_user: idUser,
+            kode_soal: kodeSoal,
+            jawaban_user: userAnswer,
+        }),
+    })
+
+        if (userCode === solutions[day].trim()) {
             feedback.textContent = "Kode Anda Benar!";
             feedback.className = "feedback correct";
             apiPoints++; // Tambahkan Poin Api
