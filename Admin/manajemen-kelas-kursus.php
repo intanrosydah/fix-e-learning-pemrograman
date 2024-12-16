@@ -2,22 +2,19 @@
 include 'config2.php'; // File koneksi database
 
 // Query untuk mendapatkan data pembayaran
-$sql = "SELECT langganan.id_langganan, langganan.id, langganan.id_paket, langganan.id_metode_pembayaran, langganan.nomor_va, langganan.tanggal_mulai, langganan.tanggal_selesai, user.name AS nama_pelanggan, paket.nama_paket AS nama_paket, paket.harga_paket AS harga_paket, metode_pembayaran.nama_metode_pembayaran AS nama_metode_pembayaran
-        FROM langganan
-        JOIN user ON langganan.id = user.id
-        JOIN paket ON langganan.id_paket = paket.id_paket
-        JOIN metode_pembayaran ON langganan.id_metode_pembayaran = metode_pembayaran.id_metode_pembayaran";
+$sql = "SELECT kelas.id_kelas, kelas.nama_kelas, kelas.deskripsi_kelas, kategori.nama_kategori AS nama_kategori
+        FROM kelas
+        JOIN kategori ON kelas.id_kategori = kategori.id_kategori";
 
 $result = $pdo->query($sql);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SISFO - Manajemen Pembayaran</title>
+  <title>SISFO - Mata Kuliah List</title>
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
     rel="stylesheet" />
@@ -162,21 +159,24 @@ $result = $pdo->query($sql);
   <div class="content pt-5 mt-3">
     <div class="container mt-5">
       <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3>RIWAYAT PEMBAYARAN</h3>
+        <h3>KELAS KURSUS</h3>
+        <div>
+          <button class="btn btn-danger me-2">Create</button>
+          <button class="btn btn-primary me-2">Excel</button>
+          <button class="btn btn-primary me-2">Word</button>
+          <button class="btn btn-primary">PDF</button>
+        </div>
       </div>
 
       <div class="table-responsive">
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>ID Langganan</th>
-              <th>Nama Pelanggan</th> <!-- Menambahkan kolom untuk nama pelanggan -->
-              <th>Paket</th>
-              <th>Harga Paket</th>
-              <th>Metode Pembayaran</th>
-              <th>Nomor VA</th>
-              <th>Tanggal Mulai</th>
-              <th>Tanggal Selesai</th>
+              <th>No</th>
+              <th>ID Kelas</th> <!-- Mengubah dari ID Materi ke ID Kelas -->
+              <th>Nama Kategori</th>
+              <th>Nama Kelas</th> <!-- Mengubah dari Nama Materi ke Nama Kelas -->
+              <th>Deskripsi_Kelas</th>
             </tr>
           </thead>
           <tbody>
@@ -186,17 +186,12 @@ $result = $pdo->query($sql);
               while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                 echo "<tr>";
                 echo "<td>" . $no++ . "</td>";
-                echo "<td>" . htmlspecialchars($row['nama_pelanggan']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['nama_paket']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['harga_paket']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['nama_metode_pembayaran']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['nomor_va']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['tanggal_mulai']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['tanggal_selesai']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['id_kelas']) . "</td>"; // ID Kelas dari database
+                echo "<td>" . htmlspecialchars($row['nama_kategori']) . "</td>"; // Nama Kelas dari database
+                echo "<td>" . htmlspecialchars($row['nama_kelas']) . "</td>"; // Nama Kelas dari database
+                echo "<td>" . htmlspecialchars($row['deskripsi_kelas']) . "</td>"; // Nama Kelas dari database
                 echo "</tr>";
               }
-            } else {
-              echo "<tr><td colspan='7'>Tidak ada data</td></tr>";
             }
             ?>
           </tbody>
