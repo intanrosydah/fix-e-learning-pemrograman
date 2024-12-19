@@ -1,10 +1,38 @@
 <?php
-include 'config2.php'; // File koneksi database
+include 'config2.php'; // Koneksi database
 
-// Query untuk mendapatkan data pembayaran
-$sql = "SELECT kategori.id_kategori, kategori. nama_kategori, kategori.deskripsi_kategori
-        FROM kategori";
+// Proses Tambah Data
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create') {
+    $nama_kategori = $_POST['nama_kategori'];
+    $deskripsi_kategori = $_POST['deskripsi_kategori'];
 
+    $sql = "INSERT INTO kategori (nama_kategori, deskripsi_kategori) VALUES (:nama_kategori, :deskripsi_kategori)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':nama_kategori' => $nama_kategori, ':deskripsi_kategori' => $deskripsi_kategori]);
+}
+
+// Proses Update Data
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update') {
+    $id_kategori = $_POST['id_kategori'];
+    $nama_kategori = $_POST['nama_kategori'];
+    $deskripsi_kategori = $_POST['deskripsi_kategori'];
+
+    $sql = "UPDATE kategori SET nama_kategori = :nama_kategori, deskripsi_kategori = :deskripsi_kategori WHERE id_kategori = :id_kategori";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':nama_kategori' => $nama_kategori, ':deskripsi_kategori' => $deskripsi_kategori, ':id_kategori' => $id_kategori]);
+}
+
+// Proses Hapus Data
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'delete') {
+    $id_kategori = $_GET['id'];
+
+    $sql = "DELETE FROM kategori WHERE id_kategori = :id_kategori";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':id_kategori' => $id_kategori]);
+}
+
+// Query untuk mendapatkan data kategori
+$sql = "SELECT * FROM kategori";
 $result = $pdo->query($sql);
 ?>
 <!DOCTYPE html>
@@ -159,7 +187,7 @@ $result = $pdo->query($sql);
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h3>KATEGORI KURSUS</h3>
                 <div>
-                    <button class="btn btn-danger me-2">Create</button>
+                    <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addModal">Tambah Kategori</button>
                     <button class="btn btn-primary me-2">Excel</button>
                     <button class="btn btn-primary me-2">Word</button>
                     <button class="btn btn-primary">PDF</button>
@@ -174,6 +202,7 @@ $result = $pdo->query($sql);
                             <th>ID Kategori</th>
                             <th>Nama Kategori</th>
                             <th>Deskripsi Kategori</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -186,12 +215,75 @@ $result = $pdo->query($sql);
                                 echo "<td>" . htmlspecialchars($row['id_kategori']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['nama_kategori']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['deskripsi_kategori']) . "</td>";
+                                echo "<td>
+                                    <button class='btn btn-warning btn-sm' data-bs-toggle='modal' data-bs-target='#editModal" . $row['id_kategori'] . "'>Edit</button>
+                                    <a href='?action=delete&id=" . $row['id_kategori'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus data ini?\")'>Hapus</a>
+                                </td>";
                                 echo "</tr>";
+
+                                // Modal Edit
+                                echo "
+                                <div class='modal fade' id='editModal" . $row['id_kategori'] . "' tabindex='-1'>
+                                    <div class='modal-dialog'>
+                                        <form method='POST'>
+                                            <div class='modal-content'>
+                                                <div class='modal-header'>
+                                                    <h5 class='modal-title'>Edit Kategori</h5>
+                                                    <button type='button' class='btn-close' data-bs-dismiss='modal'></button>
+                                                </div>
+                                                <div class='modal-body'>
+                                                    <input type='hidden' name='id_kategori' value='" . htmlspecialchars($row['id_kategori']) . "'>
+                                                    <div class='mb-3'>
+                                                        <label for='nama_kategori' class='form-label'>Nama Kategori</label>
+                                                        <input type='text' class='form-control' name='nama_kategori' value='" . htmlspecialchars($row['nama_kategori']) . "' required>
+                                                    </div>
+                                                    <div class='mb-3'>
+                                                        <label for='deskripsi_kategori' class='form-label'>Deskripsi</label>
+                                                        <textarea class='form-control' name='deskripsi_kategori' rows='3' required>" . htmlspecialchars($row['deskripsi_kategori']) . "</textarea>
+                                                    </div>
+                                                </div>
+                                                <div class='modal-footer'>
+                                                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Batal</button>
+                                                    <button type='submit' class='btn btn-primary'>Simpan</button>
+                                                    <input type='hidden' name='action' value='update'>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>";
                             }
                         }
                         ?>
                     </tbody>
                 </table>
+            </div>
+            <!-- Modal Tambah Data -->
+            <div class="modal fade" id="addModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <form method="POST">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Tambah Kategori</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="nama_kategori" class="form-label">Nama Kategori</label>
+                                    <input type="text" class="form-control" name="nama_kategori" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="deskripsi_kategori" class="form-label">Deskripsi</label>
+                                    <textarea class="form-control" name="deskripsi_kategori" rows="3" required></textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                <input type="hidden" name="action" value="create">
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
 
             <nav aria-label="Page navigation">
