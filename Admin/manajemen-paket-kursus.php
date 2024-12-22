@@ -1,39 +1,41 @@
 <?php
 include 'config2.php'; // Koneksi database
 
+
 // Proses Tambah Data
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create') {
-    $nama_kategori = $_POST['nama_kategori'];
-    $deskripsi_kategori = $_POST['deskripsi_kategori'];
+    $nama_paket = $_POST['nama_paket'];
+    $harga_paket = $_POST['harga_paket'];
 
-    $sql = "INSERT INTO kategori (nama_kategori, deskripsi_kategori) VALUES (:nama_kategori, :deskripsi_kategori)";
+    $sql = "INSERT INTO paket (nama_paket, harga_paket) VALUES (:nama_paket, :harga_paket)";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([':nama_kategori' => $nama_kategori, ':deskripsi_kategori' => $deskripsi_kategori]);
+    $stmt->execute([':nama_paket' => $nama_paket, ':harga_paket' => $harga_paket]);
 }
 
 // Proses Update Data
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update') {
-    $id_kategori = $_POST['id_kategori'];
-    $nama_kategori = $_POST['nama_kategori'];
-    $deskripsi_kategori = $_POST['deskripsi_kategori'];
+    $id_paket = $_POST['id_paket'];
+    $nama_paket = $_POST['nama_paket'];
+    $harga_paket = $_POST['harga_paket'];
 
-    $sql = "UPDATE kategori SET nama_kategori = :nama_kategori, deskripsi_kategori = :deskripsi_kategori WHERE id_kategori = :id_kategori";
+    $sql = "UPDATE paket SET nama_paket = :nama_paket, harga_paket = :harga_paket WHERE id_paket = :id_paket";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([':nama_kategori' => $nama_kategori, ':deskripsi_kategori' => $deskripsi_kategori, ':id_kategori' => $id_kategori]);
+    $stmt->execute([':nama_paket' => $nama_paket, ':harga_paket' => $harga_paket, ':id_paket' => $id_paket]);
 }
 
 // Proses Hapus Data
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'delete') {
-    $id_kategori = $_GET['id'];
+    $id_paket = $_GET['id'];
 
-    $sql = "DELETE FROM kategori WHERE id_kategori = :id_kategori";
+    $sql = "DELETE FROM paket WHERE id_paket = :id_paket";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([':id_kategori' => $id_kategori]);
+    $stmt->execute([':id_paket' => $id_paket]);
 }
 
-// Query untuk mendapatkan data kategori
-$sql = "SELECT * FROM kategori";
+// Query untuk mendapatkan data paket kursus
+$sql = "SELECT * FROM paket";
 $result = $pdo->query($sql);
+?>
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -93,9 +95,9 @@ $result = $pdo->query($sql);
     <div class="content pt-5 mt-3">
         <div class="container mt-5">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3>KATEGORI KURSUS</h3>
+                <h3>PAKET KURSUS</h3>
                 <div>
-                    <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addModal">Tambah Kategori</button>
+                    <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addModal">Tambah Paket</button>
                     <button class="btn btn-primary me-2">Excel</button>
                     <button class="btn btn-primary me-2">Word</button>
                     <button class="btn btn-primary">PDF</button>
@@ -107,9 +109,9 @@ $result = $pdo->query($sql);
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>ID Kategori</th>
-                            <th>Nama Kategori</th>
-                            <th>Deskripsi Kategori</th>
+                            <th>ID Paket</th>
+                            <th>Nama Paket</th>
+                            <th>Harga Paket</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -120,34 +122,34 @@ $result = $pdo->query($sql);
                             while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
                                 echo "<tr>";
                                 echo "<td>" . $no++ . "</td>";
-                                echo "<td>" . htmlspecialchars($row['id_kategori']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['nama_kategori']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['deskripsi_kategori']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['id_paket']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['nama_paket']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['harga_paket']) . "</td>";
                                 echo "<td>
-                                    <button class='btn btn-warning btn-sm' data-bs-toggle='modal' data-bs-target='#editModal" . $row['id_kategori'] . "'>Edit</button>
-                                    <a href='?action=delete&id=" . $row['id_kategori'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus data ini?\")'>Hapus</a>
+                                    <button class='btn btn-warning btn-sm' data-bs-toggle='modal' data-bs-target='#editModal" . $row['id_paket'] . "'>Edit</button>
+                                    <a href='?action=delete&id=" . $row['id_paket'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus data ini?\")'>Hapus</a>
                                 </td>";
                                 echo "</tr>";
 
                                 // Modal Edit
                                 echo "
-                                <div class='modal fade' id='editModal" . $row['id_kategori'] . "' tabindex='-1'>
+                                <div class='modal fade' id='editModal" . $row['id_paket'] . "' tabindex='-1'>
                                     <div class='modal-dialog'>
                                         <form method='POST'>
                                             <div class='modal-content'>
                                                 <div class='modal-header'>
-                                                    <h5 class='modal-title'>Edit Kategori</h5>
+                                                    <h5 class='modal-title'>Edit Paket Kursus</h5>
                                                     <button type='button' class='btn-close' data-bs-dismiss='modal'></button>
                                                 </div>
                                                 <div class='modal-body'>
-                                                    <input type='hidden' name='id_kategori' value='" . htmlspecialchars($row['id_kategori']) . "'>
+                                                    <input type='hidden' name='id_paket' value='" . htmlspecialchars($row['id_paket']) . "'>
                                                     <div class='mb-3'>
-                                                        <label for='nama_kategori' class='form-label'>Nama Kategori</label>
-                                                        <input type='text' class='form-control' name='nama_kategori' value='" . htmlspecialchars($row['nama_kategori']) . "' required>
+                                                        <label for='nama_paket' class='form-label'>Nama Paket</label>
+                                                        <input type='text' class='form-control' name='nama_paket' value='" . htmlspecialchars($row['nama_paket']) . "' required>
                                                     </div>
                                                     <div class='mb-3'>
-                                                        <label for='deskripsi_kategori' class='form-label'>Deskripsi</label>
-                                                        <textarea class='form-control' name='deskripsi_kategori' rows='3' required>" . htmlspecialchars($row['deskripsi_kategori']) . "</textarea>
+                                                        <label for='harga_paket' class='form-label'>Harga Paket</label>
+                                                        <input type='text' class='form-control' name='harga_paket' value='" . htmlspecialchars($row['harga_paket']) . "' required>
                                                     </div>
                                                 </div>
                                                 <div class='modal-footer'>
@@ -165,23 +167,24 @@ $result = $pdo->query($sql);
                     </tbody>
                 </table>
             </div>
+
             <!-- Modal Tambah Data -->
             <div class="modal fade" id="addModal" tabindex="-1">
                 <div class="modal-dialog">
                     <form method="POST">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Tambah Kategori</h5>
+                                <h5 class="modal-title">Tambah Paket Kursus</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-body">
                                 <div class="mb-3">
-                                    <label for="nama_kategori" class="form-label">Nama Kategori</label>
-                                    <input type="text" class="form-control" name="nama_kategori" required>
+                                    <label for="nama_paket" class="form-label">Nama Paket</label>
+                                    <input type="text" class="form-control" name="nama_paket" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="deskripsi_kategori" class="form-label">Deskripsi</label>
-                                    <textarea class="form-control" name="deskripsi_kategori" rows="3" required></textarea>
+                                    <label for="harga_paket" class="form-label">Harga Paket</label>
+                                    <input type="text" class="form-control" name="harga_paket" required>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -193,20 +196,22 @@ $result = $pdo->query($sql);
                     </form>
                 </div>
             </div>
-
-            <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1">Previous</a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
-                    </li>
-                </ul>
-            </nav>
         </div>
+    </div>
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Previous</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
+    </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

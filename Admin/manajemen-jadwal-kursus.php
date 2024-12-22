@@ -1,13 +1,70 @@
+<?php
+include 'config2.php'; // File koneksi database
+
+// Proses Tambah Data
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create') {
+  $id_user = $_POST['id_user'];
+  $id_paket = $_POST['id_paket'];
+  $tanggal_mulai = $_POST['tanggal_mulai'];
+  $tanggal_selesai = $_POST['tanggal_selesai'];
+
+  $sql = "INSERT INTO langganan (id_user, id_paket, tanggal_mulai, tanggal_selesai) 
+            VALUES (:id_user, :id_paket, :tanggal_mulai, :tanggal_selesai)";
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute([
+    ':id_user' => $id_user,
+    ':id_paket' => $id_paket,
+    ':tanggal_mulai' => $tanggal_mulai,
+    ':tanggal_selesai' => $tanggal_selesai
+  ]);
+}
+
+// Proses Update Data
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update') {
+  $id_langganan = $_POST['id_langganan'];
+  $id_user = $_POST['id_user'];
+  $id_paket = $_POST['id_paket'];
+  $tanggal_mulai = $_POST['tanggal_mulai'];
+  $tanggal_selesai = $_POST['tanggal_selesai'];
+
+  $sql = "UPDATE langganan 
+            SET id_user = :id_user, id_paket = :id_paket, tanggal_mulai = :tanggal_mulai, tanggal_selesai = :tanggal_selesai 
+            WHERE id_langganan = :id_langganan";
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute([
+    ':id_user' => $id_user,
+    ':id_paket' => $id_paket,
+    ':tanggal_mulai' => $tanggal_mulai,
+    ':tanggal_selesai' => $tanggal_selesai,
+    ':id_langganan' => $id_langganan
+  ]);
+}
+
+// Proses Hapus Data
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'delete') {
+  $id_langganan = $_GET['id'];
+
+  $sql = "DELETE FROM langganan WHERE id_langganan = :id_langganan";
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute([':id_langganan' => $id_langganan]);
+}
+
+// Query untuk mendapatkan data dengan JOIN
+$sql = "SELECT langganan.id_langganan, user.name AS nama_pengguna, paket.nama_paket, langganan.tanggal_mulai, langganan.tanggal_selesai
+        FROM langganan
+        JOIN user ON langganan.id = user.id
+        JOIN paket ON langganan.id_paket = paket.id_paket";
+$result = $pdo->query($sql);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SISFO - Mata Kuliah List</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-    rel="stylesheet" />
+  <title>SISFO - Langganan List</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
     body {
       min-height: 100vh;
@@ -49,101 +106,9 @@
 </head>
 
 <body>
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <div class="text-center mb-3">
-      <img
-        src="https://via.placeholder.com/50"
-        class="rounded-circle"
-        alt="User" />
-      <p>Admin</p>
-    </div>
-    <a href="#">Home</a>
-
-    <!-- Dropdown Manajemen Pengguna -->
-    <a
-      class="dropdown-toggle"
-      data-bs-toggle="collapse"
-      href="#manajemenPengguna"
-      role="button"
-      aria-expanded="false"
-      aria-controls="manajemenPengguna">
-      Manajemen Pengguna
-    </a>
-    <div class="collapse" id="manajemenPengguna">
-      <a href="data-pengguna.php">Data Pengguna</a>
-      <a href="monitoring-aktivitas.php">Monitoring Aktivitas Pengguna</a>
-      <a href="manajemen-sertifikat.php">Sertifikat Pengguna</a>
-    </div>
-
-    <!-- Dropdown Manajemen Kursus -->
-    <a
-      class="dropdown-toggle"
-      data-bs-toggle="collapse"
-      href="#manajemenKursus"
-      role="button"
-      aria-expanded="false"
-      aria-controls="manajemenKursus">
-      Manajemen Kursus
-    </a>
-    <div class="collapse" id="manajemenKursus">
-      <a href="manajemen-jadwal-kursus.php">Jadwal Kursus</a>
-      <a href="manajemen-kategori-kursus.php">Kategori Kursus</a>
-      <a href="manajemen-kelas-kursus.php">Kelas Kursus</a>
-      <a href="manajemen-modul-kursus.php">Modul Kursus</a>
-    </div>
-
-    <!-- Dropdown Manajemen Pembayaran -->
-    <a
-      class="dropdown-toggle"
-      data-bs-toggle="collapse"
-      href="#manajemenPembayaran"
-      role="button"
-      aria-expanded="false"
-      aria-controls="manajemenPembayaran">
-      Manajemen Pembayaran
-    </a>
-    <div class="collapse" id="manajemenPembayaran">
-      <a href="manajemen-pembayaran.php">Riwayat Pembayaran</a>
-    </div>
-
-    <a href="index.php">Logout</a>
-  </div>
-
-  <!-- Header/Navbar -->
-  <nav
-    class="navbar navbar-expand-lg navbar-light bg-light fixed-top"
-    style="margin-left: 250px">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">
-        <img src="images/new-logo.png" alt="Logo" />
-        AIFYCODE Learning
-      </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
-        <form class="d-flex">
-          <input
-            class="form-control me-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search" />
-          <button class="btn btn-outline-success" type="submit">
-            Search
-          </button>
-        </form>
-      </div>
-    </div>
-  </nav>
+  <?php
+  require 'sidebar.php';
+  ?>
 
   <!-- Main Content -->
   <div class="content pt-5 mt-3">
@@ -151,7 +116,7 @@
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h3>JADWAL KURSUS</h3>
         <div>
-          <button class="btn btn-danger me-2">Create</button>
+          <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addModal">Tambah Langganan</button>
           <button class="btn btn-primary me-2">Excel</button>
           <button class="btn btn-primary me-2">Word</button>
           <button class="btn btn-primary">PDF</button>
@@ -162,10 +127,9 @@
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>No</th>
-              <th>ID Pengguna</th>
+              <th>ID Langganan</th>
               <th>Nama Pengguna</th>
-              <th>Paket Kursus</th>
+              <th>Nama Paket</th>
               <th>Tanggal Mulai</th>
               <th>Tanggal Selesai</th>
               <th>Status</th>
@@ -173,75 +137,147 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>001</td>
-              <td>Intan Aulia Rosydah</td>
-              <td>1 Bulan</td>
-              <td>09/03/2024</td>
-              <td>09/04/2024</td>
-              <td>1 Bulan</td>
-              <td>Selesai</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>002</td>
-              <td>Agniesa Junica Putri</td>
-              <td>1 Bulan</td>
-              <td>12/03/2024</td>
-              <td>12/04/2024</td>
-              <td>Selesai</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>003</td>
-              <td>Fitri Aisyah Ramadhani</td>
-              <td>3 Bulan</td>
-              <td>21/08/2024</td>
-              <td>21/11/2024</td>
-              <td>Aktif</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>004</td>
-              <td>M. Yasir Rahmatullah</td>
-              <td>3 Bulan</td>
-              <td>17/06/2024</td>
-              <td>17/09/2024</td>
-              <td>Selesai</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>005</td>
-              <td>Michael Fernando</td>
-              <td>3 Bulan</td>
-              <td>14/02/2024</td>
-              <td>14/05/2024</td>
-              <td>Selesai</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
+            <?php
+            if ($result) {
+              foreach ($result as $row) {
+                $status = (strtotime($row['tanggal_selesai']) < time()) ? 'Selesai' : 'Aktif';
+                echo "<tr>
+                        <td>" . htmlspecialchars($row['id_langganan']) . "</td>
+                        <td>" . htmlspecialchars($row['nama_pengguna']) . "</td>
+                        <td>" . htmlspecialchars($row['nama_paket']) . "</td>
+                        <td>" . date('d/m/Y', strtotime($row['tanggal_mulai'])) . "</td>
+                        <td>" . date('d/m/Y', strtotime($row['tanggal_selesai'])) . "</td>
+                        <td>" . $status . "</td>
+                        <td>
+                          <button class='btn btn-warning btn-sm' data-bs-toggle='modal' data-bs-target='#editModal" . $row['id_langganan'] . "'>Edit</button>
+                          <a href='?action=delete&id=" . $row['id_langganan'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus data ini?\")'>Hapus</a>
+                        </td>
+                      </tr>";
+
+                // Modal Edit
+                echo "<div class='modal fade' id='editModal" . $row['id_langganan'] . "' tabindex='-1'>
+                        <div class='modal-dialog'>
+                          <form method='POST'>
+                            <div class='modal-content'>
+                              <div class='modal-header'>
+                                <h5 class='modal-title'>Edit Langganan</h5>
+                                <button type='button' class='btn-close' data-bs-dismiss='modal'></button>
+                              </div>
+                              <div class='modal-body'>
+                                <input type='hidden' name='id_langganan' value='" . htmlspecialchars($row['id_langganan']) . "'>
+
+                                <div class='mb-3'>
+                                  <label for='id_user' class='form-label'>Nama Pengguna</label>
+                                  <select class='form-control' name='id_user' required>";
+
+                // Query to get all users
+                $sql_users = "SELECT id, name FROM user";
+                $stmt_users = $pdo->query($sql_users);
+                while ($user = $stmt_users->fetch()) {
+                  $selected = ($user['id'] == $row['id_user']) ? "selected" : "";
+                  echo "<option value='" . $user['id'] . "' $selected>" . htmlspecialchars($user['name']) . "</option>";
+                }
+
+                echo "  </select>
+                                          </div>
+
+                                            <div class='mb-3'>
+                                              <label for='id_paket' class='form-label'>Nama Paket</label>
+                                              <select class='form-control' name='id_paket' required>";
+
+                // Query to get all packages
+                $sql_packages = "SELECT id_paket, nama_paket FROM paket";
+                $stmt_packages = $pdo->query($sql_packages);
+                while ($package = $stmt_packages->fetch()) {
+                  $selected = ($package['id_paket'] == $row['id_paket']) ? "selected" : "";
+                  echo "<option value='" . $package['id_paket'] . "' $selected>" . htmlspecialchars($package['nama_paket']) . "</option>";
+                }
+
+                echo "  </select>
+                                            </div>
+
+                        <div class='mb-3'>
+                          <label for='tanggal_mulai' class='form-label'>Tanggal Mulai</label>
+                          <input type='date' class='form-control' name='tanggal_mulai' value='" . $row['tanggal_mulai'] . "' required>
+                        </div>
+                        <div class='mb-3'>
+                          <label for='tanggal_selesai' class='form-label'>Tanggal Selesai</label>
+                          <input type='date' class='form-control' name='tanggal_selesai' value='" . $row['tanggal_selesai'] . "' required>
+                        </div>
+                      </div>
+                      <div class='modal-footer'>
+                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Batal</button>
+                        <button type='submit' class='btn btn-primary'>Simpan</button>
+                        <input type='hidden' name='action' value='update'>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                </div>";
+              }
+            }
+            ?>
           </tbody>
         </table>
       </div>
+
+      <!-- Modal Tambah Langganan -->
+      <div class="modal fade" id="addModal" tabindex="-1">
+        <div class="modal-dialog">
+          <form method="POST">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Tambah Langganan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="id_user" class="form-label">Nama Pengguna</label>
+                  <select class="form-control" name="id_user" required>
+                    <option value="">Pilih Nama Pengguna</option>
+                    <?php
+                    // Query untuk mengambil data pengguna
+                    $sql_user = "SELECT id, name FROM user";
+                    $stmt_user = $pdo->query($sql_user);
+                    while ($user = $stmt_user->fetch(PDO::FETCH_ASSOC)) {
+                      echo "<option value='" . $user['id'] . "'>" . $user['name'] . "</option>";
+                    }
+                    ?>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="id_paket" class="form-label">Nama Paket</label>
+                  <select class="form-control" name="id_paket" required>
+                    <option value="">Pilih Nama Paket</option>
+                    <?php
+                    // Query untuk mengambil data paket
+                    $sql_paket = "SELECT id_paket, nama_paket FROM paket";
+                    $stmt_paket = $pdo->query($sql_paket);
+                    while ($paket = $stmt_paket->fetch(PDO::FETCH_ASSOC)) {
+                      echo "<option value='" . $paket['id_paket'] . "'>" . $paket['nama_paket'] . "</option>";
+                    }
+                    ?>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="tanggal_mulai" class="form-label">Tanggal Mulai</label>
+                  <input type="date" class="form-control" name="tanggal_mulai" required>
+                </div>
+                <div class="mb-3">
+                  <label for="tanggal_selesai" class="form-label">Tanggal Selesai</label>
+                  <input type="date" class="form-control" name="tanggal_selesai" required>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+                <input type="hidden" name="action" value="create">
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
 
       <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">

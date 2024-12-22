@@ -1,11 +1,55 @@
 <?php
 include 'config2.php'; // File koneksi database
 
-// Query untuk mendapatkan data pembayaran
-$sql = "SELECT modul.id_modul, modul. nama_modul, modul.deskripsi_modul, kelas.nama_kelas AS nama_kelas
-        FROM modul
-        JOIN kelas ON modul.id_kelas = kelas.id_kelas";
+// Proses Tambah Data
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create') {
+  $id_kelas = $_POST['id_kelas'];
+  $nama_modul = $_POST['nama_modul'];
+  $deskripsi_modul = $_POST['deskripsi_modul'];
 
+  $sql = "INSERT INTO modul (id_kelas, nama_modul, deskripsi_modul) 
+            VALUES (:id_kelas, :nama_modul, :deskripsi_modul)";
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute([
+    ':id_kelas' => $id_kelas,
+    ':nama_modul' => $nama_modul,
+    ':deskripsi_modul' => $deskripsi_modul
+  ]);
+}
+
+// Proses Update Data
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update') {
+  $id_modul = $_POST['id_modul'];
+  $id_kelas = $_POST['id_kelas'];
+  $nama_modul = $_POST['nama_modul'];
+  $deskripsi_modul = $_POST['deskripsi_modul'];
+
+  $sql = "UPDATE modul 
+            SET id_kelas = :id_kelas, nama_modul = :nama_modul, deskripsi_modul = :deskripsi_modul 
+            WHERE id_modul = :id_modul";
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute([
+    ':id_kelas' => $id_kelas,
+    ':nama_modul' => $nama_modul,
+    ':deskripsi_modul' => $deskripsi_modul,
+    ':id_modul' => $id_modul
+  ]);
+}
+
+// Proses Hapus Data
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'delete') {
+  $id_modul = $_GET['id'];
+
+  $sql = "DELETE FROM modul WHERE id_modul = :id_modul";
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute([':id_modul' => $id_modul]);
+}
+
+// Query untuk mendapatkan data modul dengan JOIN
+$sql = "SELECT modul.id_modul, modul.nama_modul, modul.deskripsi_modul, kelas.nama_kelas, kelas.id_kelas 
+        FROM modul
+        JOIN kelas ON modul.id_kelas = kelas.id_kelas
+        ORDER BY modul.id_modul ASC";
 $result = $pdo->query($sql);
 ?>
 <!DOCTYPE html>
@@ -14,7 +58,7 @@ $result = $pdo->query($sql);
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SISFO - Mata Kuliah List</title>
+  <title>SISFO - Modul List</title>
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
     rel="stylesheet" />
@@ -59,108 +103,17 @@ $result = $pdo->query($sql);
 </head>
 
 <body>
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <div class="text-center mb-3">
-      <img
-        src="https://via.placeholder.com/50"
-        class="rounded-circle"
-        alt="User" />
-      <p>Admin</p>
-    </div>
-    <a href="#">Home</a>
+  <?php
+  require 'sidebar.php'
+  ?>
 
-    <!-- Dropdown Manajemen Pengguna -->
-    <a
-      class="dropdown-toggle"
-      data-bs-toggle="collapse"
-      href="#manajemenPengguna"
-      role="button"
-      aria-expanded="false"
-      aria-controls="manajemenPengguna">
-      Manajemen Pengguna
-    </a>
-    <div class="collapse" id="manajemenPengguna">
-      <a href="data-pengguna.php">Data Pengguna</a>
-      <a href="monitoring-aktivitas.php">Monitoring Aktivitas Pengguna</a>
-      <a href="manajemen-sertifikat.php">Sertifikat Pengguna</a>
-    </div>
-
-    <!-- Dropdown Manajemen Kursus -->
-    <a
-      class="dropdown-toggle"
-      data-bs-toggle="collapse"
-      href="#manajemenKursus"
-      role="button"
-      aria-expanded="false"
-      aria-controls="manajemenKursus">
-      Manajemen Kursus
-    </a>
-    <div class="collapse" id="manajemenKursus">
-      <a href="manajemen-jadwal-kursus.php">Jadwal Kursus</a>
-      <a href="manajemen-kategori-kursus.php">Kategori Kursus</a>
-      <a href="manajemen-kelas-kursus.php">Kelas Kursus</a>
-      <a href="manajemen-modul-kursus.php">Modul Kursus</a>
-    </div>
-
-    <!-- Dropdown Manajemen Pembayaran -->
-    <a
-      class="dropdown-toggle"
-      data-bs-toggle="collapse"
-      href="#manajemenPembayaran"
-      role="button"
-      aria-expanded="false"
-      aria-controls="manajemenPembayaran">
-      Manajemen Pembayaran
-    </a>
-    <div class="collapse" id="manajemenPembayaran">
-      <a href="manajemen-pembayaran.php">Riwayat Pembayaran</a>
-    </div>
-
-    <a href="index.php">Logout</a>
-  </div>
-
-  <!-- Header/Navbar -->
-  <nav
-    class="navbar navbar-expand-lg navbar-light bg-light fixed-top"
-    style="margin-left: 250px">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">
-        <img src="images/new-logo.png" alt="Logo" />
-        AIFYCODE Learning
-      </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
-        <form class="d-flex">
-          <input
-            class="form-control me-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search" />
-          <button class="btn btn-outline-success" type="submit">
-            Search
-          </button>
-        </form>
-      </div>
-    </div>
-  </nav>
   <!-- Main Content -->
   <div class="content pt-5 mt-3">
     <div class="container mt-5">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h3>MODUL KURSUS</h3>
         <div>
-          <button class="btn btn-danger me-2">Create</button>
+          <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addModal">Tambah Modul</button>
           <button class="btn btn-primary me-2">Excel</button>
           <button class="btn btn-primary me-2">Word</button>
           <button class="btn btn-primary">PDF</button>
@@ -172,10 +125,11 @@ $result = $pdo->query($sql);
           <thead>
             <tr>
               <th>No</th>
-              <th>ID Modul</th> <!-- Mengubah dari ID Materi ke ID Kelas -->
+              <th>ID Modul</th>
               <th>Nama Kelas</th>
-              <th>Nama Modul</th> <!-- Mengubah dari Nama Materi ke Nama Kelas -->
-              <th>Deskripsi_Modul</th>
+              <th>Nama Modul</th>
+              <th>Deskripsi Modul</th>
+              <th>Aksi</th>
             </tr>
           </thead>
           <tbody>
@@ -189,12 +143,96 @@ $result = $pdo->query($sql);
                 echo "<td>" . htmlspecialchars($row['nama_kelas']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['nama_modul']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['deskripsi_modul']) . "</td>";
+                echo "<td>
+                          <button class='btn btn-warning btn-sm' data-bs-toggle='modal' data-bs-target='#editModal" . $row['id_modul'] . "'>Edit</button>
+                          <a href='?action=delete&id=" . $row['id_modul'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus data ini?\")'>Hapus</a>
+                      </td>";
                 echo "</tr>";
+
+                // Modal Edit
+                echo "
+                <div class='modal fade' id='editModal" . $row['id_modul'] . "' tabindex='-1'>
+                    <div class='modal-dialog'>
+                        <form method='POST'>
+                            <div class='modal-content'>
+                                <div class='modal-header'>
+                                    <h5 class='modal-title'>Edit Modul</h5>
+                                    <button type='button' class='btn-close' data-bs-dismiss='modal'></button>
+                                </div>
+                                <div class='modal-body'>
+                                    <input type='hidden' name='id_modul' value='" . htmlspecialchars($row['id_modul']) . "'>
+                                    <div class='mb-3'>
+                                        <label for='id_kelas' class='form-label'>Kelas</label>
+                                        <select class='form-select' name='id_kelas' required>
+                                            <option value='" . htmlspecialchars($row['id_kelas']) . "' selected>" . htmlspecialchars($row['nama_kelas']) . "</option>
+                                            <!-- Tambahkan opsi kelas lain dari database -->
+                                        </select>
+                                    </div>
+                                    <div class='mb-3'>
+                                        <label for='nama_modul' class='form-label'>Nama Modul</label>
+                                        <input type='text' class='form-control' name='nama_modul' value='" . htmlspecialchars($row['nama_modul']) . "' required>
+                                    </div>
+                                    <div class='mb-3'>
+                                        <label for='deskripsi_modul' class='form-label'>Deskripsi Modul</label>
+                                        <textarea class='form-control' name='deskripsi_modul' rows='3' required>" . htmlspecialchars($row['deskripsi_modul']) . "</textarea>
+                                    </div>
+                                </div>
+                                <div class='modal-footer'>
+                                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Batal</button>
+                                    <button type='submit' class='btn btn-primary'>Simpan</button>
+                                    <input type='hidden' name='action' value='update'>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>";
               }
             }
             ?>
           </tbody>
         </table>
+      </div>
+
+      <!-- Modal Tambah Data -->
+      <div class="modal fade" id="addModal" tabindex="-1">
+        <div class="modal-dialog">
+          <form method="POST">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Tambah Modul</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="id_kelas" class="form-label">Kelas</label>
+                  <select class="form-select" name="id_kelas" required>
+                    <option value="" disabled selected>Pilih Kelas</option>
+                    <?php
+                    // Query untuk mengambil data kelas
+                    $stmt = $pdo->query("SELECT id_kelas, nama_kelas FROM kelas");
+                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                      echo "<option value='" . htmlspecialchars($row['id_kelas']) . "'>" . htmlspecialchars($row['nama_kelas']) . "</option>";
+                    }
+                    ?>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="nama_modul" class="form-label">Nama Modul</label>
+                  <input type="text" class="form-control" name="nama_modul" required>
+                </div>
+                <div class="mb-3">
+                  <label for="deskripsi_modul" class="form-label">Deskripsi Modul</label>
+                  <textarea class="form-control" name="deskripsi_modul" rows="3" required></textarea>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+                <input type="hidden" name="action" value="create">
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
 
       <nav aria-label="Page navigation">
