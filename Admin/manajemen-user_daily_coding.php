@@ -5,18 +5,18 @@ include 'config2.php'; // File koneksi database
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create') {
   $id_user = $_POST['id_user'];
   $hari_tantangan = $_POST['hari_tantangan'];
-  $kode_soal = $_POST['kode_soal'];
+  $id_daily_coding = $_POST['id_daily_coding'];
   $jawaban_user = $_POST['jawaban_user'];
   $status_tantangan = $_POST['status_tantangan'];
   $perolehan_api = $_POST['perolehan_api'];
 
-  $sql = "INSERT INTO user_daily_coding (id_user, hari_tantangan, kode_soal, jawaban_user, status_tantangan, perolehan_api) 
-          VALUES (:id_user, :hari_tantangan, :kode_soal, :jawaban_user, :status_tantangan, :perolehan_api)";
+  $sql = "INSERT INTO user_daily_coding (id_user, hari_tantangan, id_daily_coding, jawaban_user, status_tantangan, perolehan_api) 
+          VALUES (:id_user, :hari_tantangan, :id_daily_coding, :jawaban_user, :status_tantangan, :perolehan_api)";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([
     ':id_user' => $id_user,
     ':hari_tantangan' => $hari_tantangan,
-    ':kode_soal' => $kode_soal,
+    ':id_daily_coding' => $id_daily_coding,
     ':jawaban_user' => $jawaban_user,
     ':status_tantangan' => $status_tantangan,
     ':perolehan_api' => $perolehan_api
@@ -27,19 +27,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update') {
   $id_user = $_POST['id_user'];
   $hari_tantangan = $_POST['hari_tantangan'];
-  $kode_soal = $_POST['kode_soal'];
+  $id_daily_coding = $_POST['id_daily_coding'];
   $jawaban_user = $_POST['jawaban_user'];
   $status_tantangan = $_POST['status_tantangan'];
   $perolehan_api = $_POST['perolehan_api'];
 
   $sql = "UPDATE user_daily_coding 
-          SET hari_tantangan = :hari_tantangan, kode_soal = :kode_soal, jawaban_user = :jawaban_user, 
+          SET hari_tantangan = :hari_tantangan, id_daily_coding = :id_daily_coding, jawaban_user = :jawaban_user, 
               status_tantangan = :status_tantangan, perolehan_api = :perolehan_api
           WHERE id_user = :id_user";
   $stmt = $pdo->prepare($sql);
   $stmt->execute([
     ':hari_tantangan' => $hari_tantangan,
-    ':kode_soal' => $kode_soal,
+    ':id_daily_coding' => $id_daily_coding,
     ':jawaban_user' => $jawaban_user,
     ':status_tantangan' => $status_tantangan,
     ':perolehan_api' => $perolehan_api,
@@ -60,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
 $sql = "SELECT * FROM user_daily_coding ORDER BY id_user ASC";
 $result = $pdo->query($sql);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -67,9 +68,7 @@ $result = $pdo->query($sql);
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SISFO - User Daily Coding</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-    rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
     body {
       min-height: 100vh;
@@ -111,9 +110,7 @@ $result = $pdo->query($sql);
 </head>
 
 <body>
-  <?php
-  require 'sidebar.php'
-  ?>
+  <?php require 'sidebar.php'; ?>
 
   <!-- Main Content -->
   <div class="content pt-5 mt-3">
@@ -121,7 +118,7 @@ $result = $pdo->query($sql);
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h3>USER DAILY CODING</h3>
         <div>
-        <button class="btn btn-primary me-2">Excel</button>
+          <button class="btn btn-primary me-2">Excel</button>
           <button class="btn btn-primary me-2">Word</button>
           <button class="btn btn-primary">PDF</button>
         </div>
@@ -134,7 +131,7 @@ $result = $pdo->query($sql);
               <th>No</th>
               <th>ID User</th>
               <th>Hari Tantangan</th>
-              <th>Kode Soal</th>
+              <th>ID Daily Coding</th>
               <th>Jawaban User</th>
               <th>Status Tantangan</th>
               <th>Perolehan API</th>
@@ -150,7 +147,7 @@ $result = $pdo->query($sql);
                 echo "<td>" . $no++ . "</td>";
                 echo "<td>" . htmlspecialchars($row['id_user']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['hari_tantangan']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['kode_soal']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['id_daily_coding']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['jawaban_user']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['status_tantangan']) . "</td>";
                 echo "<td>" . htmlspecialchars($row['perolehan_api']) . "</td>";

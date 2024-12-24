@@ -12,13 +12,13 @@ $message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $id_user = $_POST['id_user'];
-        $kode_soal = $_POST['kode_soal'];
+        $id_daily_coding = $_POST['id_daily_coding'];
         $jawaban_user = $_POST['jawaban_user'];
 
-        // Ambil jawaban yang benar berdasarkan kode soal dari database
-        $query = "SELECT jawaban_benar FROM daily_coding WHERE kode_soal = :kode_soal";
+        // Ambil jawaban yang benar berdasarkan id_daily_coding dari database
+        $query = "SELECT jawaban_benar FROM daily_coding WHERE id_daily_coding = :id_daily_coding";
         $stmt = $pdo->prepare($query);
-        $stmt->bindParam(':kode_soal', $kode_soal);
+        $stmt->bindParam(':id_daily_coding', $id_daily_coding);
         $stmt->execute();
         $jawaban_benar = $stmt->fetchColumn();
 
@@ -32,15 +32,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Tambah atau update data di tabel `user_daily_coding`
-        $sql = "INSERT INTO user_daily_coding (id_user, hari_tantangan, kode_soal, jawaban_user, status_tantangan, perolehan_api)
-                VALUES (:id_user, CURDATE(), :kode_soal, :jawaban_user, :status_tantangan, :perolehan_api)
+        $sql = "INSERT INTO user_daily_coding (id_user, hari_tantangan, id_daily_coding, jawaban_user, status_tantangan, perolehan_api)
+                VALUES (:id_user, CURDATE(), :id_daily_coding, :jawaban_user, :status_tantangan, :perolehan_api)
                 ON DUPLICATE KEY UPDATE 
                     status_tantangan = :status_tantangan, 
                     perolehan_api = perolehan_api + :perolehan_api";
         $stmt = $pdo->prepare($sql);
         
         $stmt->bindParam(':id_user', $id_user);
-        $stmt->bindParam(':kode_soal', $kode_soal);
+        $stmt->bindParam(':id_daily_coding', $id_daily_coding);
         $stmt->bindParam(':jawaban_user', $jawaban_user);
         $stmt->bindParam(':status_tantangan', $status_tantangan);
         $stmt->bindParam(':perolehan_api', $poin_didapatkan);
@@ -221,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     function checkAnswer(day) {
     const userAnswer = document.querySelector(`input[name="answer[${day}]"]:checked`)?.value;
     const feedback = document.getElementById(`feedback-${day}`);
-    const kodeSoal = `${String(day).padStart(2, '0')}A`; // Format day as two digits and append 'A'
+    const idDailyCoding = `${String(day)}`; // Format day as two digits and append 'A'
     const idUser = 1; // Example user ID
 
     // Pastikan jawaban dipilih
@@ -236,7 +236,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({
             id_user: idUser,
-            kode_soal: kodeSoal,
+            id_daily_coding: idDailyCoding,
             jawaban_user: userAnswer,
         }),
     })
