@@ -120,6 +120,11 @@ $result = $pdo->query($sql);
     <div class="container mt-5">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h3>USER DAILY CODING</h3>
+        <div>
+        <button class="btn btn-primary me-2">Excel</button>
+          <button class="btn btn-primary me-2">Word</button>
+          <button class="btn btn-primary">PDF</button>
+        </div>
       </div>
 
       <div class="table-responsive">
