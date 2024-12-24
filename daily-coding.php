@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background-color: #092635;
             color: white;
         }
-        .content { margin-top: 150px; }
+        .content { margin-top: 130px; }
         .card {
             background-color: #fff;
             padding: 20px;
@@ -180,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="answer4_<?= $day ?>"><?= htmlspecialchars($row['opsi_d']); ?></label>
                 </div>
                 <div class="submit-button mt-4">
-                    <button type="button" class="btn btn-primary" onclick="checkAnswer(<?= $day ?>)">Kirim Jawaban</button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="checkAnswer(<?= $day ?>)">Kirim Jawaban</button>
                     <div id="feedback-<?= $day ?>" class="feedback"></div>
                 </div>
             </div>
@@ -246,8 +246,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             feedback.className = "feedback correct";
             apiPoints++; // Tambahkan Poin Api
             document.getElementById('api-points').textContent = apiPoints; // Perbarui tampilan poin
-
-            // Tampilkan modal
             const modal = new bootstrap.Modal(document.getElementById('exampleModal'));
             modal.show();
         } else {
@@ -255,12 +253,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             feedback.className = "feedback incorrect";
         }
     }
-
-    document.getElementById('start-button').addEventListener('click', () => {
-        document.getElementById('intro-section').style.display = 'none';
-        document.getElementById('daily-coding-section').style.display = 'block';
-    });
-
+    
     function nextChallenge() {
         const activeTab = document.querySelector('.nav-pills .nav-link.active');
         const nextTab = activeTab.parentElement.nextElementSibling?.querySelector('.nav-link');

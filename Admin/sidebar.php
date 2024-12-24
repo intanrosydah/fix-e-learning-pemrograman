@@ -57,6 +57,21 @@
         <a href="manajemen-pembayaran.php">Riwayat Pembayaran</a>
     </div>
 
+        <!-- Dropdown Manajemen Kelola Daily Coding -->
+        <a
+        class="dropdown-toggle"
+        data-bs-toggle="collapse"
+        href="#manajemenDailyCoding"
+        role="button"
+        aria-expanded="false"
+        aria-controls="manajemenDailyCoding">
+        Manajemen Daily Coding
+    </a>
+    <div class="collapse" id="manajemenDailyCoding">
+        <a href="manajemen-daily_coding.php">Daily Coding</a>
+        <a href="manajemen-user_daily_coding.php">Riwayat Daily Coding</a>
+    </div>
+
     <a href="index.php">Logout</a>
 </div>
 
