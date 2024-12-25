@@ -7,11 +7,11 @@
             alt="User" />
         <p>Admin</p>
     </div>
-    <a href="#">Home</a>
+    <a href="#" class="d-block mb-2">Home</a>
 
     <!-- Dropdown Manajemen Pengguna -->
     <a
-        class="dropdown-toggle"
+        class="dropdown-toggle d-block mb-2"
         data-bs-toggle="collapse"
         href="#manajemenPengguna"
         role="button"
@@ -19,15 +19,15 @@
         aria-controls="manajemenPengguna">
         Manajemen Pengguna
     </a>
-    <div class="collapse" id="manajemenPengguna">
-        <a href="data-pengguna.php">Data Pengguna</a>
-        <a href="monitoring-aktivitas.php">Monitoring Aktivitas Pengguna</a>
-        <a href="manajemen-sertifikat.php">Sertifikat Pengguna</a>
+    <div class="collapse ms-3" id="manajemenPengguna">
+        <a href="data-pengguna.php" class="d-block ">Data Pengguna</a>
+        <a href="monitoring-aktivitas.php" class="d-block">Monitoring Aktivitas Pengguna</a>
+        <a href="manajemen-sertifikat.php" class="d-block">Sertifikat Pengguna</a>
     </div>
 
     <!-- Dropdown Manajemen Kursus -->
     <a
-        class="dropdown-toggle"
+        class="dropdown-toggle d-block mb-2"
         data-bs-toggle="collapse"
         href="#manajemenKursus"
         role="button"
@@ -35,17 +35,20 @@
         aria-controls="manajemenKursus">
         Manajemen Kursus
     </a>
-    <div class="collapse" id="manajemenKursus">
-        <a href="manajemen-jadwal-kursus.php">Jadwal Kursus</a>
-        <a href="manajemen-paket-kursus.php">Paket Kursus</a>
-        <a href="manajemen-kategori-kursus.php">Kategori Kursus</a>
-        <a href="manajemen-kelas-kursus.php">Kelas Kursus</a>
-        <a href="manajemen-modul-kursus.php">Modul Kursus</a>
+    <div class="collapse ms-3" id="manajemenKursus">
+        <a href="manajemen-jadwal-kursus.php" class="d-block">Jadwal Kursus</a>
+        <a href="manajemen-paket-kursus.php" class="d-block">Paket Kursus</a>
+        <a href="manajemen-kategori-kursus.php" class="d-block">Kategori Kursus</a>
+        <a href="manajemen-kelas-kursus.php" class="d-block">Kelas Kursus</a>
+        <a href="manajemen-modul-kursus.php" class="d-block">Modul Kursus</a>
+        <a href="manajemen-bab-kursus.php" class="d-block">Bab Kursus</a>
+        <a href="manajemen-kuis-kursus.php" class="d-block">Kuis Kursus</a>
+        <a href="manajemen-soal-kuis-kursus.php" class="d-block">Soal Kuis Kursus</a>
     </div>
 
     <!-- Dropdown Manajemen Pembayaran -->
     <a
-        class="dropdown-toggle"
+        class="dropdown-toggle d-block mb-2"
         data-bs-toggle="collapse"
         href="#manajemenPembayaran"
         role="button"
@@ -53,13 +56,15 @@
         aria-controls="manajemenPembayaran">
         Manajemen Pembayaran
     </a>
-    <div class="collapse" id="manajemenPembayaran">
-        <a href="manajemen-pembayaran.php">Riwayat Pembayaran</a>
+    <div class="collapse ms-3" id="manajemenPembayaran">
+        <a href="manajemen-pembayaran.php" class="d-block">Riwayat Pembayaran</a>
+        <a href="manajemen-metode-pembayaran.php" class="d-block">Metode Pembayaran</a>
+        <a href="manajemen-nomor-va.php" class="d-block">Nomor VA</a>
     </div>
 
-        <!-- Dropdown Manajemen Kelola Daily Coding -->
-        <a
-        class="dropdown-toggle"
+    <!-- Dropdown Manajemen Kelola Daily Coding -->
+    <a
+        class="dropdown-toggle d-block mb-2"
         data-bs-toggle="collapse"
         href="#manajemenDailyCoding"
         role="button"
@@ -67,12 +72,12 @@
         aria-controls="manajemenDailyCoding">
         Manajemen Daily Coding
     </a>
-    <div class="collapse" id="manajemenDailyCoding">
-        <a href="manajemen-daily_coding.php">Daily Coding</a>
-        <a href="manajemen-user_daily_coding.php">Riwayat Daily Coding</a>
+    <div class="collapse ms-3" id="manajemenDailyCoding">
+        <a href="manajemen-daily_coding.php" class="d-block">Daily Coding</a>
+        <a href="manajemen-user_daily_coding.php" class="d-block">Riwayat Daily Coding</a>
     </div>
 
-    <a href="index.php">Logout</a>
+    <a href="index.php" class="d-block mt-2">Logout</a>
 </div>
 
 <!-- Header/Navbar -->
@@ -81,7 +86,7 @@
     style="margin-left: 250px">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
-            <img src="images/new-logo.png" alt="Logo" />
+            <img src="fix-e-learning-pemrograman/images/new-logo.png" alt="Logo" />
             AIFYCODE Learning
         </a>
         <button
