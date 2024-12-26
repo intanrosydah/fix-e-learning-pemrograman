@@ -74,7 +74,8 @@
     </a>
     <div class="collapse ms-3" id="manajemenDailyCoding">
         <a href="manajemen-daily_coding.php" class="d-block">Daily Coding</a>
-        <a href="manajemen-user_daily_coding.php" class="d-block">Riwayat Daily Coding</a>
+        <a href="manajemen-progres_api.php" class="d-block">Riwayat Progres Api</a>
+        <a href="manajemen-tukar_api.php" class="d-block">Riwayat Tukar Api</a>
     </div>
 
     <a href="index.php" class="d-block mt-2">Logout</a>

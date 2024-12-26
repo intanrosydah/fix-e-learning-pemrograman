@@ -15,39 +15,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id_daily_coding = $_POST['id_daily_coding'];
         $jawaban_user = $_POST['jawaban_user'];
 
-        // Ambil jawaban yang benar berdasarkan id_daily_coding dari database
-        $query = "SELECT jawaban_benar FROM daily_coding WHERE id_daily_coding = :id_daily_coding";
+        // Ambil jawaban yang benar dan reward dari database `daily_coding`
+        $query = "SELECT jawaban_benar, reward_api FROM daily_coding WHERE id_daily_coding = :id_daily_coding";
         $stmt = $pdo->prepare($query);
         $stmt->bindParam(':id_daily_coding', $id_daily_coding);
         $stmt->execute();
-        $jawaban_benar = $stmt->fetchColumn();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$result) {
+            throw new Exception("Soal tidak ditemukan.");
+        }
+
+        $jawaban_benar = $result['jawaban_benar'];
+        $reward_api = $result['reward_api'];
 
         // Validasi jawaban user
         if (trim($jawaban_benar) === trim($jawaban_user)) {
             $status_tantangan = 'selesai';
-            $poin_didapatkan = 1; // Poin API untuk jawaban benar
+            $poin_didapatkan = $reward_api; // Poin dari reward_api
         } else {
             $status_tantangan = 'belum';
             $poin_didapatkan = 0;
         }
 
-        // Tambah atau update data di tabel `user_daily_coding`
-        $sql = "INSERT INTO user_daily_coding (id_user, hari_tantangan, id_daily_coding, jawaban_user, status_tantangan, perolehan_api)
-                VALUES (:id_user, CURDATE(), :id_daily_coding, :jawaban_user, :status_tantangan, :perolehan_api)
+        // Simpan hasil ke database `progres_api`
+        $sql = "INSERT INTO progres_api (id_user, id_daily_coding, api_diperoleh, tanggal_perolehan)
+                VALUES (:id_user, :id_daily_coding, :api_diperoleh, CURDATE())
                 ON DUPLICATE KEY UPDATE 
-                    status_tantangan = :status_tantangan, 
-                    perolehan_api = perolehan_api + :perolehan_api";
+                    api_diperoleh = api_diperoleh + :api_diperoleh";
         $stmt = $pdo->prepare($sql);
-        
+
         $stmt->bindParam(':id_user', $id_user);
         $stmt->bindParam(':id_daily_coding', $id_daily_coding);
-        $stmt->bindParam(':jawaban_user', $jawaban_user);
-        $stmt->bindParam(':status_tantangan', $status_tantangan);
-        $stmt->bindParam(':perolehan_api', $poin_didapatkan);
+        $stmt->bindParam(':api_diperoleh', $poin_didapatkan);
         $stmt->execute();
 
         $message = "Jawaban berhasil disimpan!";
-    } catch (PDOException $e) {
+    } catch (Exception $e) {
         $message = "Error: " . $e->getMessage();
     }
 
@@ -219,27 +223,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     });
 
     function checkAnswer(day) {
-    const userAnswer = document.querySelector(`input[name="answer[${day}]"]:checked`)?.value;
-    const feedback = document.getElementById(`feedback-${day}`);
-    const idDailyCoding = `${String(day)}`; // Format day as two digits and append 'A'
-    const idUser = 1; // Example user ID
+        const userAnswer = document.querySelector(`input[name="answer[${day}]"]:checked`)?.value;
+        const feedback = document.getElementById(`feedback-${day}`);
+        const idDailyCoding = day; // Gunakan nilai day sebagai id_daily_coding
+        const idUser = 1; // Contoh ID pengguna (gunakan ID pengguna yang valid di aplikasi Anda)
 
-    // Pastikan jawaban dipilih
-    if (!userAnswer) {
-        feedback.textContent = "Pilih jawaban terlebih dahulu!";
-        feedback.className = "feedback incorrect";
-        return;
-    }
+        // Pastikan jawaban dipilih
+        if (!userAnswer) {
+            feedback.textContent = "Pilih jawaban terlebih dahulu!";
+            feedback.className = "feedback incorrect";
+            return;
+        }
 
-    fetch('daily-coding.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-            id_user: idUser,
-            id_daily_coding: idDailyCoding,
-            jawaban_user: userAnswer,
-        }),
-    })
+        // Kirim data ke server untuk validasi
+        fetch('daily-coding.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                id_user: idUser,
+                id_daily_coding: idDailyCoding,
+                jawaban_user: userAnswer,
+            }),
+        })
 
         if (userCode === solutions[day].trim()) {
             feedback.textContent = "Kode Anda Benar!";
