@@ -19,10 +19,10 @@
         aria-controls="manajemenPengguna">
         Manajemen Pengguna
     </a>
-    <div class="collapse ms-3" id="manajemenPengguna">
-        <a href="data-pengguna.php" class="d-block ">Data Pengguna</a>
-        <a href="monitoring-aktivitas.php" class="d-block">Monitoring Aktivitas Pengguna</a>
-        <a href="manajemen-sertifikat.php" class="d-block">Sertifikat Pengguna</a>
+    <div class="collapse" id="manajemenPengguna">
+        <a href="data-pengguna.php" class="d-block ps-3">Data Pengguna</a>
+        <a href="monitoring-aktivitas.php" class="d-block ps-3">Monitoring Aktivitas Pengguna</a>
+        <a href="manajemen-sertifikat.php" class="d-block ps-3">Sertifikat Pengguna</a>
     </div>
 
     <!-- Dropdown Manajemen Kursus -->
@@ -35,15 +35,16 @@
         aria-controls="manajemenKursus">
         Manajemen Kursus
     </a>
-    <div class="collapse ms-3" id="manajemenKursus">
-        <a href="manajemen-jadwal-kursus.php" class="d-block">Jadwal Kursus</a>
-        <a href="manajemen-paket-kursus.php" class="d-block">Paket Kursus</a>
-        <a href="manajemen-kategori-kursus.php" class="d-block">Kategori Kursus</a>
-        <a href="manajemen-kelas-kursus.php" class="d-block">Kelas Kursus</a>
-        <a href="manajemen-modul-kursus.php" class="d-block">Modul Kursus</a>
-        <a href="manajemen-bab-kursus.php" class="d-block">Bab Kursus</a>
-        <a href="manajemen-kuis-kursus.php" class="d-block">Kuis Kursus</a>
-        <a href="manajemen-soal-kuis-kursus.php" class="d-block">Soal Kuis Kursus</a>
+    <div class="collapse" id="manajemenKursus">
+        <a href="manajemen-jadwal-kursus.php" class="d-block ps-3">Jadwal Kursus</a>
+        <a href="manajemen-paket-kursus.php" class="d-block ps-3">Paket Kursus</a>
+        <a href="manajemen-kategori-kursus.php" class="d-block ps-3">Kategori Kursus</a>
+        <a href="manajemen-kelas-kursus.php" class="d-block ps-3">Kelas Kursus</a>
+        <a href="manajemen-modul-kursus.php" class="d-block ps-3">Modul Kursus</a>
+        <a href="manajemen-bab-kursus.php" class="d-block ps-3">Bab Kursus</a>
+        <a href="manajemen-kuis-kursus.php" class="d-block ps-3">Kuis Kursus</a>
+        <a href="manajemen-soal-kuis-kursus.php" class="d-block ps-3">Soal Kuis Kursus</a>
+        <a href="manajemen-hasil-kuis.php" class="d-block ps-3">Hasil Kuis Pengguna</a>
     </div>
 
     <!-- Dropdown Manajemen Pembayaran -->
@@ -56,10 +57,10 @@
         aria-controls="manajemenPembayaran">
         Manajemen Pembayaran
     </a>
-    <div class="collapse ms-3" id="manajemenPembayaran">
-        <a href="manajemen-pembayaran.php" class="d-block">Riwayat Pembayaran</a>
-        <a href="manajemen-metode-pembayaran.php" class="d-block">Metode Pembayaran</a>
-        <a href="manajemen-nomor-va.php" class="d-block">Nomor VA</a>
+    <div class="collapse" id="manajemenPembayaran">
+        <a href="manajemen-pembayaran.php" class="d-block ps-3">Riwayat Pembayaran</a>
+        <a href="manajemen-metode-pembayaran.php" class="d-block ps-3">Metode Pembayaran</a>
+        <a href="manajemen-nomor-va.php" class="d-block ps-3">Nomor VA</a>
     </div>
 
     <!-- Dropdown Manajemen Kelola Daily Coding -->
@@ -72,10 +73,11 @@
         aria-controls="manajemenDailyCoding">
         Manajemen Daily Coding
     </a>
-    <div class="collapse ms-3" id="manajemenDailyCoding">
-        <a href="manajemen-daily_coding.php" class="d-block">Daily Coding</a>
-        <a href="manajemen-progres_api.php" class="d-block">Riwayat Progres Api</a>
-        <a href="manajemen-tukar_api.php" class="d-block">Riwayat Tukar Api</a>
+    <div class="collapse" id="manajemenDailyCoding">
+        <a href="manajemen-daily_coding.php" class="d-block ps-3">Daily Coding</a>
+        <a href="manajemen-progres_api.php" class="d-block ps-3">Riwayat Progres Api</a>
+        <a href="manajemen-paket_api.php" class="d-block ps-3">Paket Api</a>
+        <a href="manajemen-tukar_api.php" class="d-block ps-3">Riwayat Tukar Api</a>
     </div>
 
     <a href="index.php" class="d-block mt-2">Logout</a>
