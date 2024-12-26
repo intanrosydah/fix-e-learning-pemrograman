@@ -19,7 +19,7 @@
         aria-controls="manajemenPengguna">
         Manajemen Pengguna
     </a>
-    <div class="collapse" id="manajemenPengguna">
+    <div class="collapse ms-3" id="manajemenPengguna">
         <a href="data-pengguna.php" class="d-block ps-3">Data Pengguna</a>
         <a href="monitoring-aktivitas.php" class="d-block ps-3">Monitoring Aktivitas Pengguna</a>
         <a href="manajemen-sertifikat.php" class="d-block ps-3">Sertifikat Pengguna</a>
@@ -35,7 +35,7 @@
         aria-controls="manajemenKursus">
         Manajemen Kursus
     </a>
-    <div class="collapse" id="manajemenKursus">
+    <div class="collapse ms-3" id="manajemenKursus">
         <a href="manajemen-jadwal-kursus.php" class="d-block ps-3">Jadwal Kursus</a>
         <a href="manajemen-paket-kursus.php" class="d-block ps-3">Paket Kursus</a>
         <a href="manajemen-kategori-kursus.php" class="d-block ps-3">Kategori Kursus</a>
@@ -57,7 +57,7 @@
         aria-controls="manajemenPembayaran">
         Manajemen Pembayaran
     </a>
-    <div class="collapse" id="manajemenPembayaran">
+    <div class="collapse ms-3" id="manajemenPembayaran">
         <a href="manajemen-pembayaran.php" class="d-block ps-3">Riwayat Pembayaran</a>
         <a href="manajemen-metode-pembayaran.php" class="d-block ps-3">Metode Pembayaran</a>
         <a href="manajemen-nomor-va.php" class="d-block ps-3">Nomor VA</a>
@@ -73,7 +73,7 @@
         aria-controls="manajemenDailyCoding">
         Manajemen Daily Coding
     </a>
-    <div class="collapse" id="manajemenDailyCoding">
+    <div class="collapse ms-3" id="manajemenDailyCoding">
         <a href="manajemen-daily_coding.php" class="d-block ps-3">Daily Coding</a>
         <a href="manajemen-progres_api.php" class="d-block ps-3">Riwayat Progres Api</a>
         <a href="manajemen-paket_api.php" class="d-block ps-3">Paket Api</a>
