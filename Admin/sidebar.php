@@ -60,7 +60,6 @@
     <div class="collapse ms-3" id="manajemenPembayaran">
         <a href="manajemen-pembayaran.php" class="d-block ps-3">Riwayat Pembayaran</a>
         <a href="manajemen-metode-pembayaran.php" class="d-block ps-3">Metode Pembayaran</a>
-        <a href="manajemen-nomor-va.php" class="d-block ps-3">Nomor VA</a>
     </div>
 
     <!-- Dropdown Manajemen Kelola Daily Coding -->

@@ -13,7 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username'])) {
     // Query to find the certificate by username
     $query = "SELECT sertifikat.gambar_sertifikat 
               FROM sertifikat 
-              JOIN user ON sertifikat.id_user = user.id 
+              JOIN progres_kelas  ON sertifikat.id_progres = progres_kelas.id_progres
+              JOIN user ON progres_kelas.id_user = user.id
               WHERE user.username = :username";
     $stmt = $pdo->prepare($query);
     $stmt->bindParam(':username', $username, PDO::PARAM_STR);
@@ -51,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username'])) {
       font-family: "Montserrat", sans-serif;
       background-color: #092635;
       color: white;
+      padding-top: 100px;
     }
 
     .form-container {
@@ -121,6 +123,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username'])) {
   </section>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const navbar = document.querySelector(".navbar");
+
+    window.addEventListener("scroll", () => {
+      const scrollPos = window.scrollY;
+      if (scrollPos > 50) {
+        navbar.classList.add("zoom-out");
+        navbar.classList.remove("zoom-in");
+      } else {
+        navbar.classList.add("zoom-in");
+        navbar.classList.remove("zoom-out");
+      }
+    });
+  </script>
 </body>
 
 </html>

@@ -1,8 +1,8 @@
 <?php
 $host = 'localhost';
-$dbname = 'aifycodenew';
-$username = 'root'; 
-$password = '';     
+$dbname = 'aifycode';
+$username = 'root';
+$password = '';
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
@@ -10,4 +10,3 @@ try {
 } catch (PDOException $e) {
     die("Database connection failed: " . $e->getMessage());
 }
-?>

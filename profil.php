@@ -4,13 +4,13 @@ include 'config.php'; // File koneksi database
 
 // Periksa apakah pengguna sudah login
 if (!isset($_SESSION['user_id'])) {
-    header("Location: loginfix.php");
-    exit();
+  header("Location: loginfix.php");
+  exit();
 }
 
 // Ambil data pengguna berdasarkan sesi
 $user_id = $_SESSION['user_id'];
-$query = "SELECT name, email FROM user WHERE id = :user_id";
+$query = "SELECT name, email, foto_profil FROM user WHERE id = :user_id";
 $stmt = $pdo->prepare($query);
 $stmt->bindParam(':user_id', $user_id);
 $stmt->execute();
@@ -18,8 +18,8 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // Periksa apakah data pengguna ditemukan
 if (!$user) {
-    header("Location: login.php");
-    exit();
+  header("Location: login.php");
+  exit();
 }
 ?>
 <!DOCTYPE html>
@@ -153,11 +153,12 @@ if (!$user) {
         <div class="profile-section">
           <!-- Foto Profil -->
           <div class="text-center">
-            <img id="profileImage" src="images/default_profile.jpg" alt="Foto Profil" class="profile-image rounded" />
+            <img id="profileImage" src="<?php echo $user['foto_profil'] ? 'data:image/jpeg;base64,' . base64_encode($user['foto_profil']) : 'images/default_profile.jpg'; ?>" alt="Foto Profil" class="profile-image rounded" />
             <p>FOTO PROFIL</p>
-            <input type="file" id="imageInput" accept="image/*" class="form-control" />
             <h3 class="mt-3"><?= htmlspecialchars($user['name']); ?></h3>
             <p><?= htmlspecialchars($user['email']); ?></p>
+            <!-- Tombol Edit -->
+            <a href="profil-edit.php" class="btn btn-dark my-5">Edit Profil</a>
           </div>
         </div>
       </div>
