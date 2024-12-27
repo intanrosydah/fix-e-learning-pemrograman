@@ -1,57 +1,303 @@
 <?php
-session_start();
-include 'config.php';
+session_start(); // Memulai session
+require 'header-login.php'; // Memasukkan header
+require 'config.php'; // Konfigurasi database
 
-
-
-// Ambil data user dari session
-$user_id = $_SESSION['user_id'];
-
-// Query data user berdasarkan session
-$query_user = "SELECT * FROM user WHERE id = :id";
-$stmt_user = $pdo->prepare($query_user);
-$stmt_user->bindParam(':id', $user_id, PDO::PARAM_INT);
-$stmt_user->execute();
-$user = $stmt_user->fetch(PDO::FETCH_ASSOC);
-
-if (!$user) {
-    echo "Data user tidak ditemukan!";
-    exit();
+$query = "SELECT * FROM kelas";
+try {
+    $stmt = $pdo->prepare($query);
+    $stmt->execute();
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Query gagal: " . $e->getMessage());
 }
 
-// Query data kelas (optional: filter jika perlu)
-$query_kelas = "SELECT * FROM kelas"; // Jika ingin filter user: tambahkan WHERE user_id = :user_id
-$stmt_kelas = $pdo->prepare($query_kelas);
-$stmt_kelas->execute();
-$kelas_list = $stmt_kelas->fetchAll(PDO::FETCH_ASSOC);
-?>
+// Proses pemilihan kelas
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!empty($_POST['id_kelas'])) {
+        $id_kelas = $_POST['id_kelas'];
 
+        // Cek apakah kelas sudah ada di dalam keranjang (session)
+        if (!isset($_SESSION['keranjang'])) {
+            $_SESSION['keranjang'] = [];
+        }
+
+        if (count($_SESSION['keranjang']) < 3) {
+            // Tambahkan kelas ke dalam keranjang
+            if (!in_array($id_kelas, $_SESSION['keranjang'])) {
+                $_SESSION['keranjang'][] = $id_kelas;
+                echo "Kelas berhasil ditambahkan ke keranjang!";
+            } else {
+                echo "Kelas ini sudah ada di keranjang.";
+            }
+        } else {
+            echo "Maksimal 3 kelas dapat dipilih.";
+        }
+    }
+}
+
+// Proses untuk menghapus kelas dari keranjang
+if (isset($_GET['remove'])) {
+    $id_kelas_remove = $_GET['remove'];
+    if (($key = array_search($id_kelas_remove, $_SESSION['keranjang'])) !== false) {
+        unset($_SESSION['keranjang'][$key]);
+        $_SESSION['keranjang'] = array_values($_SESSION['keranjang']); // Re-index array
+        echo "Kelas telah dihapus dari keranjang.";
+    }
+}
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pilih Kelas</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        /* Styling untuk Halaman */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #092635;
+            color: #333;
+        }
+
+        main {
+            padding: 20px;
+            margin-top: 80px;
+            margin-bottom: 150px;
+        }
+
+        .kelas-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .kelas-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 220px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .kelas-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .kelas-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        h3 {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+
+        p {
+            padding: 0 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 18px;
+            margin: 15px 0;
+            background-color: #092635;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: rgb(2, 11, 15);
+        }
+
+        /* Styling untuk Keranjang */
+        .keranjang {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 320px;
+            background-color: white;
+            color: #333;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border: 2px solid #ddd;
+            z-index: 1000;
+            font-size: 0.9em;
+            max-height: 300px;
+            overflow-y: auto;
+            cursor: move; /* Menambahkan pointer untuk menunjukkan bahwa ini bisa digeser */
+        }
+
+        .keranjang h3 {
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            color: #092635;
+        }
+
+        .keranjang ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-bottom: 10px;
+        }
+
+        .keranjang li {
+            margin: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .keranjang .btn {
+            background-color: #092635;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.8em;
+            transition: background-color 0.3s;
+        }
+
+        .keranjang .btn:hover {
+            background-color:rgb(2, 11, 15);
+        }
+
+        .keranjang .checkout-btn {
+            display: block;
+            width: 100%;
+            background-color: #092635;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: background-color 0.3s;
+            margin-top: 15px;
+        }
+
+        .keranjang .checkout-btn:hover {
+            background-color: rgb(2, 11, 15);
+        }
+    </style>
 </head>
 <body>
-<div class="container mt-5">
-    <h1>Halo, <?= htmlspecialchars($user['name']); ?>!</h1>
-    <p>Berikut adalah daftar kelas:</p>
-
-    <div class="row">
-        <?php foreach ($kelas_list as $kelas): ?>
-            <div class="col-md-4 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title"><?= htmlspecialchars($kelas['nama_kelas']); ?></h5>
-                        <p class="card-text">Deskripsi: <?= htmlspecialchars($kelas['deskripsi']); ?></p>
-                        <a href="detail-kelas.php?id=<?= $kelas['id_kelas']; ?>" class="btn btn-primary">Pilih Kelas</a>
-                    </div>
-                </div>
+<main>
+    <section class="kelas-container">
+        <?php if (!empty($result)) {
+            foreach ($result as $row) { 
+                $gambar_kelas = !empty($row['gambar_kelas']) 
+                    ? 'data:image/jpeg;base64,' . base64_encode($row['gambar_kelas']) 
+                    : 'images/logo-1.png';
+                $nama_kelas = $row['nama_kelas'] ?? 'Nama Kelas Tidak Tersedia';
+                $deskripsi = $row['deskripsi_kelas'] ?? 'Deskripsi tidak tersedia.';
+                $link = $row['link'] ?? '#'; 
+        ?>
+            <div class="kelas-card">
+                <img src="<?php echo htmlspecialchars($gambar_kelas); ?>" alt="<?php echo htmlspecialchars($nama_kelas); ?>" class="kelas-image">
+                <h3><?php echo htmlspecialchars($nama_kelas); ?></h3>
+                <p><?php echo htmlspecialchars($deskripsi); ?></p>
+                <form method="POST" action="">
+                    <input type="hidden" name="id_kelas" value="<?php echo $row['id_kelas']; ?>" />
+                    <button type="submit" class="btn">Pilih Kelas</button>
+                </form>
             </div>
-        <?php endforeach; ?>
+        <?php }
+        } else {
+            echo "<p>Tidak ada data tersedia.</p>";
+        } ?>
+    </section>
+
+    <!-- Menampilkan Keranjang -->
+    <?php if (!empty($_SESSION['keranjang'])): ?>
+        <section class="keranjang" id="keranjang">
+            <h3>Kelas yang Dipilih:</h3>
+            <ul>
+                <?php
+                foreach ($_SESSION['keranjang'] as $id_kelas) {
+                    $query_kelas = "SELECT * FROM kelas WHERE id_kelas = :id_kelas";
+                    $stmt_kelas = $pdo->prepare($query_kelas);
+                    $stmt_kelas->execute([':id_kelas' => $id_kelas]);
+                    $kelas = $stmt_kelas->fetch(PDO::FETCH_ASSOC);
+                    if ($kelas) {
+                        echo '<li>' . htmlspecialchars($kelas['nama_kelas']) . ' 
+                        <a href="?remove=' . $kelas['id_kelas'] . '" class="btn">Hapus</a></li>';
+                    }
+                }
+                ?>
+            </ul>
+            <a href="progress.php" class="checkout-btn">Checkout</a>
+        </section>
+    <?php endif; ?>
+
+</main>
+
+<footer>
+    <div class="container">
+        <div class="social-icons mb-3">
+            <a href="#"><img src="images/facebook-icon.png" alt="Facebook" /></a>
+            <a href="#"><img src="images/x-icon.png" alt="Twitter" /></a>
+            <a href="#"><img src="images/linkedin-icon.png" alt="LinkedIn" /></a>
+            <a href="#"><img src="images/instagram-icon.png" alt="Instagram" /></a>
+        </div>
+        <nav>
+            <a href="index.php" class="me-3 text-decoration-none">Home</a>
+            <a href="aboutUs.php" class="me-3 text-decoration-none">About Us</a>
+            <a href="product.php" class="me-3 text-decoration-none">Product</a>
+            <a href="profil.php" class="text-decoration-none">Login</a>
+        </nav>
+        <p class="mt-3">
+            &copy; 2024 AIFYCODE Learning | All Rights Reserved. Made With Love
+        </p>
     </div>
-</div>
+</footer>
+
+<script>
+// Fungsi untuk membuat keranjang bisa digeser-geser
+let dragItem = document.querySelector("#keranjang");
+let currentX, currentY, initialX, initialY, xOffset = 0, yOffset = 0;
+
+dragItem.addEventListener("mousedown", dragStart, false);
+window.addEventListener("mouseup", dragEnd, false);
+window.addEventListener("mousemove", drag, false);
+
+function dragStart(e) {
+    initialX = e.clientX - xOffset;
+    initialY = e.clientY - yOffset;
+    dragItem.style.transition = "none"; // Matikan transisi saat drag
+}
+
+function dragEnd(e) {
+    initialX = currentX;
+    initialY = currentY;
+    dragItem.style.transition = "transform 0.3s ease"; // Aktifkan kembali transisi
+}
+
+function drag(e) {
+    if (dragItem.style.transition === "none") {
+        currentX = e.clientX - initialX;
+        currentY = e.clientY - initialY;
+        xOffset = currentX;
+        yOffset = currentY;
+
+        dragItem.style.transform = "translate(" + currentX + "px, " + currentY + "px)";
+    }
+}
+</script>
 </body>
 </html>

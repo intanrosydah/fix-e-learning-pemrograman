@@ -1,5 +1,7 @@
 <?php
+session_start(); // Memulai session
 require 'header-login.php'; // Memasukkan header
+require 'config.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -119,8 +121,8 @@ require 'header-login.php'; // Memasukkan header
 
   <div class="container text-center py-5">
     <?php
-    // Ambil kelas yang dipilih dari URL (jika ada)
-    $kelasDipilih = isset($_GET['kelas']) ? $_GET['kelas'] : [];
+    // Ambil kelas yang dipilih dari session
+    $kelasDipilih = isset($_SESSION['keranjang']) ? $_SESSION['keranjang'] : [];
     ?>
     <div class="class-section">
       <!-- Kelas yang Dipelajari -->
@@ -129,14 +131,24 @@ require 'header-login.php'; // Memasukkan header
         <?php if (empty($kelasDipilih)): ?>
           <p>Tidak ada kelas yang dipilih.</p>
         <?php else: ?>
-          <?php foreach ($kelasDipilih as $kelas): ?>
-            <div class="class-item">
-              <div class="class-item-wrapper">
-                <span><?php echo htmlspecialchars($kelas); ?></span>
-                <button class="btn btn-dark" onclick="window.location.href='koridor-dipelajari.php?kelas=<?php echo urlencode($kelas); ?>'">Koridor Kelas</button>
-              </div>
-            </div>
-          <?php endforeach; ?>
+          <?php
+          // Menampilkan setiap kelas yang dipilih
+          foreach ($kelasDipilih as $id_kelas) {
+              // Query untuk mendapatkan detail kelas berdasarkan ID
+              $query = "SELECT * FROM kelas WHERE id_kelas = :id_kelas";
+              $stmt = $pdo->prepare($query);
+              $stmt->execute([':id_kelas' => $id_kelas]);
+              $kelas = $stmt->fetch(PDO::FETCH_ASSOC);
+              if ($kelas) {
+                  echo '<div class="class-item">
+                          <div class="class-item-wrapper">
+                            <span>' . htmlspecialchars($kelas['nama_kelas']) . '</span>
+                            <button class="btn btn-dark" onclick="window.location.href=\'koridor-dipelajari.php?kelas=' . urlencode($kelas['nama_kelas']) . '\'">Koridor Kelas</button>
+                          </div>
+                        </div>';
+              }
+          }
+          ?>
         <?php endif; ?>
       </div>
 

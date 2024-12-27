@@ -1,11 +1,26 @@
 <?php
+session_start();
 include 'config.php'; // File koneksi database
 
-// Query untuk mengambil data pengguna
-$query = "SELECT name, email FROM user";
+// Periksa apakah pengguna sudah login
+if (!isset($_SESSION['user_id'])) {
+    header("Location: loginfix.php");
+    exit();
+}
+
+// Ambil data pengguna berdasarkan sesi
+$user_id = $_SESSION['user_id'];
+$query = "SELECT name, email FROM user WHERE id = :user_id";
 $stmt = $pdo->prepare($query);
+$stmt->bindParam(':user_id', $user_id);
 $stmt->execute();
-$user_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Periksa apakah data pengguna ditemukan
+if (!$user) {
+    header("Location: login.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,7 +37,6 @@ $user_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet" />
 
   <style>
-    /* Body background image */
     body {
       background-image: url("images/bg_profil.jpg");
       background-size: cover;
@@ -142,10 +156,8 @@ $user_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <img id="profileImage" src="images/default_profile.jpg" alt="Foto Profil" class="profile-image rounded" />
             <p>FOTO PROFIL</p>
             <input type="file" id="imageInput" accept="image/*" class="form-control" />
-            <?php if (!empty($user_list)) : ?>
-              <h3 class="mt-3"><?php echo htmlspecialchars($user_list[0]['name']); ?></h3>
-              <p><?php echo htmlspecialchars($user_list[0]['email']); ?></p>
-            <?php endif; ?>
+            <h3 class="mt-3"><?= htmlspecialchars($user['name']); ?></h3>
+            <p><?= htmlspecialchars($user['email']); ?></p>
           </div>
         </div>
       </div>

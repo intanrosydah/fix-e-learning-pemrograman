@@ -1,112 +1,201 @@
 <?php
-require 'config.php'; // Koneksi database
+session_start(); // Pastikan sesi dimulai untuk mengambil data user login
+require 'config.php'; // File koneksi database
 
-// Tangkap nilai package dari URL
-$package = isset($_GET['package']) ? (int)$_GET['package'] : 1;
-
-// Query untuk mengambil data paket berdasarkan ID
-$query = "SELECT * FROM paket WHERE id_paket = :id_paket";
-$stmt = $pdo->prepare($query);
-$stmt->bindParam(':id_paket', $package, PDO::PARAM_INT);
-$stmt->execute();
-$paket = $stmt->fetch(PDO::FETCH_ASSOC);
-
-// Jika paket tidak ditemukan, redirect ke halaman lain atau tampilkan error
-if (!$paket) {
-  die("Paket tidak ditemukan.");
+// Pastikan pengguna sudah login
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php'); // Redirect ke halaman login jika belum login
+    exit();
 }
 
-$nama = htmlspecialchars($paket['nama_paket']);  // Menampilkan nama paket
-$harga = number_format($paket['harga_paket'], 0, ',', '.');  // Menampilkan harga paket dengan format
+$id_user = $_SESSION['user_id']; // Ambil ID pengguna dari sesi
+
+// Ambil data paket dari database
+$paketQuery = "SELECT * FROM paket";
+$paketStmt = $pdo->query($paketQuery);
+$paketData = $paketStmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Ambil data metode pembayaran dari database
+$metodeQuery = "SELECT * FROM metode_pembayaran";
+$metodeStmt = $pdo->query($metodeQuery);
+$metodeData = $metodeStmt->fetchAll(PDO::FETCH_ASSOC);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Validasi input
+    if (empty($_POST['id_paket']) || empty($_POST['id_metode_pembayaran']) || empty($_FILES['bukti_pembayaran']['name'])) {
+        die('Semua data harus diisi!');
+    }
+
+    $id_paket = $_POST['id_paket'];
+    $id_metode_pembayaran = $_POST['id_metode_pembayaran'];
+    $bukti_pembayaran = $_FILES['bukti_pembayaran']['name'];
+
+    // Pindahkan file bukti pembayaran ke folder uploads
+    $target_dir = "uploads/";
+    if (!is_dir($target_dir)) {
+        mkdir($target_dir, 0777, true); // Buat folder jika belum ada
+    }
+    $target_file = $target_dir . basename($bukti_pembayaran);
+
+    if (!move_uploaded_file($_FILES['bukti_pembayaran']['tmp_name'], $target_file)) {
+        die('Gagal mengunggah file bukti pembayaran.');
+    }
+
+    // Masukkan data ke tabel langganan
+    $insertQuery = "INSERT INTO langganan (id, id_paket, id_metode_pembayaran, bukti_pembayaran, tanggal_mulai, tanggal_selesai) 
+                    VALUES (:id_user, :id_paket, :id_metode_pembayaran, :bukti_pembayaran, CURDATE(), DATE_ADD(CURDATE(), INTERVAL 1 MONTH))";
+    $stmt = $pdo->prepare($insertQuery);
+    $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+    $stmt->bindParam(':id_paket', $id_paket, PDO::PARAM_INT);
+    $stmt->bindParam(':id_metode_pembayaran', $id_metode_pembayaran, PDO::PARAM_INT);
+    $stmt->bindParam(':bukti_pembayaran', $bukti_pembayaran, PDO::PARAM_STR);
+
+    if ($stmt->execute()) {
+        // Ambil ID terakhir yang dimasukkan
+        $id_langganan = $pdo->lastInsertId();
+        // Redirect ke halaman pilih-kelas.php dengan parameter id_langganan
+        header("Location: pilih-kelas.php?id_langganan=" . $id_langganan);
+        exit;
+    } else {
+        die('Gagal menyimpan data langganan.');
+    }
+}
+
+// Script untuk mengembalikan nomor virtual account
+if (isset($_GET['id_metode_pembayaran'])) {
+    $id_metode_pembayaran = $_GET['id_metode_pembayaran'];
+
+    // Ambil no_va berdasarkan id_metode_pembayaran
+    $query = "SELECT no_va FROM metode_pembayaran WHERE id_metode_pembayaran = :id_metode_pembayaran";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':id_metode_pembayaran', $id_metode_pembayaran, PDO::PARAM_INT);
+    $stmt->execute();
+    
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($result) {
+        echo json_encode(['success' => true, 'virtual_account' => $result['no_va']]);
+    } else {
+        echo json_encode(['success' => false, 'message' => 'Virtual Account tidak ditemukan']);
+    }
+    exit;
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pembayaran</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    body {
-      font-family: "Montserrat", sans-serif;
-      background-color: #092635;
-      color: white;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Pembayaran</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #092635;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        select, input[type="file"], button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #092635;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: gray;
+        }
+        .va-container {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+    <script>
+        function showVirtualAccount() {
+            const metodePembayaran = document.getElementById('id_metode_pembayaran');
+            const vaContainer = document.getElementById('va-container');
 
-    .content-container {
-      max-width: 600px;
-      margin: auto;
-      padding-top: 80px;
-    }
+            metodePembayaran.addEventListener('change', () => {
+                const idMetode = metodePembayaran.value;
+                if (idMetode) {
+                    fetch(`?id_metode_pembayaran=${idMetode}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                vaContainer.innerHTML = `Virtual Account: <strong>${data.virtual_account}</strong>`;
+                            } else {
+                                vaContainer.innerHTML = 'Virtual Account tidak tersedia.';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            vaContainer.innerHTML = 'Terjadi kesalahan saat mengambil data.';
+                        });
+                } else {
+                    vaContainer.innerHTML = '';
+                }
+            });
+        }
 
-    .package-info {
-      background-color: #ffffff;
-      color: #000;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    footer {
-      background-color: #092635;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .social-icons a img {
-      width: 30px;
-      margin-right: 10px;
-    }
-  </style>
+        document.addEventListener('DOMContentLoaded', showVirtualAccount);
+    </script>
 </head>
-
 <body>
-  <div class="content-container">
-    <div class="package-info text-center">
-      <h2>Pembayaran untuk Paket Kursus Online: <?php echo $nama; ?></h2>
-      <div class="text-start mt-4">
-        <div class="d-flex justify-content-between">
-          <span>Harga Paket <?php echo $nama; ?></span>
-          <span>Rp <?php echo $harga; ?></span>
-        </div>
-        <hr />
-        <div class="d-flex justify-content-between">
-          <span>Jumlah Tagihan</span>
-          <span>Rp <?php echo $harga; ?></span>
-        </div>
-      </div>
-      <div class="d-flex justify-content-between mt-4">
-        <a href="product-login.php" class="btn btn-outline-dark">Kembali</a>
-        <a href="metode-pembayaran.php?package=<?php echo $package; ?>" class="btn btn-dark">Bayar</a>
-      </div>
-    </div>
-  </div>
+<div class="container">
+    <h1>Halaman Pembayaran</h1>
+    <form action="" method="post" enctype="multipart/form-data">
+        <label for="id_paket">Pilih Paket:</label>
+        <select name="id_paket" id="id_paket" required>
+            <option value="">-- Pilih Paket --</option>
+            <?php foreach ($paketData as $paket): ?>
+                <option value="<?= $paket['id_paket'] ?>">
+                    <?= htmlspecialchars($paket['nama_paket']) ?> - Rp <?= number_format($paket['harga_paket'], 0, ',', '.') ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
 
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      <div class="social-icons mb-3">
-        <a href="#"><img src="images/facebook-icon.png" alt="Facebook" /></a>
-        <a href="#"><img src="images/x-icon.png" alt="Twitter" /></a>
-        <a href="#"><img src="images/linkedin-icon.png" alt="LinkedIn" /></a>
-        <a href="#"><img src="images/instagram-icon.png" alt="Instagram" /></a>
-      </div>
-      <nav>
-        <a href="index.php" class="me-3 text-decoration-none">Home</a>
-        <a href="aboutUs.php" class="me-3 text-decoration-none">About Us</a>
-        <a href="product.php" class="me-3 text-decoration-none">Product</a>
-        <a href="profil.php" class="text-decoration-none">Login</a>
-      </nav>
-      <p class="mt-3">&copy; 2024 AIFYCODE Learning | All Rights Reserved. Made With Love</p>
-    </div>
-  </footer>
+        <label for="id_metode_pembayaran">Pilih Metode Pembayaran:</label>
+        <select name="id_metode_pembayaran" id="id_metode_pembayaran" required>
+            <option value="">-- Pilih Metode Pembayaran --</option>
+            <?php foreach ($metodeData as $metode): ?>
+                <option value="<?= $metode['id_metode_pembayaran'] ?>">
+                    <?= htmlspecialchars($metode['nama_metode_pembayaran']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <div id="va-container" class="va-container"></div>
+
+        <label for="bukti_pembayaran">Upload Bukti Pembayaran:</label>
+        <input type="file" name="bukti_pembayaran" id="bukti_pembayaran" required>
+
+        <button type="submit">Konfirmasi Pembayaran</button>
+    </form>
+</div>
 </body>
-
 </html>

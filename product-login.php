@@ -113,7 +113,7 @@ $paket_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h2>Pilih Paket Kursus</h2>
         <div class="d-flex flex-column gap-3">
             <?php foreach ($paket_list as $paket) : ?>
-                <a href="pembayaran2.php?package=<?= $paket['id_paket'] ?>" class="btn-package text-center">
+                <a href="pembayaran.php?package=<?= $paket['id_paket'] ?>" class="btn-package text-center">
                     <?= htmlspecialchars($paket['nama_paket']) ?> - Rp <?= number_format($paket['harga_paket'], 0, ',', '.') ?>
                 </a>
             <?php endforeach; ?>
