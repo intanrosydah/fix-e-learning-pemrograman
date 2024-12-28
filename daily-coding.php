@@ -214,6 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="modal-content text-center">
                     <div class="modal-body">
                         <h2 class="text-warning fw-bold">Selamat!</h2>
+                        <img src="https://img.icons8.com/emoji/48/fire.png" alt="Fire" width="60" class="fire-icon mt-4 gap-5">
                         <p class="text-dark fs-4">Anda telah menyelesaikan tantangan hari ini!</p>
                     </div>
                     <div class="modal-footer">
