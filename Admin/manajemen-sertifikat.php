@@ -192,9 +192,7 @@ $result = $pdo->query($sql_sertifikat);
         <h3>MANAJEMEN SERTIFIKAT</h3>
         <div>
           <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addModal">Tambah Sertifikat</button>
-          <button class="btn btn-primary me-2" onclick="exportToExcel()">Excel</button>
-          <button class="btn btn-primary me-2" onclick="exportToWord()">Word</button>
-          <button class="btn btn-primary" onclick="exportToPDF()">PDF</button>
+          
         </div>
       </div>
 

@@ -1,311 +1,217 @@
+<?php
+include 'config2.php'; // Koneksi database
+
+
+// Proses Tambah Data
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create') {
+    $nama = $_POST['name'];
+    $email = $_POST['email'];
+
+    $sql = "INSERT INTO user (name, email) VALUES (:name, :email)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':name' => $name, ':email' => $email]);
+}
+
+// Proses Update Data
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update') {
+    $id = $_POST['id'];
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+
+    $sql = "UPDATE user SET name = :name, email = :email WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':name' => $name, ':email' => $email, ':id' => $id]);
+}
+
+// Proses Hapus Data
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'delete') {
+    $id = $_GET['id'];
+
+    $sql = "DELETE FROM user WHERE id = :id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':id' => $id]);
+}
+
+// Query untuk mendapatkan data user kursus
+$sql = "SELECT * FROM user";
+$result = $pdo->query($sql);
+?>
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>List Data Pengguna</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-    rel="stylesheet" />
-  <style>
-    body {
-      min-height: 100vh;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SISFO - Mata Kuliah List</title>
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+        rel="stylesheet" />
+    <style>
+        body {
+            min-height: 100vh;
+        }
 
-    .sidebar {
-      min-height: 100vh;
-      width: 250px;
-      background-color: #343a40;
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 100;
-      color: white;
-      padding-top: 20px;
-    }
+        .sidebar {
+            min-height: 100vh;
+            width: 250px;
+            background-color: #343a40;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            color: white;
+            padding-top: 20px;
+        }
 
-    .sidebar a {
-      color: white;
-      text-decoration: none;
-      display: block;
-      padding: 10px 15px;
-    }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px 15px;
+        }
 
-    .sidebar a:hover {
-      background-color: #495057;
-    }
+        .sidebar a:hover {
+            background-color: #495057;
+        }
 
-    .content {
-      margin-left: 250px;
-      padding: 20px;
-    }
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
 
-    .navbar-brand img {
-      border-radius: 50%;
-      width: 30px;
-    }
-  </style>
+        .navbar-brand img {
+            border-radius: 50%;
+            width: 30px;
+        }
+    </style>
 </head>
 
 <body>
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <div class="text-center mb-3">
-      <img
-        src="https://via.placeholder.com/50"
-        class="rounded-circle"
-        alt="User" />
-      <p>Admin</p>
+    <?php
+    require 'sidebar.php'
+    ?>
+    <!-- Main Content -->
+    <div class="content pt-5 mt-3">
+        <div class="container mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3>user KURSUS</h3>
+                <div>
+                    <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addModal">Tambah user</button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>ID user</th>
+                            <th>Nama user</th>
+                            <th>Harga user</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($result) {
+                            $no = 1;
+                            while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                                echo "<tr>";
+                                echo "<td>" . $no++ . "</td>";
+                                echo "<td>" . htmlspecialchars($row['id']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['name']) . "</td>";
+                                echo "<td>" . htmlspecialchars($row['email']) . "</td>";
+                                echo "<td>
+                                    <button class='btn btn-warning btn-sm' data-bs-toggle='modal' data-bs-target='#editModal" . $row['id'] . "'>Edit</button>
+                                    <a href='?action=delete&id=" . $row['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus data ini?\")'>Hapus</a>
+                                </td>";
+                                echo "</tr>";
+
+                                // Modal Edit
+                                echo "
+                                <div class='modal fade' id='editModal" . $row['id'] . "' tabindex='-1'>
+                                    <div class='modal-dialog'>
+                                        <form method='POST'>
+                                            <div class='modal-content'>
+                                                <div class='modal-header'>
+                                                    <h5 class='modal-title'>Edit user Kursus</h5>
+                                                    <button type='button' class='btn-close' data-bs-dismiss='modal'></button>
+                                                </div>
+                                                <div class='modal-body'>
+                                                    <input type='hidden' name='id' value='" . htmlspecialchars($row['id']) . "'>
+                                                    <div class='mb-3'>
+                                                        <label for='name' class='form-label'>Nama user</label>
+                                                        <input type='text' class='form-control' name='name' value='" . htmlspecialchars($row['name']) . "' required>
+                                                    </div>
+                                                    <div class='mb-3'>
+                                                        <label for='email' class='form-label'>Harga user</label>
+                                                        <input type='text' class='form-control' name='email' value='" . htmlspecialchars($row['email']) . "' required>
+                                                    </div>
+                                                </div>
+                                                <div class='modal-footer'>
+                                                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Batal</button>
+                                                    <button type='submit' class='btn btn-primary'>Simpan</button>
+                                                    <input type='hidden' name='action' value='update'>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>";
+                            }
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Modal Tambah Data -->
+            <div class="modal fade" id="addModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <form method="POST">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Tambah user Kursus</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Nama user</label>
+                                    <input type="text" class="form-control" name="name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Harga user</label>
+                                    <input type="text" class="form-control" name="email" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                                <input type="hidden" name="action" value="create">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <a href="#">Home</a>
 
-    <!-- Dropdown Manajemen Pengguna -->
-    <a
-      class="dropdown-toggle"
-      data-bs-toggle="collapse"
-      href="#manajemenPengguna"
-      role="button"
-      aria-expanded="false"
-      aria-controls="manajemenPengguna">
-      Manajemen Pengguna
-    </a>
-    <div class="collapse" id="manajemenPengguna">
-      <a href="data-pengguna.php">Data Pengguna</a>
-      <a href="monitoring-aktivitas.php">Monitoring Aktivitas Pengguna</a>
-      <a href="manajemen-sertifikat.php">Sertifikat Pengguna</a>
-    </div>
-
-    <!-- Dropdown Manajemen Kursus -->
-    <a
-      class="dropdown-toggle"
-      data-bs-toggle="collapse"
-      href="#manajemenKursus"
-      role="button"
-      aria-expanded="false"
-      aria-controls="manajemenKursus">
-      Manajemen Kursus
-    </a>
-    <div class="collapse" id="manajemenKursus">
-      <a href="manajemen-jadwal-kursus.php">Jadwal Kursus</a>
-      <a href="manajemen-kategori-kursus.php">Kategori Kursus</a>
-      <a href="manajemen-kelas-kursus.php">Kelas Kursus</a>
-      <a href="manajemen-modul-kursus.php">Modul Kursus</a>
-    </div>
-
-    <!-- Dropdown Manajemen Pembayaran -->
-    <a
-      class="dropdown-toggle"
-      data-bs-toggle="collapse"
-      href="#manajemenPembayaran"
-      role="button"
-      aria-expanded="false"
-      aria-controls="manajemenPembayaran">
-      Manajemen Pembayaran
-    </a>
-    <div class="collapse" id="manajemenPembayaran">
-      <a href="manajemen-pembayaran.php">Riwayat Pembayaran</a>
-    </div>
-
-    <a href="index.php">Logout</a>
-  </div>
-
-  <!-- Header/Navbar -->
-  <nav
-    class="navbar navbar-expand-lg navbar-light bg-light fixed-top"
-    style="margin-left: 250px">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">
-        <img src="images/new-logo.png" alt="Logo" />
-        AIFYCODE Learning
-      </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
-        <form class="d-flex">
-          <input
-            class="form-control me-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search" />
-          <button class="btn btn-outline-success" type="submit">
-            Search
-          </button>
-        </form>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Main Content -->
-  <div class="content pt-5 mt-3">
-    <div class="container mt-5">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3>List Data Pengguna</h3>
-        <!-- .ikm               -->
-      </div>
-
-      <div class="table-responsive">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>ID</th>
-              <th>Nama</th>
-              <th>Username</th>
-              <th>Password</th>
-              <th>Email</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>001</td>
-              <td>Intan Aulia Rosydah</td>
-              <td>Intan Aulia</td>
-              <td>89skw!</td>
-              <td>intan@gmail.com</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>002</td>
-              <td>Agniesa Junica Putri</td>
-              <td>Agniesa Junica</td>
-              <td>kad90*1</td>
-              <td>Agniesa@gmail.com</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>003</td>
-              <td>Fitri Aisyah Ramadhani</td>
-              <td>Fitri Aisyah</td>
-              <td>ow76#!</td>
-              <td>Fitri@gmail.com</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>004</td>
-              <td>M. Yasir Rahmatullah</td>
-              <td>M. Yasir</td>
-              <td>oaa723!</td>
-              <td>Yasir@gmail.com</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>005</td>
-              <td>Michael Fernando</td>
-              <td>Fernando</td>
-              <td>iswe34#!</td>
-              <td>Fernando@gmail.com</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>6</td>
-              <td>006</td>
-              <td>Michael Fernando</td>
-              <td>Fernando</td>
-              <td>iswe34#!</td>
-              <td>Fernando@gmail.com</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>7</td>
-              <td>007</td>
-              <td>Michael Fernando</td>
-              <td>Fernando</td>
-              <td>iswe34#!</td>
-              <td>Fernando@gmail.com</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>8</td>
-              <td>008</td>
-              <td>Michael Fernando</td>
-              <td>Fernando</td>
-              <td>iswe34#!</td>
-              <td>Fernando@gmail.com</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>9</td>
-              <td>009</td>
-              <td>Michael Fernando</td>
-              <td>Fernando</td>
-              <td>iswe34#!</td>
-              <td>Fernando@gmail.com</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>10</td>
-              <td>010</td>
-              <td>Michael Fernando</td>
-              <td>Fernando</td>
-              <td>iswe34#!</td>
-              <td>Fernando@gmail.com</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <nav aria-label="Page navigation">
+    <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
-          <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1">Previous</a>
-          </li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item">
-            <a class="page-link" href="#">Next</a>
-          </li>
+            <li class="page-item disabled">
+                <a class="page-link" href="#" tabindex="-1">Previous</a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
         </ul>
-      </nav>
+    </nav>
     </div>
-  </div>
+    </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

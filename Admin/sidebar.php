@@ -7,7 +7,7 @@
             alt="User" />
         <p>Admin</p>
     </div>
-    <a href="#" class="d-block mb-2">Home</a>
+    
 
     <!-- Dropdown Manajemen Pengguna -->
     <a
@@ -88,7 +88,6 @@
     style="margin-left: 250px">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
-            <img src="fix-e-learning-pemrograman/images/new-logo.png" alt="Logo" />
             AIFYCODE Learning
         </a>
         <button
