@@ -32,6 +32,12 @@ try {
 } catch (PDOException $e) {
     die("Query gagal: " . $e->getMessage());
 }
+if (isset($_GET['nama_kelas'])) {
+  $nama_kelas = htmlspecialchars($_GET['nama_kelas']);
+  echo "<h1>Koridor untuk Kelas: $nama_kelas</h1>";
+} else {
+  echo "<h1>Nama kelas tidak ditemukan!</h1>";
+}
 ?>
 
 <!DOCTYPE html>
@@ -107,13 +113,16 @@ try {
             <?php foreach ($kelasDipilih as $kelas): ?>
                 <div class="kelas-card">
                     <p><?php echo htmlspecialchars($kelas['nama_kelas']); ?></p>
-                    <button>Koridor Kelas</button>
+                    <form method="GET" action="koridor-dipelajari.php">
+                        <input type="hidden" name="nama_kelas" value="<?php echo htmlspecialchars($kelas['nama_kelas']); ?>">
+                        <button type="submit">Koridor Kelas</button>
+                    </form>
                 </div>
             <?php endforeach; ?>
         <?php else: ?>
           <div class="kelas-card">
             <p>Tidak ada kelas yang sedang dipelajari.</p>
-            </div>
+          </div>
         <?php endif; ?>
     </section>
 
@@ -123,15 +132,19 @@ try {
             <?php foreach ($kelasDiselesaikan as $kelas): ?>
                 <div class="kelas-card">
                     <p><?php echo htmlspecialchars($kelas['nama_kelas']); ?></p>
-                    <button>Koridor Kelas</button>
+                    <form method="GET" action="koridor-diselesaikan.php">
+                        <input type="hidden" name="nama_kelas" value="<?php echo htmlspecialchars($kelas['nama_kelas']); ?>">
+                        <button type="submit">Koridor Kelas</button>
+                    </form>
                 </div>
             <?php endforeach; ?>
         <?php else: ?>
           <div class="kelas-card">
             <p>Belum ada kelas yang diselesaikan.</p>
-            </div>
+          </div>
         <?php endif; ?>
     </section>
 </main>
+
 </body>
 </html>

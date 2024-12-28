@@ -1,5 +1,6 @@
 <?php
 require 'header-login.php';
+require 'config.php';
 ?>
 
 <body class="py-5 d-flex flex-column min-vh-100">
