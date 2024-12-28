@@ -145,6 +145,6 @@ if (isset($_GET['nama_kelas'])) {
         <?php endif; ?>
     </section>
 </main>
-
+<?php require 'footer.php'; ?>
 </body>
 </html>

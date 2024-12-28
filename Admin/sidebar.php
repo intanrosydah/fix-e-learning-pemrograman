@@ -79,7 +79,7 @@
         <a href="manajemen-tukar_api.php" class="d-block ps-3">Riwayat Tukar Api</a>
     </div>
 
-    <a href="index.php" class="d-block mt-2">Logout</a>
+    <a href="fix-e-learning-pemrograman/index.php" class="d-block mt-2">Logout</a>
 </div>
 
 <!-- Header/Navbar -->

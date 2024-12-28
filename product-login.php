@@ -1,6 +1,6 @@
 <?php
 require 'header-login.php';
-include 'config.php'; // Koneksi database
+require 'config.php'; // Koneksi database
 
 // Query untuk mengambil data paket kursus
 $query = "SELECT * FROM paket";
@@ -121,24 +121,7 @@ $paket_list = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 </div>
 
-<!-- Footer -->
-<footer>
-    <div class="container text-center">
-        <div class="social-icons mb-4">
-            <a href="#"><img src="images/facebook-icon.png" alt="Facebook" /></a>
-            <a href="#"><img src="images/x-icon.png" alt="Twitter" /></a>
-            <a href="#"><img src="images/linkedin-icon.png" alt="LinkedIn" /></a>
-            <a href="#"><img src="images/instagram-icon.png" alt="Instagram" /></a>
-        </div>
-        <div class="footer-nav">
-            <a href="index.php">Home</a>
-            <a href="aboutUs.php">About Us</a>
-            <a href="product.php">Product</a>
-            <a href="profil.php">Login</a>
-        </div>
-        <p class="footer-text mt-3">&copy; 2024 AIFYCODE Learning | All Rights Reserved. Made With Love</p>
-    </div>
-</footer>
+<?php require 'footer.php'; ?>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
