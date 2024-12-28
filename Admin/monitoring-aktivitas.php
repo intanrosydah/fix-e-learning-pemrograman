@@ -1,13 +1,69 @@
+<?php
+include 'config2.php'; // File koneksi database
+
+// Proses Tambah Data
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create') {
+    $id_user = $_POST['id_user'];
+    $id_kelas = $_POST['id_kelas'];
+    $status = $_POST['status'];
+    $tanggal_selesai = $_POST['tanggal_selesai'];
+    $skor_akhir = $_POST['skor_akhir'];
+
+    $sql = "INSERT INTO progres_kelas (id_user, id_kelas, status, tanggal_selesai, skor_akhir) 
+            VALUES (:id_user, :id_kelas, :status, :tanggal_selesai, :skor_akhir)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        ':id_user' => $id_user,
+        ':id_kelas' => $id_kelas,
+        ':status' => $status,
+        ':tanggal_selesai' => $tanggal_selesai,
+        ':skor_akhir' => $skor_akhir
+    ]);
+}
+
+// Proses Update Data
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update') {
+    $id_progres = $_POST['id_progres'];
+    $id_user = $_POST['id_user'];
+    $id_kelas = $_POST['id_kelas'];
+    $status = $_POST['status'];
+    $tanggal_selesai = $_POST['tanggal_selesai'];
+    $skor_akhir = $_POST['skor_akhir'];
+
+    $sql = "UPDATE progres_kelas SET id_user = :id_user, id_kelas = :id_kelas, status = :status, 
+            tanggal_selesai = :tanggal_selesai, skor_akhir = :skor_akhir 
+            WHERE id_progres = :id_progres";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        ':id_user' => $id_user,
+        ':id_kelas' => $id_kelas,
+        ':status' => $status,
+        ':tanggal_selesai' => $tanggal_selesai,
+        ':skor_akhir' => $skor_akhir,
+        ':id_progres' => $id_progres
+    ]);
+}
+
+// Proses Hapus Data
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'delete') {
+    $id_progres = $_GET['id'];
+
+    $sql = "DELETE FROM progres_kelas WHERE id_progres = :id_progres";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':id_progres' => $id_progres]);
+}
+
+// Query untuk mendapatkan data
+$sql = "SELECT * FROM progres_kelas ORDER BY id_progres ASC";
+$result = $pdo->query($sql);
+?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SISFO - Monitoring aktivitas</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-    rel="stylesheet" />
+  <title>SISFO - Monitoring Aktivitas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
     body {
       min-height: 100vh;
@@ -47,115 +103,20 @@
     }
   </style>
 </head>
-
 <body>
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <div class="text-center mb-3">
-      <img
-        src="https://via.placeholder.com/50"
-        class="rounded-circle"
-        alt="User" />
-      <p>Admin</p>
-    </div>
-    <a href="#">Home</a>
-
-    <!-- Dropdown Manajemen Pengguna -->
-    <a
-      class="dropdown-toggle"
-      data-bs-toggle="collapse"
-      href="#manajemenPengguna"
-      role="button"
-      aria-expanded="false"
-      aria-controls="manajemenPengguna">
-      Manajemen Pengguna
-    </a>
-    <div class="collapse" id="manajemenPengguna">
-      <a href="data-pengguna.php">Data Pengguna</a>
-      <a href="monitoring-aktivitas.php">Monitoring Aktivitas Pengguna</a>
-      <a href="manajemen-sertifikat.php">Sertifikat Pengguna</a>
-    </div>
-
-    <!-- Dropdown Manajemen Kursus -->
-    <a
-      class="dropdown-toggle"
-      data-bs-toggle="collapse"
-      href="#manajemenKursus"
-      role="button"
-      aria-expanded="false"
-      aria-controls="manajemenKursus">
-      Manajemen Kursus
-    </a>
-    <div class="collapse" id="manajemenKursus">
-      <a href="manajemen-jadwal-kursus.php">Jadwal Kursus</a>
-      <a href="manajemen-kategori-kursus.php">Kategori Kursus</a>
-      <a href="manajemen-kelas-kursus.php">Kelas Kursus</a>
-      <a href="manajemen-modul-kursus.php">Modul Kursus</a>
-    </div>
-
-    <!-- Dropdown Manajemen Pembayaran -->
-    <a
-      class="dropdown-toggle"
-      data-bs-toggle="collapse"
-      href="#manajemenPembayaran"
-      role="button"
-      aria-expanded="false"
-      aria-controls="manajemenPembayaran">
-      Manajemen Pembayaran
-    </a>
-    <div class="collapse" id="manajemenPembayaran">
-      <a href="manajemen-pembayaran.php">Riwayat Pembayaran</a>
-    </div>
-
-    <a href="index.php">Logout</a>
-  </div>
-
-  <!-- Header/Navbar -->
-  <nav
-    class="navbar navbar-expand-lg navbar-light bg-light fixed-top"
-    style="margin-left: 250px">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">
-        <img src="images/new-logo.png" alt="Logo" />
-        AIFYCODE Learning
-      </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
-        <form class="d-flex">
-          <input
-            class="form-control me-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search" />
-          <button class="btn btn-outline-success" type="submit">
-            Search
-          </button>
-        </form>
-      </div>
-    </div>
-  </nav>
+  <?php include 'sidebar.php'; ?>
 
   <!-- Main Content -->
   <div class="content pt-5 mt-3">
     <div class="container mt-5">
       <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3>MENTORING AKTIVITAS</h3>
-        <!-- <div>
-            <button class="btn btn-danger me-2">Create</button>
-            <button class="btn btn-primary me-2">Excel</button>
-            <button class="btn btn-primary me-2">Word</button>
-            <button class="btn btn-primary">PDF</button>
-          </div> -->
+        <h3>Monitoring Aktivitas</h3>
+        <div>
+          <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addModal">Tambah Aktivitas</button>
+          <button class="btn btn-primary me-2">Excel</button>
+          <button class="btn btn-primary me-2">Word</button>
+          <button class="btn btn-primary">PDF</button>
+        </div>
       </div>
 
       <div class="table-responsive">
@@ -163,100 +124,116 @@
           <thead>
             <tr>
               <th>No</th>
-              <th>ID</th>
-              <th>Login</th>
-              <th>Tanggal/Waktu</th>
-              <th>Progres Pembelajaran</th>
-              <th>Poin Daily Coding</th>
-              <th>Nilai Kuis</th>
+              <th>ID Progres</th>
+              <th>ID User</th>
+              <th>ID Kelas</th>
+              <th>Status</th>
+              <th>Tanggal Selesai</th>
+              <th>Skor Akhir</th>
+              <th>Aksi</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <th>001</th>
-              <td>intan@gmail.com</td>
-              <td>20/10/2024 11:32</td>
-              <td>Dasar AI</td>
-              <td>34</td>
-              <td>80</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <th>002</th>
-              <td>Agniesa@gmail.com</td>
-              <td>21/11/2024 10:22</td>
-              <td>Bahasa Pyhton</td>
-              <td>20</td>
-              <td>70</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <th>003</th>
-              <td>Fitri@gmail.com</td>
-              <td>31/09/2024 09:20</td>
-              <td>Bahasa Java</td>
-              <td>10</td>
-              <td>89</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <th>004</th>
-              <td>Yasir@gmail.com</td>
-              <td>31/09/2024 09:20</td>
-              <td>Bahasa Java</td>
-              <td>10</td>
-              <td>89</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <th>005</th>
-              <td>Fernando@gmail.com</td>
-              <td>06/07/2024 08:20</td>
-              <td>Bahasa C++</td>
-              <td>40</td>
-              <td>60</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
+            <?php
+            if ($result) {
+              $no = 1;
+              while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                echo "<tr>";
+                echo "<td>" . $no++ . "</td>";
+                echo "<td>" . htmlspecialchars($row['id_progres']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['id_user']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['id_kelas']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['status']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['tanggal_selesai']) . "</td>";
+                echo "<td>" . htmlspecialchars($row['skor_akhir']) . "</td>";
+                echo "<td>
+                           <button class='btn btn-warning btn-sm' data-bs-toggle='modal' data-bs-target='#editModal" . $row['id_progres'] . "'>Edit</button>
+                           <a href='?action=delete&id=" . $row['id_progres'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus data ini?\")'>Hapus</a>
+                      </td>";
+                echo "</tr>";
+
+                // Modal Edit
+                echo "
+                <div class='modal fade' id='editModal" . $row['id_progres'] . "' tabindex='-1'>
+                    <div class='modal-dialog'>
+                        <form method='POST'>
+                            <div class='modal-content'>
+                                <div class='modal-header'>
+                                    <h5 class='modal-title'>Edit Aktivitas</h5>
+                                    <button type='button' class='btn-close' data-bs-dismiss='modal'></button>
+                                </div>
+                                <div class='modal-body'>
+                                    <input type='hidden' name='id_progres' value='" . htmlspecialchars($row['id_progres']) . "'>
+                                    <div class='mb-3'>
+                                        <label for='id_user' class='form-label'>ID User</label>
+                                        <input type='number' class='form-control' name='id_user' value='" . htmlspecialchars($row['id_user']) . "' required>
+                                    </div>
+                                    <div class='mb-3'>
+                                        <label for='id_kelas' class='form-label'>ID Kelas</label>
+                                        <input type='number' class='form-control' name='id_kelas' value='" . htmlspecialchars($row['id_kelas']) . "' required>
+                                    </div>
+                                    <div class='mb-3'>
+                                        <label for='status' class='form-label'>Status</label>
+                                        <input type='text' class='form-control' name='status' value='" . htmlspecialchars($row['status']) . "' required>
+                                    </div>
+                                    <div class='mb-3'>
+                                        <label for='tanggal_selesai' class='form-label'>Tanggal Selesai</label>
+                                        <input type='datetime-local' class='form-control' name='tanggal_selesai' value='" . htmlspecialchars($row['tanggal_selesai']) . "' required>
+                                    </div>
+                                    <div class='mb-3'>
+                                        <label for='skor_akhir' class='form-label'>Skor Akhir</label>
+                                        <input type='number' class='form-control' name='skor_akhir' value='" . htmlspecialchars($row['skor_akhir']) . "' required>
+                                    </div>
+                                </div>
+                                <div class='modal-footer'>
+                                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Batal</button>
+                                    <button type='submit' class='btn btn-primary'>Simpan</button>
+                                    <input type='hidden' name='action' value='update'>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>";
+              }
+            }
+            ?>
           </tbody>
         </table>
       </div>
 
-      <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-          <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1">Previous</a>
-          </li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item">
-            <a class="page-link" href="#">Next</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+      <!-- Modal Tambah Aktivitas -->
+      <div class="modal fade" id="addModal" tabindex="-1">
+        <div class="modal-dialog">
+          <form method="POST">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Tambah Aktivitas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="id_user" class="form-label">ID User</label>
+                  <input type="number" class="form-control" name="id_user" required>
+                </div>
+                <div class="mb-3">
+                  <label for="id_kelas" class="form-label">ID Kelas</label>
+                  <input type="number" class="form-control" name="id_kelas" required>
+                </div>
+                <div class="mb-3">
+                  <label for="status" class="form-label">Status</label>
+                  <input type="text" class="form-control" name="status" required>
+                </div>
+                <div class="mb-3">
+                  <label for="tanggal_selesai" class="form-label">Tanggal Selesai</label>
+                  <input type="datetime-local" class="form-control" name="tanggal_selesai" required>
+                </div>
+                <div class="mb-3">
+                  <label for="skor_akhir" class="form-label">Skor Akhir</label>
+                  <input type="number" class="form-control" name="skor_akhir" required>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+                <input type="hidden" name="action" value="create">
+              </div

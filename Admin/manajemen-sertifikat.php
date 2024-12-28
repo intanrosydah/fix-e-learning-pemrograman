@@ -1,256 +1,225 @@
+<?php
+include 'config2.php'; // File koneksi database
+
+// Proses Tambah Data
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create') {
+    $id_progres = $_POST['id_progres'];
+    $tanggal_terbit = $_POST['tanggal_terbit'];
+    $gambar_sertifikat = $_FILES['gambar_sertifikat']['name'];
+
+    // Proses upload gambar
+    $target_dir = "uploads/";
+    $target_file = $target_dir . basename($gambar_sertifikat);
+    move_uploaded_file($_FILES['gambar_sertifikat']['tmp_name'], $target_file);
+
+    $sql = "INSERT INTO sertifikat (id_progres, tanggal_terbit, gambar_sertifikat) VALUES (:id_progres, :tanggal_terbit, :gambar_sertifikat)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        ':id_progres' => $id_progres,
+        ':tanggal_terbit' => $tanggal_terbit,
+        ':gambar_sertifikat' => $gambar_sertifikat
+    ]);
+}
+
+// Proses Update Data
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update') {
+    $id_sertifikat = $_POST['id_sertifikat'];
+    $id_progres = $_POST['id_progres'];
+    $tanggal_terbit = $_POST['tanggal_terbit'];
+    $gambar_sertifikat = $_FILES['gambar_sertifikat']['name'];
+
+    // Proses upload gambar jika ada gambar baru
+    if ($gambar_sertifikat) {
+        $target_dir = "uploads/";
+        $target_file = $target_dir . basename($gambar_sertifikat);
+        move_uploaded_file($_FILES['gambar_sertifikat']['tmp_name'], $target_file);
+
+        $sql = "UPDATE sertifikat SET id_progres = :id_progres, tanggal_terbit = :tanggal_terbit, gambar_sertifikat = :gambar_sertifikat WHERE id_sertifikat = :id_sertifikat";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ':id_progres' => $id_progres,
+            ':tanggal_terbit' => $tanggal_terbit,
+            ':gambar_sertifikat' => $gambar_sertifikat,
+            ':id_sertifikat' => $id_sertifikat
+        ]);
+    } else {
+        $sql = "UPDATE sertifikat SET id_progres = :id_progres, tanggal_terbit = :tanggal_terbit WHERE id_sertifikat = :id_sertifikat";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ':id_progres' => $id_progres,
+            ':tanggal_terbit' => $tanggal_terbit,
+            ':id_sertifikat' => $id_sertifikat
+        ]);
+    }
+}
+
+// Proses Hapus Data
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'delete') {
+    $id_sertifikat = $_GET['id'];
+
+    $sql = "DELETE FROM sertifikat WHERE id_sertifikat = :id_sertifikat";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':id_sertifikat' => $id_sertifikat]);
+}
+
+// Query untuk mendapatkan data
+$sql = "SELECT * FROM sertifikat ORDER BY id_sertifikat ASC";
+$result = $pdo->query($sql);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SISFO - Manajamen Sertifikat</title>
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-    rel="stylesheet" />
-  <style>
-    body {
-      min-height: 100vh;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Sertifikat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            min-height: 100vh;
+        }
 
-    .sidebar {
-      min-height: 100vh;
-      width: 250px;
-      background-color: #343a40;
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 100;
-      color: white;
-      padding-top: 20px;
-    }
+        .sidebar {
+            min-height: 100vh;
+            width: 250px;
+            background-color: #343a40;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            color: white;
+            padding-top: 20px;
+        }
 
-    .sidebar a {
-      color: white;
-      text-decoration: none;
-      display: block;
-      padding: 10px 15px;
-    }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px 15px;
+        }
 
-    .sidebar a:hover {
-      background-color: #495057;
-    }
+        .sidebar a:hover {
+            background-color: #495057;
+        }
 
-    .content {
-      margin-left: 250px;
-      padding: 20px;
-    }
-
-    .navbar-brand img {
-      border-radius: 50%;
-      width: 30px;
-    }
-  </style>
+        .content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+    </style>
 </head>
 
 <body>
-  <!-- Sidebar -->
-  <div class="sidebar">
-    <div class="text-center mb-3">
-      <img
-        src="https://via.placeholder.com/50"
-        class="rounded-circle"
-        alt="User" />
-      <p>Admin</p>
+    <?php include 'sidebar.php'; ?>
+
+    <div class="content">
+        <h3 class="mb-4">Manajemen Sertifikat</h3>
+        <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">Tambah Sertifikat</button>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>ID Progres</th>
+                        <th>Tanggal Terbit</th>
+                        <th>Gambar Sertifikat</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    if ($result) {
+                        $no = 1;
+                        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                            echo "<tr>";
+                            echo "<td>" . $no++ . "</td>";
+                            echo "<td>" . htmlspecialchars($row['id_progres']) . "</td>";
+                            echo "<td>" . htmlspecialchars($row['tanggal_terbit']) . "</td>";
+                            echo "<td><img src='uploads/" . htmlspecialchars($row['gambar_sertifikat']) . "' alt='Gambar Sertifikat' width='100'></td>";
+                            echo "<td>
+                                <button class='btn btn-warning btn-sm' data-bs-toggle='modal' data-bs-target='#editModal" . $row['id_sertifikat'] . "'>Edit</button>
+                                <a href='?action=delete&id=" . $row['id_sertifikat'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus data ini?\")'>Hapus</a>
+                            </td>";
+                            echo "</tr>";
+
+                            // Modal Edit
+                            echo "
+                            <div class='modal fade' id='editModal" . $row['id_sertifikat'] . "' tabindex='-1'>
+                                <div class='modal-dialog'>
+                                    <form method='POST' enctype='multipart/form-data'>
+                                        <div class='modal-content'>
+                                            <div class='modal-header'>
+                                                <h5 class='modal-title'>Edit Sertifikat</h5>
+                                                <button type='button' class='btn-close' data-bs-dismiss='modal'></button>
+                                            </div>
+                                            <div class='modal-body'>
+                                                <input type='hidden' name='id_sertifikat' value='" . htmlspecialchars($row['id_sertifikat']) . "'>
+                                                <div class='mb-3'>
+                                                    <label for='id_progres' class='form-label'>ID Progres</label>
+                                                    <input type='text' class='form-control' name='id_progres' value='" . htmlspecialchars($row['id_progres']) . "' required>
+                                                </div>
+                                                <div class='mb-3'>
+                                                    <label for='tanggal_terbit' class='form-label'>Tanggal Terbit</label>
+                                                    <input type='date' class='form-control' name='tanggal_terbit' value='" . htmlspecialchars($row['tanggal_terbit']) . "' required>
+                                                </div>
+                                                <div class='mb-3'>
+                                                    <label for='gambar_sertifikat' class='form-label'>Gambar Sertifikat</label>
+                                                    <input type='file' class='form-control' name='gambar_sertifikat'>
+                                                    <img src='uploads/" . htmlspecialchars($row['gambar_sertifikat']) . "' alt='Gambar Sertifikat' width='100' class='mt-2'>
+                                                </div>
+                                            </div>
+                                            <div class='modal-footer'>
+                                                <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Batal</button>
+                                                <button type='submit' class='btn btn-primary'>Simpan</button>
+                                                <input type='hidden' name='action' value='update'>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>";
+                        }
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
     </div>
-    <a href="#">Home</a>
 
-    <!-- Dropdown Manajemen Pengguna -->
-    <a
-      class="dropdown-toggle"
-      data-bs-toggle="collapse"
-      href="#manajemenPengguna"
-      role="button"
-      aria-expanded="false"
-      aria-controls="manajemenPengguna">
-      Manajemen Pengguna
-    </a>
-    <div class="collapse" id="manajemenPengguna">
-      <a href="data-pengguna.php">Data Pengguna</a>
-      <a href="monitoring-aktivitas.php">Monitoring Aktivitas Pengguna</a>
-      <a href="manajemen-sertifikat.php">Sertifikat Pengguna</a>
+    <!-- Modal Tambah Data -->
+    <div class="modal fade" id="addModal" tabindex="-1">
+        <div class="modal-dialog">
+            <form method="POST" enctype="multipart/form-data">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Tambah Sertifikat</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="id_progres" class="form-label">ID Progres</label>
+                            <input type="text" class="form-control" name="id_progres" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tanggal_terbit" class="form-label">Tanggal Terbit</label>
+                            <input type="date" class="form-control" name="tanggal_terbit" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="gambar_sertifikat" class="form-label">Gambar Sertifikat</label>
+                            <input type="file" class="form-control" name="gambar_sertifikat" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class='btn btn-secondary' data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class='btn btn-primary'>Simpan</button>
+                        <input type="hidden" name="action" value="create">
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <!-- Dropdown Manajemen Kursus -->
-    <a
-      class="dropdown-toggle"
-      data-bs-toggle="collapse"
-      href="#manajemenKursus"
-      role="button"
-      aria-expanded="false"
-      aria-controls="manajemenKursus">
-      Manajemen Kursus
-    </a>
-    <div class="collapse" id="manajemenKursus">
-      <a href="manajemen-jadwal-kursus.php">Jadwal Kursus</a>
-      <a href="manajemen-kategori-kursus.php">Kategori Kursus</a>
-      <a href="manajemen-kelas-kursus.php">Kelas Kursus</a>
-      <a href="manajemen-modul-kursus.php">Modul Kursus</a>
-    </div>
-
-    <!-- Dropdown Manajemen Pembayaran -->
-    <a
-      class="dropdown-toggle"
-      data-bs-toggle="collapse"
-      href="#manajemenPembayaran"
-      role="button"
-      aria-expanded="false"
-      aria-controls="manajemenPembayaran">
-      Manajemen Pembayaran
-    </a>
-    <div class="collapse" id="manajemenPembayaran">
-      <a href="manajemen-pembayaran.php">Riwayat Pembayaran</a>
-    </div>
-
-    <a href="index.php">Logout</a>
-  </div>
-
-  <!-- Header/Navbar -->
-  <nav
-    class="navbar navbar-expand-lg navbar-light bg-light fixed-top"
-    style="margin-left: 250px">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">
-        <img src="images/new-logo.png" alt="Logo" />
-        AIFYCODE Learning
-      </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
-        <form class="d-flex">
-          <input
-            class="form-control me-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search" />
-          <button class="btn btn-outline-success" type="submit">
-            Search
-          </button>
-        </form>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Main Content -->
-  <div class="content pt-5 mt-3">
-    <div class="container mt-5">
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3>MANAJEMEN SERTIFIKAT</h3>
-        <!-- <div>
-            <button class="btn btn-danger me-2">Create</button>
-            <button class="btn btn-primary me-2">Excel</button>
-            <button class="btn btn-primary me-2">Word</button>
-            <button class="btn btn-primary">PDF</button>
-          </div> -->
-      </div>
-
-      <div class="table-responsive">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>ID</th>
-              <th>Nama</th>
-              <th>Periode</th>
-              <th>Nilai Kuis</th>
-              <th>Kategeri</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>001</td>
-              <td>Intan Aulia Rosydah</td>
-              <td>21/04/21 - 07/06/24</td>
-              <td>89</td>
-              <td>LULUS</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>002</td>
-              <td>Agniesa Junica Putri</td>
-              <td>22/10/20 - 17/10/24</td>
-              <td>90</td>
-              <td>LULUS</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>003</td>
-              <td>Fitri Aisyah Ramadhani</td>
-              <td>10/10/21 - 28/10/23</td>
-              <td>85</td>
-              <td>LULUS</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>004</td>
-              <td>M. Yasir Rahmatullah</td>
-              <td>18/07/22 - 12/11/20</td>
-              <td>88</td>
-              <td>LULUS</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>005</td>
-              <td>Micheal Fernando</td>
-              <td>21/05/20 - 10/12/20</td>
-              <td>91</td>
-              <td>LULUS</td>
-              <td>
-                <button class="btn btn-warning btn-sm me-2">Edit</button>
-                <button class="btn btn-danger btn-sm">Delete</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-          <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1">Previous</a>
-          </li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item">
-            <a class="page-link" href="#">Next</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
