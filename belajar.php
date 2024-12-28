@@ -164,7 +164,7 @@ try {
         </div>
 
         <div class="d-flex justify-content-between mt-4">
-            <button class="btn navigation-buttons">← Sebelumnya</button>
+            <button class="btn navigation-buttons" onclick="window.location.href='koridor-dipelajari.php'">← Sebelumnya</button>
             <button class="btn navigation-buttons" onclick="window.location.href='koridor-diselesaikan.php'">Selanjutnya →</button>
         </div>
     </div>

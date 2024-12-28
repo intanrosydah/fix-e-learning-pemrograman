@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'config.php'; // File koneksi database
+include 'header-login.php';
 
 // Periksa apakah pengguna sudah login
 if (!isset($_SESSION['user_id'])) {
