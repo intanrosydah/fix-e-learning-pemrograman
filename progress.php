@@ -1,193 +1,137 @@
 <?php
-session_start(); // Memulai session
-require 'header-login.php'; // Memasukkan header
+session_start();
 require 'config.php';
+require 'header-login.php';
+
+$user_id = $_SESSION['user_id']; // Ambil ID user dari session
+
+// Query untuk mengambil data progres kelas yang sedang dipelajari
+$queryDipilih = "
+    SELECT k.nama_kelas 
+    FROM progres_kelas pk
+    JOIN kelas k ON pk.id_kelas = k.id_kelas
+    WHERE pk.id = :user_id AND pk.status = 'dipilih'
+";
+
+// Query untuk mengambil data progres kelas yang telah diselesaikan
+$queryDiselesaikan = "
+    SELECT k.nama_kelas 
+    FROM progres_kelas pk
+    JOIN kelas k ON pk.id_kelas = k.id_kelas
+    WHERE pk.id = :user_id AND pk.status = 'diselesaikan'
+";
+
+try {
+    $stmtDipilih = $pdo->prepare($queryDipilih);
+    $stmtDipilih->execute([':user_id' => $user_id]);
+    $kelasDipilih = $stmtDipilih->fetchAll(PDO::FETCH_ASSOC);
+
+    $stmtDiselesaikan = $pdo->prepare($queryDiselesaikan);
+    $stmtDiselesaikan->execute([':user_id' => $user_id]);
+    $kelasDiselesaikan = $stmtDiselesaikan->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Query gagal: " . $e->getMessage());
+}
 ?>
+
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Progress Belajar</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet" />
-</head>
-
-<style>
-  body {
-    font-family: "Montserrat", sans-serif;
-    background-color: #092635;
-    color: white;
-  }
-
-  .navbar {
-    padding: 0;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-    background-color: rgba(9, 38, 53, 0.5);
-    backdrop-filter: blur(10px);
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    transform-origin: center top;
-  }
-
-  .navbar:hover {
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-
-  .navbar.zoom-in {
-    transform: scale(1.05);
-  }
-
-  .navbar.zoom-out {
-    transform: scale(1) translateY(-10px);
-  }
-
-  .navbar-brand img {
-    max-width: 200px;
-  }
-
-  .navbar-nav .nav-link {
-    padding: 8px 15px;
-  }
-
-  .class-section {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 50px;
-    flex-wrap: wrap;
-  }
-
-  .class-box {
-    width: 45%;
-    margin-bottom: 20px;
-  }
-
-  /* Class Item Styles */
-  .class-item {
-    margin-bottom: 20px;
-  }
-
-  .class-item-wrapper {
-    position: relative;
-    background-color: #fff;
-    color: #000;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-
-  .class-item-wrapper span {
-    display: block;
-    text-align: left;
-    /* Align class title to the left */
-  }
-
-  .class-item-wrapper button {
-    margin-top: 10px;
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-  }
-
-  footer {
-    background-color: #092635;
-    color: white;
-    padding: 20px;
-  }
-
-  .social-icons a img {
-    width: 30px;
-    margin-right: 10px;
-  }
-
-  /* Media Query for responsiveness */
-  @media (max-width: 768px) {
-    .class-section {
-      flex-direction: column;
-      align-items: center;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Kelas</title>
+    <style>
+    body {
+        margin: 0;
+        font-family: "Montserrat", sans-serif;
+        background-color: #092635;
     }
 
-    .class-box {
-      width: 90%;
-      /* Make boxes take full width on smaller screens */
+    .progress-container {
+        display: flex;
+        justify-content: space-around;
+        padding: 20px;
+        margin-top: 80px; /* Tambahkan jarak dari atas */
     }
-  }
+
+    section {
+        width: 45%;
+        background-color: #092635;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    h2 {
+        text-align: center;
+        color:#FFFFFF;
+    }
+    
+
+    .kelas-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #FFFFFF;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 6px;
+    }
+
+    .kelas-card p {
+        margin: 0;
+    }
+
+    button {
+        background-color: #092635;
+        color: #FFFFFF;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 12px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    button:hover {
+        background-color:grey;
+        color: #000000;
+    }
 </style>
 
-<body class="py-5">
+</head>
+<body>
 
-  <div class="container text-center py-5">
-    <?php
-    // Ambil kelas yang dipilih dari session
-    $kelasDipilih = isset($_SESSION['keranjang']) ? $_SESSION['keranjang'] : [];
-    ?>
-    <div class="class-section">
-      <!-- Kelas yang Dipelajari -->
-      <div class="class-box">
-        <h3>Kelas yang Dipelajari</h3>
-        <?php if (empty($kelasDipilih)): ?>
-          <p>Tidak ada kelas yang dipilih.</p>
+<main class="progress-container">
+    <section class="kelas-dipilih">
+        <h2>Kelas yang Dipelajari</h2>
+        <?php if (!empty($kelasDipilih)): ?>
+            <?php foreach ($kelasDipilih as $kelas): ?>
+                <div class="kelas-card">
+                    <p><?php echo htmlspecialchars($kelas['nama_kelas']); ?></p>
+                    <button>Koridor Kelas</button>
+                </div>
+            <?php endforeach; ?>
         <?php else: ?>
-          <?php
-          // Menampilkan setiap kelas yang dipilih
-          foreach ($kelasDipilih as $id_kelas) {
-              // Query untuk mendapatkan detail kelas berdasarkan ID
-              $query = "SELECT * FROM kelas WHERE id_kelas = :id_kelas";
-              $stmt = $pdo->prepare($query);
-              $stmt->execute([':id_kelas' => $id_kelas]);
-              $kelas = $stmt->fetch(PDO::FETCH_ASSOC);
-              if ($kelas) {
-                  echo '<div class="class-item">
-                          <div class="class-item-wrapper">
-                            <span>' . htmlspecialchars($kelas['nama_kelas']) . '</span>
-                            <button class="btn btn-dark" onclick="window.location.href=\'koridor-dipelajari.php?kelas=' . urlencode($kelas['nama_kelas']) . '\'">Koridor Kelas</button>
-                          </div>
-                        </div>';
-              }
-          }
-          ?>
+          <div class="kelas-card">
+            <p>Tidak ada kelas yang sedang dipelajari.</p>
+            </div>
         <?php endif; ?>
-      </div>
+    </section>
 
-      <!-- Kelas yang Diselesaikan -->
-      <div class="class-box">
-        <h3>Kelas yang Diselesaikan</h3>
-        <div class="class-item">
-          <div class="class-item-wrapper">
-            <span>Belajar Dasar Pemrograman</span>
-            <button class="btn btn-dark" onclick="window.location.href='koridor-diselesaikan.php'">Koridor Kelas</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <footer class="text-center">
-    <div class="container">
-      <div class="social-icons mb-3">
-        <a href="#"><img src="images/facebook-icon.png" alt="Facebook" /></a>
-        <a href="#"><img src="images/x-icon.png" alt="Twitter" /></a>
-        <a href="#"><img src="images/linkedin-icon.png" alt="LinkedIn" /></a>
-        <a href="#"><img src="images/instagram-icon.png" alt="Instagram" /></a>
-      </div>
-      <nav>
-        <a href="index.php" class="me-3 text-decoration-none">Home</a>
-        <a href="aboutUs.php" class="me-3 text-decoration-none">About Us</a>
-        <a href="product.php" class="me-3 text-decoration-none">Product</a>
-        <a href="profil.php" class="text-decoration-none">Login</a>
-      </nav>
-      <p class="mt-3">
-        &copy; 2024 AIFYCODE Learning | All Rights Reserved. Made With Love
-      </p>
-    </div>
-  </footer>
-
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <section class="kelas-selesai">
+        <h2>Kelas yang Diselesaikan</h2>
+        <?php if (!empty($kelasDiselesaikan)): ?>
+            <?php foreach ($kelasDiselesaikan as $kelas): ?>
+                <div class="kelas-card">
+                    <p><?php echo htmlspecialchars($kelas['nama_kelas']); ?></p>
+                    <button>Koridor Kelas</button>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+          <div class="kelas-card">
+            <p>Belum ada kelas yang diselesaikan.</p>
+            </div>
+        <?php endif; ?>
+    </section>
+</main>
 </body>
-
 </html>

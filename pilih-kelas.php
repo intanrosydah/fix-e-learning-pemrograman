@@ -14,10 +14,11 @@ try {
 
 // Proses pemilihan kelas
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!empty($_POST['id_kelas'])) {
+    if (!empty($_POST['id_kelas']) && isset($_SESSION['user_id'])) {
         $id_kelas = $_POST['id_kelas'];
+        $user_id = $_SESSION['user_id']; // Asumsikan user ID disimpan di session
 
-        // Cek apakah kelas sudah ada di dalam keranjang (session)
+        // Cek apakah kelas sudah ada di keranjang (session)
         if (!isset($_SESSION['keranjang'])) {
             $_SESSION['keranjang'] = [];
         }
@@ -26,26 +27,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Tambahkan kelas ke dalam keranjang
             if (!in_array($id_kelas, $_SESSION['keranjang'])) {
                 $_SESSION['keranjang'][] = $id_kelas;
-                echo "Kelas berhasil ditambahkan ke keranjang!";
+
+                // Tambahkan data ke tabel progres_kelas
+                try {
+                    $insertQuery = "INSERT INTO progres_kelas (id, id_kelas, status, skor_akhir) VALUES (:id, :id_kelas, 'dipilih', 0)";
+                    $stmtInsert = $pdo->prepare($insertQuery);
+                    $stmtInsert->execute([
+                        ':id' => $user_id,
+                        ':id_kelas' => $id_kelas,
+                    ]);
+                    echo "Kelas berhasil ditambahkan ke keranjang dan disimpan dalam database!";
+                } catch (PDOException $e) {
+                    echo "Gagal menyimpan kelas ke database: " . $e->getMessage();
+                }
             } else {
                 echo "Kelas ini sudah ada di keranjang.";
             }
         } else {
             echo "Maksimal 3 kelas dapat dipilih.";
         }
+    } else {
+        echo "Anda harus login untuk memilih kelas.";
     }
 }
 
 // Proses untuk menghapus kelas dari keranjang
-if (isset($_GET['remove'])) {
+if (isset($_GET['remove']) && isset($_SESSION['user_id'])) {
     $id_kelas_remove = $_GET['remove'];
+    $user_id = $_SESSION['user_id']; // Asumsikan user ID disimpan di session
+
     if (($key = array_search($id_kelas_remove, $_SESSION['keranjang'])) !== false) {
         unset($_SESSION['keranjang'][$key]);
         $_SESSION['keranjang'] = array_values($_SESSION['keranjang']); // Re-index array
-        echo "Kelas telah dihapus dari keranjang.";
+
+        // Hapus data dari tabel progres_kelas
+        try {
+            $deleteQuery = "DELETE FROM progres_kelas WHERE id = :id AND id_kelas = :id_kelas AND status = 'dipilih'";
+            $stmtDelete = $pdo->prepare($deleteQuery);
+            $stmtDelete->execute([
+                ':id' => $user_id,
+                ':id_kelas' => $id_kelas_remove,
+            ]);
+            echo "Kelas telah dihapus dari keranjang dan database.";
+        } catch (PDOException $e) {
+            echo "Gagal menghapus kelas dari database: " . $e->getMessage();
+        }
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
