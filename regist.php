@@ -164,6 +164,7 @@
                                 type="submit"
                                 class="btn btn-primary btn-lg"
                                 style="padding-left: 2.5rem; padding-right: 2.5rem"
+                                onclick="window.location.href='loginfix.php'"
                             >
                                 Register
                             </button>
