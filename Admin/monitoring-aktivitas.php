@@ -241,13 +241,31 @@ $result = $pdo->query($sql);
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
               </div>
               <div class="modal-body">
-                <div class="mb-3">
-                  <label for="id_user" class="form-label">ID User</label>
-                  <input type="number" class="form-control" name="id_user" required>
+                <div class="mb-3">                  
+                  <label for="id" class="form-label">Nama Pengguna</label>
+                  <select class="form-control" name="id" required>
+                    <option value="">Pilih Nama Pengguna</option>
+                    <?php
+                    $sql_user = "SELECT id, name FROM user";
+                    $stmt_user = $pdo->query($sql_user);
+                    while ($user = $stmt_user->fetch(PDO::FETCH_ASSOC)) {
+                      echo "<option value='" . $user['id'] . "'>" . $user['name'] . "</option>";
+                    }
+                    ?>
+                  </select>
                 </div>
                 <div class="mb-3">
-                  <label for="id_kelas" class="form-label">ID Kelas</label>
-                  <input type="number" class="form-control" name="id_kelas" required>
+                  <label for="id_kelas" class="form-label">Nama Kelas</label>
+                  <select class="form-control" name="id_kelas" required>
+                    <option value="">Pilih Nama Kelas</option>
+                    <?php
+                    $sql_kelas = "SELECT id_kelas, nama_kelas FROM kelas";
+                    $stmt_kelas = $pdo->query($sql_kelas);
+                    while ($kelas = $stmt_kelas->fetch(PDO::FETCH_ASSOC)) {
+                      echo "<option value='" . $kelas['id_kelas'] . "'>" . $kelas['nama_kelas'] . "</option>";
+                    }
+                    ?>
+                  </select>
                 </div>
                 <div class="mb-3">
                   <label for="status" class="form-label">Status</label>
