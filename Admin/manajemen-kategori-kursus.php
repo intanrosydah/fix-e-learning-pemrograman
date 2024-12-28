@@ -96,9 +96,7 @@ $result = $pdo->query($sql);
                 <h3>KATEGORI KURSUS</h3>
                 <div>
                     <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addModal">Tambah Kategori</button>
-                    <button class="btn btn-primary me-2">Excel</button>
-                    <button class="btn btn-primary me-2">Word</button>
-                    <button class="btn btn-primary">PDF</button>
+
                 </div>
             </div>
 

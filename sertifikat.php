@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username'])) {
     $query = "SELECT sertifikat.gambar_sertifikat 
               FROM sertifikat 
               JOIN progres_kelas  ON sertifikat.id_progres = progres_kelas.id_progres
-              JOIN user ON progres_kelas.id_user = user.id
+              JOIN user ON progres_kelas.id = user.id
               WHERE user.username = :username";
     $stmt = $pdo->prepare($query);
     $stmt->bindParam(':username', $username, PDO::PARAM_STR);

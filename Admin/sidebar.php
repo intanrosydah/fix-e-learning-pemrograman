@@ -36,7 +36,7 @@
         Manajemen Kursus
     </a>
     <div class="collapse ms-3" id="manajemenKursus">
-        <a href="manajemen-jadwal-kursus.php" class="d-block ps-3">Jadwal Kursus</a>
+        <a href="informasi-manajemen-kursus.php" class="d-block ps-3">Informasi Kursus</a>
         <a href="manajemen-paket-kursus.php" class="d-block ps-3">Paket Kursus</a>
         <a href="manajemen-kategori-kursus.php" class="d-block ps-3">Kategori Kursus</a>
         <a href="manajemen-kelas-kursus.php" class="d-block ps-3">Kelas Kursus</a>
@@ -58,7 +58,7 @@
         Manajemen Pembayaran
     </a>
     <div class="collapse ms-3" id="manajemenPembayaran">
-        <a href="manajemen-pembayaran.php" class="d-block ps-3">Riwayat Pembayaran</a>
+        <a href="manajemen-pembayaran.php" class="d-block ps-3">Riwayat Langganan</a>
         <a href="manajemen-metode-pembayaran.php" class="d-block ps-3">Metode Pembayaran</a>
     </div>
 
@@ -74,7 +74,7 @@
     </a>
     <div class="collapse ms-3" id="manajemenDailyCoding">
         <a href="manajemen-daily_coding.php" class="d-block ps-3">Daily Coding</a>
-        <a href="manajemen-progres_api.php" class="d-block ps-3">Riwayat Progres Api</a>
+        <a href="manajemen-progres_api.php" class="d-block ps-3">Progres Api</a>
         <a href="manajemen-paket_api.php" class="d-block ps-3">Paket Api</a>
         <a href="manajemen-tukar_api.php" class="d-block ps-3">Riwayat Tukar Api</a>
     </div>

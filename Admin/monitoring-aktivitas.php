@@ -3,54 +3,54 @@ include 'config2.php'; // Database connection file
 
 // Add new record to progres_kelas
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create') {
-    $id_user = $_POST['id_user'];
-    $id_kelas = $_POST['id_kelas'];
-    $status = $_POST['status'];
-    $tanggal_selesai = $_POST['tanggal_selesai'];
-    $skor_akhir = $_POST['skor_akhir'];
+  $id_user = $_POST['id_user'];
+  $id_kelas = $_POST['id_kelas'];
+  $status = $_POST['status'];
+  $tanggal_selesai = $_POST['tanggal_selesai'];
+  $skor_akhir = $_POST['skor_akhir'];
 
-    $sql = "INSERT INTO progres_kelas (id, id_kelas, status, tanggal_selesai, skor_akhir) 
+  $sql = "INSERT INTO progres_kelas (id, id_kelas, status, tanggal_selesai, skor_akhir) 
             VALUES (:id_user, :id_kelas, :status, :tanggal_selesai, :skor_akhir)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([
-        ':id_user' => $id_user,
-        ':id_kelas' => $id_kelas,
-        ':status' => $status,
-        ':tanggal_selesai' => $tanggal_selesai,
-        ':skor_akhir' => $skor_akhir
-    ]);
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute([
+    ':id_user' => $id_user,
+    ':id_kelas' => $id_kelas,
+    ':status' => $status,
+    ':tanggal_selesai' => $tanggal_selesai,
+    ':skor_akhir' => $skor_akhir
+  ]);
 }
 
 // Update existing record in progres_kelas
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update') {
-    $id_progres = $_POST['id_progres'];
-    $id_user = $_POST['id_user'];
-    $id_kelas = $_POST['id_kelas'];
-    $status = $_POST['status'];
-    $tanggal_selesai = $_POST['tanggal_selesai'];
-    $skor_akhir = $_POST['skor_akhir'];
+  $id_progres = $_POST['id_progres'];
+  $id_user = $_POST['id_user'];
+  $id_kelas = $_POST['id_kelas'];
+  $status = $_POST['status'];
+  $tanggal_selesai = $_POST['tanggal_selesai'];
+  $skor_akhir = $_POST['skor_akhir'];
 
-    $sql = "UPDATE progres_kelas 
+  $sql = "UPDATE progres_kelas 
             SET id = :id_user, id_kelas = :id_kelas, status = :status, tanggal_selesai = :tanggal_selesai, skor_akhir = :skor_akhir 
             WHERE id_progres = :id_progres";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([
-        ':id_user' => $id_user,
-        ':id_kelas' => $id_kelas,
-        ':status' => $status,
-        ':tanggal_selesai' => $tanggal_selesai,
-        ':skor_akhir' => $skor_akhir,
-        ':id_progres' => $id_progres
-    ]);
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute([
+    ':id_user' => $id_user,
+    ':id_kelas' => $id_kelas,
+    ':status' => $status,
+    ':tanggal_selesai' => $tanggal_selesai,
+    ':skor_akhir' => $skor_akhir,
+    ':id_progres' => $id_progres
+  ]);
 }
 
 // Delete record from progres_kelas
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'delete') {
-    $id_progres = $_GET['id'];
+  $id_progres = $_GET['id'];
 
-    $sql = "DELETE FROM progres_kelas WHERE id_progres = :id_progres";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([':id_progres' => $id_progres]);
+  $sql = "DELETE FROM progres_kelas WHERE id_progres = :id_progres";
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute([':id_progres' => $id_progres]);
 }
 
 // Fetch all records with JOIN to display related user and class information
@@ -63,12 +63,13 @@ $result = $pdo->query($sql);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SISFO - Monitoring Aktivitas</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SISFO - Monitoring Aktivitas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
     body {
       min-height: 100vh;
     }
@@ -120,30 +121,28 @@ $result = $pdo->query($sql);
         <h3>MONITORING AKTIVITAS</h3>
         <div>
           <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addModal">Tambah Progres</button>
-          <button class="btn btn-primary me-2">Excel</button>
-          <button class="btn btn-primary me-2">Word</button>
-          <button class="btn btn-primary">PDF</button>
+
         </div>
       </div>
 
       <div class="table-responsive">
         <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID Progres</th>
-                    <th>Nama Pengguna</th>
-                    <th>Nama Kelas</th>
-                    <th>Status</th>
-                    <th>Tanggal Selesai</th>
-                    <th>Skor Akhir</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                if ($result) {
-                    foreach ($result as $row) {
-                        echo "<tr>
+          <thead>
+            <tr>
+              <th>ID Progres</th>
+              <th>Nama Pengguna</th>
+              <th>Nama Kelas</th>
+              <th>Status</th>
+              <th>Tanggal Selesai</th>
+              <th>Skor Akhir</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            if ($result) {
+              foreach ($result as $row) {
+                echo "<tr>
                             <td>" . htmlspecialchars($row['id_progres']) . "</td>
                             <td>" . htmlspecialchars($row['nama_pengguna']) . "</td>
                             <td>" . htmlspecialchars($row['nama_kelas']) . "</td>
@@ -172,30 +171,30 @@ $result = $pdo->query($sql);
                           <label for='id_user' class='form-label'>Nama Pengguna</label>
                           <select class='form-control' name='id_user' required>";
 
-        // Query to get all users
-        $sql_users = "SELECT id, name FROM user";
-        $stmt_users = $pdo->query($sql_users);
-        while ($user = $stmt_users->fetch()) {
-          $selected = ($user['id'] == $row['id']) ? "selected" : "";
-          echo "<option value='" . $user['id'] . "' $selected>" . htmlspecialchars($user['name']) . "</option>";
-        }
+                // Query to get all users
+                $sql_users = "SELECT id, name FROM user";
+                $stmt_users = $pdo->query($sql_users);
+                while ($user = $stmt_users->fetch()) {
+                  $selected = ($user['id'] == $row['id']) ? "selected" : "";
+                  echo "<option value='" . $user['id'] . "' $selected>" . htmlspecialchars($user['name']) . "</option>";
+                }
 
-        echo "  </select>
+                echo "  </select>
                         </div>
 
                         <div class='mb-3'>
                           <label for='id_kelas' class='form-label'>Nama Kelas</label>
                           <select class='form-control' name='id_kelas' required>";
 
-        // Query to get all classes
-        $sql_kelas = "SELECT id_kelas, nama_kelas FROM kelas";
-        $stmt_kelas = $pdo->query($sql_kelas);
-        while ($kelas = $stmt_kelas->fetch()) {
-          $selected = ($kelas['id_kelas'] == $row['id_kelas']) ? "selected" : "";
-          echo "<option value='" . $kelas['id_kelas'] . "' $selected>" . htmlspecialchars($kelas['nama_kelas']) . "</option>";
-        }
+                // Query to get all classes
+                $sql_kelas = "SELECT id_kelas, nama_kelas FROM kelas";
+                $stmt_kelas = $pdo->query($sql_kelas);
+                while ($kelas = $stmt_kelas->fetch()) {
+                  $selected = ($kelas['id_kelas'] == $row['id_kelas']) ? "selected" : "";
+                  echo "<option value='" . $kelas['id_kelas'] . "' $selected>" . htmlspecialchars($kelas['nama_kelas']) . "</option>";
+                }
 
-        echo "  </select>
+                echo "  </select>
                         </div>
                         <div class='mb-3'>
                           <label for='status' class='form-label'>Status</label>
@@ -267,12 +266,13 @@ $result = $pdo->query($sql);
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                 <button type="submit" class="btn btn-primary">Simpan</button>
                 <input type="hidden" name="action" value="create">
-              </div>
             </div>
-          </form>
         </div>
+        </form>
+      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

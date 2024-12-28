@@ -1,6 +1,6 @@
 <?php
 $host = 'localhost';
-$dbname = 'aifycodenew';
+$dbname = 'aifycode';
 $username = 'root';
 $password = '';
 

@@ -1,274 +1,236 @@
 <?php
-require 'header-login.php'; // Memasukkan header
-require 'config.php'; // File koneksi database
+session_start();
+require 'header-login.php';
+require 'config.php';
 
-// Query untuk mengambil data dari daily_coding
+// Pastikan user login
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php'); // Redirect ke halaman login jika tidak ada session
+    exit();
+}
+
+$id_user = $_SESSION['user_id']; // Ambil id_user dari session
+
+// Ambil data soal dari database
 $query = "SELECT * FROM daily_coding";
 $stmt = $pdo->prepare($query);
 $stmt->execute();
+$questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$message = '';
+// Ambil total poin API yang diperoleh
+$query = "SELECT SUM(api_diperoleh) AS total_api FROM progres_api WHERE id_user = :id_user";
+$stmt = $pdo->prepare($query);
+$stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+$stmt->execute();
+$apiPoints = $stmt->fetchColumn() ?: 0; // Jika null, set ke 0
+
+$feedback = ""; // Feedback untuk user
+$activeTab = 1; // Default tab yang aktif
+$showModal = false; // Flag untuk menampilkan modal
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    try {
-        $id_user = $_POST['id_user'];
-        $id_daily_coding = $_POST['id_daily_coding'];
-        $jawaban_user = $_POST['jawaban_user'];
+    // Validasi input dari form
+    $kode_soal = filter_var($_POST['kode_soal'], FILTER_SANITIZE_STRING);
+    $jawaban_user = filter_var($_POST['jawaban'], FILTER_SANITIZE_STRING);
+    $activeTab = (int)$_POST['day']; // Tab saat ini
 
-        // Ambil jawaban yang benar dan reward dari database `daily_coding`
-        $query = "SELECT jawaban_benar, reward_api FROM daily_coding WHERE id_daily_coding = :id_daily_coding";
+    // Dapatkan hari ini berdasarkan tanggal
+    $today = date('Y-m-d');
+
+    // Periksa apakah user sudah mengerjakan soal sebelumnya
+    $query = "SELECT * FROM progres_api WHERE id_user = :id_user AND tanggal_perolehan = :today";
+    $stmt = $pdo->prepare($query);
+    $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+    $stmt->bindParam(':today', $today, PDO::PARAM_STR);
+    $stmt->execute();
+    $doneToday = $stmt->rowCount() > 0;
+
+    // Jika sudah mengerjakan hari ini
+    if ($doneToday) {
+        $feedback = "Anda sudah menyelesaikan tantangan hari ini.";
+        $showModal = false;
+    } else {
+        // Periksa apakah soal hari ini sudah pernah dikerjakan
+        $query = "SELECT COUNT(*) FROM progres_api WHERE id_user = :id_user AND id_daily_coding = :kode_soal";
         $stmt = $pdo->prepare($query);
-        $stmt->bindParam(':id_daily_coding', $id_daily_coding);
+        $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+        $stmt->bindParam(':kode_soal', $kode_soal, PDO::PARAM_STR);
         $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $isAlreadyAnswered = $stmt->fetchColumn();
 
-        if (!$result) {
-            throw new Exception("Soal tidak ditemukan.");
-        }
-
-        $jawaban_benar = $result['jawaban_benar'];
-        $reward_api = $result['reward_api'];
-
-        // Validasi jawaban user
-        if (trim($jawaban_benar) === trim($jawaban_user)) {
-            $status_tantangan = 'selesai';
-            $poin_didapatkan = $reward_api; // Poin dari reward_api
+        if ($isAlreadyAnswered > 0) {
+            $feedback = "Anda sudah menjawab tantangan hari ini. Coba tantangan berikutnya.";
+            $showModal = false; // Tidak menampilkan modal
         } else {
-            $status_tantangan = 'belum';
-            $poin_didapatkan = 0;
+            // Validasi jawaban
+            $query = "SELECT jawaban_benar FROM daily_coding WHERE kode_soal = :kode_soal";
+            $stmt = $pdo->prepare($query);
+            $stmt->bindParam(':kode_soal', $kode_soal);
+            $stmt->execute();
+            $jawaban_benar = $stmt->fetchColumn();
+
+            if ($jawaban_user === $jawaban_benar) {
+                $feedback = "Jawaban Anda benar! Anda mendapatkan 1 Api.";
+                $showModal = true;
+                $status = 'completed'; // Set status ke 'completed'
+
+                // Simpan poin ke database
+                $sql = "INSERT INTO progres_api (id_user, id_daily_coding, api_diperoleh, tanggal_perolehan, status)
+                        VALUES (:id_user, :id_daily_coding, 1, CURDATE(), :status)";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                $stmt->bindParam(':id_daily_coding', $kode_soal, PDO::PARAM_STR);
+                $stmt->bindParam(':status', $status, PDO::PARAM_STR);
+                $stmt->execute();
+
+                // Tambahkan poin ke API poin total
+                $apiPoints++;
+
+                // Perbarui ke tab berikutnya
+                $activeTab = $activeTab + 1;
+                if ($activeTab > 7) {
+                    $activeTab = 7; // Pastikan tidak lebih dari hari ke-7
+                }
+            } else {
+                $feedback = "Jawaban Anda salah. Coba lagi.";
+                $status = 'failed'; // Set status ke 'failed'
+
+                // Simpan status 'failed' di database
+                $sql = "INSERT INTO progres_api (id_user, id_daily_coding, api_diperoleh, tanggal_perolehan, status)
+                        VALUES (:id_user, :id_daily_coding, 0, CURDATE(), :status)";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindParam(':id_user', $id_user, PDO::PARAM_INT);
+                $stmt->bindParam(':id_daily_coding', $kode_soal, PDO::PARAM_STR);
+                $stmt->bindParam(':status', $status, PDO::PARAM_STR);
+                $stmt->execute();
+            }
         }
-
-        // Simpan hasil ke database `progres_api`
-        $sql = "INSERT INTO progres_api (id_user, id_daily_coding, api_diperoleh, tanggal_perolehan)
-                VALUES (:id_user, :id_daily_coding, :api_diperoleh, CURDATE())
-                ON DUPLICATE KEY UPDATE 
-                    api_diperoleh = api_diperoleh + :api_diperoleh";
-        $stmt = $pdo->prepare($sql);
-
-        $stmt->bindParam(':id_user', $id_user);
-        $stmt->bindParam(':id_daily_coding', $id_daily_coding);
-        $stmt->bindParam(':api_diperoleh', $poin_didapatkan);
-        $stmt->execute();
-
-        $message = "Jawaban berhasil disimpan!";
-    } catch (Exception $e) {
-        $message = "Error: " . $e->getMessage();
     }
-
-    // Return response as JSON
-    echo json_encode([
-        'success' => $status_tantangan === 'selesai',
-        'apiPoints' => $poin_didapatkan,
-        'message' => $message,
-    ]);
-    exit;
 }
+
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tantangan Harian</title>
-
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <style>
         body {
             font-family: "Montserrat", sans-serif;
             background-color: #092635;
             color: white;
         }
-        .content { margin-top: 130px; }
+
+        .content {
+            margin-top: 150px;
+        }
+
         .card {
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
         }
 
+        input[type="radio"],
+        label {
+            color: black;
+        }
+
         .soal-harian {
-            color: #007bff; /* Warna biru untuk soal */
-        }
-        .reward-header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 20px;
-            background-color: rgba(9, 38, 53, 0.7);
-            border-radius: 8px;
-        }
-
-        .feedback {
-            margin-top: 10px;
-            font-weight: bold;
-        }
-
-        .feedback.correct {
-            color: green;
-        }
-
-        .feedback.incorrect {
-            color: red;
-        }
-
-        #daily-coding-section {
-            display: none; /* Sembunyikan tantangan harian pada awalnya */
-        }
-
-        #intro-section {
-            text-align: center;
+            color: #007bff;
         }
     </style>
 </head>
+
 <body>
-
-<div class="content container">
-    <!-- Intro Section -->
-    <div id="intro-section">
-        <h1>Apa Itu Daily Coding?</h1>
-        <p>Daily Coding adalah rutinitas latihan pemrograman harian yang bertujuan untuk meningkatkan keterampilan coding dan pemecahan masalah. Melalui daily coding, seseorang mengasah kemampuan logika, memahami konsep-konsep pemrograman baru, serta memperkuat pemahaman algoritma dan struktur data. Biasanya, kegiatan ini melibatkan penyelesaian soal-soal dengan tingkat kesulitan yang bervariasi setiap hari, baik dalam bahasa pemrograman tertentu maupun dalam bahasa yang berbeda. Dengan konsistensi, daily coding membantu pengembangan keahlian teknis dan meningkatkan efisiensi dalam menulis kode.</p>
-        
-        <h2>Bagaimana Cara Kerja Daily Coding?</h2>
-        <ol style="list-style-type: none;">
-            <li>Klik tombol mulai</li>
-            <li>Selesaikan tantangan harian, setiap menyelesaikan tantangan dapat 1 api</li>
-            <li>Kumpulkan api untuk ditukarkan Paket Kursus Online</li>
-        </ol>
-        <button id="start-button" class="btn btn-primary">Mulai</button>
-    </div>
-
-    <!-- Daily Coding Challenges Section -->
-    <div id="daily-coding-section">
+    <div class="content container">
         <h1 class="text-center my-4">Tantangan Harian</h1>
 
         <!-- Reward Header -->
-        <div class="reward-header text-center my-4">
+        <div class="text-center mb-4">
             <a href="tukar-api.php" class="btn btn-danger">Tukar Api</a>
-            <span id="api-points" class="fs-4 fw-bold text-white">0</span> <!-- Poin Api -->
+            <span class="fs-4 fw-bold text-white"><?= $apiPoints; ?></span>
         </div>
 
         <!-- Nav Pills -->
-        <ul class="nav nav-pills justify-content-center mb-4" id="challenge-tabs">
+        <ul class="nav nav-pills justify-content-center mb-4">
             <?php for ($i = 1; $i <= 7; $i++): ?>
                 <li class="nav-item">
-                    <a class="nav-link <?= $i === 1 ? 'active' : '' ?>" id="day<?= $i ?>-tab" data-bs-toggle="pill" href="#day<?= $i ?>">Hari <?= $i ?></a>
+                    <a class="nav-link <?= $i === $activeTab ? 'active' : '' ?>" href="#day<?= $i ?>" data-bs-toggle="tab">Hari <?= $i ?></a>
                 </li>
             <?php endfor; ?>
         </ul>
 
-<!-- Tab Content -->
-<div class="tab-content">
-    <?php $day = 1; ?>
-    <?php foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $row): ?>
-        <div class="tab-pane fade <?= $day === 1 ? 'show active' : '' ?>" id="day<?= $day ?>" role="tabpanel">
-            <div class="card mb-4 question-box md-grid gap-2 d-md-block">
-                <h3 class="soal-harian">Soal Hari Ke-<?= $day ?></h3>
-                <pre class="bg-light p-3 rounded text-dark"><?= htmlspecialchars($row['deskripsi_tantangan']) ?></pre>
-                <div class="question-option text-dark">
-                    <input type="radio" id="answer1_<?= $day ?>" name="answer[<?= $day ?>]" value="A" required>
-                    <label for="answer1_<?= $day ?>"><?= htmlspecialchars($row['opsi_a']); ?></label>
-                </div>
-                <div class="question-option text-dark">
-                    <input type="radio" id="answer2_<?= $day ?>" name="answer[<?= $day ?>]" value="B">
-                    <label for="answer2_<?= $day ?>"><?= htmlspecialchars($row['opsi_b']); ?></label>
-                </div>
-                <div class="question-option text-dark">
-                    <input type="radio" id="answer3_<?= $day ?>" name="answer[<?= $day ?>]" value="C">
-                    <label for="answer3_<?= $day ?>"><?= htmlspecialchars($row['opsi_c']); ?></label>
-                </div>
-                <div class="question-option text-dark">
-                    <input type="radio" id="answer4_<?= $day ?>" name="answer[<?= $day ?>]" value="D">
-                    <label for="answer4_<?= $day ?>"><?= htmlspecialchars($row['opsi_d']); ?></label>
-                </div>
-                <div class="submit-button mt-4">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="checkAnswer(<?= $day ?>)">Kirim Jawaban</button>
-                    <div id="feedback-<?= $day ?>" class="feedback"></div>
-                </div>
-            </div>
-        </div>
-        <?php $day++; ?>
-    <?php endforeach; ?>
-</div>
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <?php $day = 1; ?>
+            <?php foreach ($questions as $row): ?>
+                <div class="tab-pane fade <?= $day === $activeTab ? 'show active' : '' ?>" id="day<?= $day ?>">
+                    <div class="card mb-4">
+                        <h3 class="soal-harian">Soal Hari Ke-<?= $day ?></h3>
+                        <pre class="bg-light p-3 rounded text-dark"><?= htmlspecialchars($row['deskripsi_tantangan']) ?></pre>
+                        <form method="POST" action="">
+                            <input type="hidden" name="kode_soal" value="<?= $row['kode_soal'] ?>">
+                            <input type="hidden" name="day" value="<?= $day ?>">
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content text-center">
-            <div class="modal-body">
-                <h2 class="text-warning fw-bold">Selamat!</h2>
-                <img src="https://img.icons8.com/emoji/48/fire.png" alt="Fire" width="60" class="fire-icon mt-4 gap-5">
-                <p class="text-center text-dark fs-3">Anda telah menyelesaikan tantangan hari ini!</p>
-            </div>
-            <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="nextChallenge()">Lanjut</button>
-            </div>
+                            <div class="mb-2">
+                                <input type="radio" id="answerA_<?= $day ?>" name="jawaban" value="A" required>
+                                <label for="answerA_<?= $day ?>"><?= htmlspecialchars($row['opsi_a']) ?></label>
+                            </div>
+                            <div class="mb-2">
+                                <input type="radio" id="answerB_<?= $day ?>" name="jawaban" value="B">
+                                <label for="answerB_<?= $day ?>"><?= htmlspecialchars($row['opsi_b']) ?></label>
+                            </div>
+                            <div class="mb-2">
+                                <input type="radio" id="answerC_<?= $day ?>" name="jawaban" value="C">
+                                <label for="answerC_<?= $day ?>"><?= htmlspecialchars($row['opsi_c']) ?></label>
+                            </div>
+                            <div class="mb-2">
+                                <input type="radio" id="answerD_<?= $day ?>" name="jawaban" value="D">
+                                <label for="answerD_<?= $day ?>"><?= htmlspecialchars($row['opsi_d']) ?></label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary mt-2">Kirim Jawaban</button>
+                        </form>
+                        <?php if ($day === $activeTab): ?>
+                            <div class="mt-3 text-<?= $showModal ? 'success' : 'danger' ?>"><?= $feedback; ?></div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php $day++; ?>
+            <?php endforeach; ?>
         </div>
     </div>
-</div>
 
-<!-- Footer -->
-<?php include 'footer.php'; ?>
+    <!-- Modal -->
+    <?php if ($showModal): ?>
+        <div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content text-center">
+                    <div class="modal-body">
+                        <h2 class="text-warning fw-bold">Selamat!</h2>
+                        <p class="text-dark fs-4">Anda telah menyelesaikan tantangan hari ini!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-success" data-bs-dismiss="modal">Lanjut</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const modal = new bootstrap.Modal(document.getElementById('successModal'));
+                modal.show();
+            });
+        </script>
+    <?php endif; ?>
 
-<!-- JavaScript -->
-<script>
-    let apiPoints = 0; // Inisialisasi Poin Api
-
-    // Tampilkan bagian Daily Coding setelah tombol mulai diklik
-    document.getElementById('start-button').addEventListener('click', function () {
-        document.getElementById('intro-section').style.display = 'none';
-        document.getElementById('daily-coding-section').style.display = 'block';
-    });
-
-    function checkAnswer(day) {
-        const userAnswer = document.querySelector(`input[name="answer[${day}]"]:checked`)?.value;
-        const feedback = document.getElementById(`feedback-${day}`);
-        const idDailyCoding = day; // Gunakan nilai day sebagai id_daily_coding
-        const idUser = 1; // Contoh ID pengguna (gunakan ID pengguna yang valid di aplikasi Anda)
-
-        // Pastikan jawaban dipilih
-        if (!userAnswer) {
-            feedback.textContent = "Pilih jawaban terlebih dahulu!";
-            feedback.className = "feedback incorrect";
-            return;
-        }
-
-        // Kirim data ke server untuk validasi
-        fetch('daily-coding.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({
-                id_user: idUser,
-                id_daily_coding: idDailyCoding,
-                jawaban_user: userAnswer,
-            }),
-        })
-
-        if (userCode === solutions[day].trim()) {
-            feedback.textContent = "Kode Anda Benar!";
-            feedback.className = "feedback correct";
-            apiPoints++; // Tambahkan Poin Api
-            document.getElementById('api-points').textContent = apiPoints; // Perbarui tampilan poin
-            const modal = new bootstrap.Modal(document.getElementById('exampleModal'));
-            modal.show();
-        } else {
-            feedback.textContent = "Kode Anda Salah. Coba Lagi!";
-            feedback.className = "feedback incorrect";
-        }
-    }
-    
-    function nextChallenge() {
-        const activeTab = document.querySelector('.nav-pills .nav-link.active');
-        const nextTab = activeTab.parentElement.nextElementSibling?.querySelector('.nav-link');
-        if (nextTab) {
-            nextTab.click();
-        }
-    }
-</script>
-
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

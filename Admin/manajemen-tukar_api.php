@@ -119,9 +119,7 @@ $result = $pdo->query($sql);
         <h3>TUKAR API</h3>
         <div>
           <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addModal">Tambah Penukaran</button>
-          <button class="btn btn-primary me-2">Excel</button>
-          <button class="btn btn-primary me-2">Word</button>
-          <button class="btn btn-primary">PDF</button>
+
         </div>
       </div>
 
@@ -226,18 +224,18 @@ $result = $pdo->query($sql);
   </div>
 
   <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-          <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1">Previous</a>
-          </li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item">
-            <a class="page-link" href="#">Next</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
+    <ul class="pagination justify-content-center">
+      <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1">Previous</a>
+      </li>
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item">
+        <a class="page-link" href="#">Next</a>
+      </li>
+    </ul>
+  </nav>
+  </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

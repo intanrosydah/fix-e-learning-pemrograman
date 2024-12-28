@@ -3,39 +3,39 @@ include 'config2.php'; // File koneksi database
 
 // Proses Tambah Data
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create') {
-    $nama_paket_api = $_POST['nama_paket_api'];
-    $api_minimal = $_POST['api_minimal'];
+  $nama_paket_api = $_POST['nama_paket_api'];
+  $api_minimal = $_POST['api_minimal'];
 
-    $sql = "INSERT INTO paket_api (nama_paket_api, api_minimal) VALUES (:nama_paket_api, :api_minimal)";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([
-        ':nama_paket_api' => $nama_paket_api,
-        ':api_minimal' => $api_minimal
-    ]);
+  $sql = "INSERT INTO paket_api (nama_paket_api, api_minimal) VALUES (:nama_paket_api, :api_minimal)";
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute([
+    ':nama_paket_api' => $nama_paket_api,
+    ':api_minimal' => $api_minimal
+  ]);
 }
 
 // Proses Update Data
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update') {
-    $id_paket_api = $_POST['id_paket_api'];
-    $nama_paket_api = $_POST['nama_paket_api'];
-    $api_minimal = $_POST['api_minimal'];
+  $id_paket_api = $_POST['id_paket_api'];
+  $nama_paket_api = $_POST['nama_paket_api'];
+  $api_minimal = $_POST['api_minimal'];
 
-    $sql = "UPDATE paket_api SET nama_paket_api = :nama_paket_api, api_minimal = :api_minimal WHERE id_paket_api = :id_paket_api";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([
-        ':nama_paket_api' => $nama_paket_api,
-        ':api_minimal' => $api_minimal,
-        ':id_paket_api' => $id_paket_api
-    ]);
+  $sql = "UPDATE paket_api SET nama_paket_api = :nama_paket_api, api_minimal = :api_minimal WHERE id_paket_api = :id_paket_api";
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute([
+    ':nama_paket_api' => $nama_paket_api,
+    ':api_minimal' => $api_minimal,
+    ':id_paket_api' => $id_paket_api
+  ]);
 }
 
 // Proses Hapus Data
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'delete') {
-    $id_paket_api = $_GET['id'];
+  $id_paket_api = $_GET['id'];
 
-    $sql = "DELETE FROM paket_api WHERE id_paket_api = :id_paket_api";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([':id_paket_api' => $id_paket_api]);
+  $sql = "DELETE FROM paket_api WHERE id_paket_api = :id_paket_api";
+  $stmt = $pdo->prepare($sql);
+  $stmt->execute([':id_paket_api' => $id_paket_api]);
 }
 
 // Query untuk mendapatkan data
@@ -46,7 +46,7 @@ $result = $pdo->query($sql);
 <html lang="en">
 
 <head>
-<meta charset="UTF-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SISFO - Paket API</title>
   <link
@@ -104,9 +104,7 @@ $result = $pdo->query($sql);
         <h3>PAKET API</h3>
         <div>
           <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addModal">Tambah Paket API</button>
-          <button class="btn btn-primary me-2">Excel</button>
-          <button class="btn btn-primary me-2">Word</button>
-          <button class="btn btn-primary">PDF</button>
+
         </div>
       </div>
 
@@ -114,11 +112,11 @@ $result = $pdo->query($sql);
         <table class="table table-striped">
           <thead>
             <tr>
-                <th>No</th>
-                <th>ID Paket API</th>
-                <th>Nama Paket API</th>
-                <th>API Minimal</th>
-                <th>Aksi</th>
+              <th>No</th>
+              <th>ID Paket API</th>
+              <th>Nama Paket API</th>
+              <th>API Minimal</th>
+              <th>Aksi</th>
             </tr>
           </thead>
           <tbody>
@@ -172,37 +170,38 @@ $result = $pdo->query($sql);
             ?>
           </tbody>
         </table>
-    </div>
+      </div>
 
-        <!-- Modal Tambah Data -->
-        <div class="modal fade" id="addModal" tabindex="-1">
-            <div class="modal-dialog">
-                <form method="POST">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Tambah Data</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="nama_paket_api" class="form-label">Nama Paket API</label>
-                                <input type="text" class="form-control" name="nama_paket_api" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="api_minimal" class="form-label">API Minimal</label>
-                                <input type="number" class="form-control" name="api_minimal" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-primary">Simpan</button>
-                            <input type="hidden" name="action" value="create">
-                        </div>
-                    </div>
-                </form>
+      <!-- Modal Tambah Data -->
+      <div class="modal fade" id="addModal" tabindex="-1">
+        <div class="modal-dialog">
+          <form method="POST">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Tambah Data</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                <div class="mb-3">
+                  <label for="nama_paket_api" class="form-label">Nama Paket API</label>
+                  <input type="text" class="form-control" name="nama_paket_api" required>
+                </div>
+                <div class="mb-3">
+                  <label for="api_minimal" class="form-label">API Minimal</label>
+                  <input type="number" class="form-control" name="api_minimal" required>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+                <input type="hidden" name="action" value="create">
+              </div>
             </div>
+          </form>
         </div>
+      </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

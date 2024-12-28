@@ -23,6 +23,7 @@ try {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -121,91 +122,95 @@ try {
         }
     </style>
 </head>
+
 <body>
-<div class="fixed-container">
-    <button class="btn back-btn" onclick="window.location.href='koridor-dipelajari.php'">Koridor Kelas</button>
+    <div class="fixed-container">
+        <button class="btn back-btn" onclick="window.location.href='koridor-dipelajari.php'">Koridor Kelas</button>
 
-    <div class="module-title">Belajar Dasar AI</div>
+        <div class="module-title">Belajar Dasar AI</div>
 
-    <div class="row">
-        <div class="col-md-4">
-            <h4 class="text-center text-primary">Daftar Modul</h4>
+        <div class="row">
+            <div class="col-md-4">
+                <h4 class="text-center text-primary">Daftar Modul</h4>
 
-            <?php foreach ($result_modul as $modul): ?>
-                <div class="dropdown">
-                    <button onclick="toggleDropdown('dropdown<?php echo $modul['id_modul']; ?>')" class="dropbtn">
-                        <?php echo htmlspecialchars($modul['nama_modul']); ?>
-                    </button>
-                    <div id="dropdown<?php echo $modul['id_modul']; ?>" class="dropdown-content">
-                        <?php
-                        $sql_bab = "SELECT * FROM bab WHERE id_modul = :id_modul";
-                        $stmt_bab = $pdo->prepare($sql_bab);
-                        $stmt_bab->execute([':id_modul' => $modul['id_modul']]);
-                        while ($bab = $stmt_bab->fetch(PDO::FETCH_ASSOC)):
+                <?php foreach ($result_modul as $modul): ?>
+                    <div class="dropdown">
+                        <button onclick="toggleDropdown('dropdown<?php echo $modul['id_modul']; ?>')" class="dropbtn">
+                            <?php echo htmlspecialchars($modul['nama_modul']); ?>
+                        </button>
+                        <div id="dropdown<?php echo $modul['id_modul']; ?>" class="dropdown-content">
+                            <?php
+                            $sql_bab = "SELECT * FROM bab WHERE id_modul = :id_modul";
+                            $stmt_bab = $pdo->prepare($sql_bab);
+                            $stmt_bab->execute([':id_modul' => $modul['id_modul']]);
+                            while ($bab = $stmt_bab->fetch(PDO::FETCH_ASSOC)):
                             ?>
-                            <a href="#" onclick="loadBab(<?php echo $bab['id_bab']; ?>, event)">
-                                <?php echo htmlspecialchars($bab['nama_bab']); ?>
-                            </a>
-                        <?php endwhile; ?>
-                        <a href="kuis.php">Kuis</a>
+                                <a href="#" onclick="loadBab(<?php echo $bab['id_bab']; ?>, event)">
+                                    <?php echo htmlspecialchars($bab['nama_bab']); ?>
+                                </a>
+                            <?php endwhile; ?>
+                            <a href="kuis.php">Kuis</a>
+                        </div>
                     </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
+                <?php endforeach; ?>
+            </div>
 
-        <div class="col-md-8">
-            <div class="border p-3">
-                <h3 class="text-primary">Konten Materi</h3>
-                <p>Pilih bab untuk melihat konten.</p>
+            <div class="col-md-8">
+                <div class="border p-3">
+                    <h3 class="text-primary">Konten Materi</h3>
+                    <p>Pilih bab untuk melihat konten.</p>
+                </div>
             </div>
         </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <button class="btn navigation-buttons">← Sebelumnya</button>
+            <button class="btn navigation-buttons" onclick="window.location.href='koridor-diselesaikan.php'">Selanjutnya →</button>
+        </div>
     </div>
 
-    <div class="d-flex justify-content-between mt-4">
-        <button class="btn navigation-buttons">← Sebelumnya</button>
-        <button class="btn navigation-buttons" onclick="window.location.href='koridor-diselesaikan.php'">Selanjutnya →</button>
-    </div>
-</div>
-
-<script>
-    function toggleDropdown(dropdownId) {
-        closeAllDropdowns();
-        document.getElementById(dropdownId).classList.toggle("show");
-    }
-
-    function closeAllDropdowns() {
-        var dropdowns = document.getElementsByClassName("dropdown-content");
-        for (var i = 0; i < dropdowns.length; i++) {
-            dropdowns[i].classList.remove("show");
-        }
-    }
-
-    function loadBab(idBab, event) {
-        event.preventDefault(); // Mencegah reload halaman
-        fetch(`get_bab_content.php?id_bab=${idBab}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    document.querySelector(".border p").innerHTML = data.content;
-                } else {
-                    document.querySelector(".border p").innerHTML = data.message;
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                document.querySelector(".border p").innerHTML = "Terjadi kesalahan saat mengambil konten.";
-            });
-    }
-
-    window.onclick = function (event) {
-        if (!event.target.matches(".dropbtn") && !event.target.closest(".dropdown-content")) {
+    <script>
+        function toggleDropdown(dropdownId) {
             closeAllDropdowns();
+            document.getElementById(dropdownId).classList.toggle("show");
         }
-    };
-</script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        function closeAllDropdowns() {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            for (var i = 0; i < dropdowns.length; i++) {
+                dropdowns[i].classList.remove("show");
+            }
+        }
+
+        function loadBab(idBab, event) {
+            event.preventDefault(); // Mencegah reload halaman
+            fetch(`get_bab_content.php?id_bab=${idBab}`)
+                .then(response => response.json())
+                .then(data => {
+                    const contentContainer = document.querySelector(".border p");
+                    if (data.success) {
+                        contentContainer.innerHTML = data.content;
+                    } else {
+                        contentContainer.innerHTML = data.message;
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    document.querySelector(".border p").innerHTML = "Terjadi kesalahan saat mengambil konten.";
+                });
+        }
+
+
+        window.onclick = function(event) {
+            if (!event.target.matches(".dropbtn") && !event.target.closest(".dropdown-content")) {
+                closeAllDropdowns();
+            }
+        };
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
 
 <?php

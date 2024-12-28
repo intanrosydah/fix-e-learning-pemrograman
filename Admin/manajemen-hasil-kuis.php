@@ -27,6 +27,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     ]);
 }
 
+// Proses Update Data
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update') {
+    $id_hasil = $_POST['id_hasil'];
+    $id_user = $_POST['id_user'];
+    $id_kuis = $_POST['id_kuis'];
+    $skor = $_POST['skor'];
+    $tanggal_selesai = $_POST['tanggal_selesai'];
+
+    $sql = "UPDATE hasil_kuis 
+            SET id_user = :id_user, id_kuis = :id_kuis, skor = :skor, tanggal_selesai = :tanggal_selesai 
+            WHERE id_hasil = :id_hasil";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        ':id_hasil' => $id_hasil,
+        ':id_user' => $id_user,
+        ':id_kuis' => $id_kuis,
+        ':skor' => $skor,
+        ':tanggal_selesai' => $tanggal_selesai
+    ]);
+}
+
+// Proses Hapus Data
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'delete') {
+    $id_hasil = $_GET['id'];
+
+    $sql = "DELETE FROM hasil_kuis WHERE id_hasil = :id_hasil";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':id_hasil' => $id_hasil]);
+}
+
+
+
 // Query untuk mendapatkan data dengan JOIN
 $sql = "SELECT hasil_kuis.id_hasil, hasil_kuis.id_user, hasil_kuis.id_kuis, hasil_kuis.skor, hasil_kuis.tanggal_selesai, 
         user.name AS nama_user, kuis.nama_kuis
