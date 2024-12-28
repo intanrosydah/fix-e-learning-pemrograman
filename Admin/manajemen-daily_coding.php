@@ -246,10 +246,6 @@ $result = $pdo->query($sql);
                             </div>
                             <div class="modal-body">
                                 <div class="mb-3">
-                                    <label for="id_daily_coding" class="form-label">ID Daily Coding</label>
-                                    <input type="text" class="form-control" name="id_daily_coding" required>
-                                </div>
-                                <div class="mb-3">
                                     <label for="kode_soal" class="form-label">Kode Soal</label>
                                     <input type="text" class="form-control" name="kode_soal" required>
                                 </div>
