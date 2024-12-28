@@ -241,7 +241,7 @@ $result = $pdo->query($sql);
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
               </div>
               <div class="modal-body">
-                <div class="mb-3">                  
+                <div class="mb-3">
                   <label for="id" class="form-label">Nama Pengguna</label>
                   <select class="form-control" name="id" required>
                     <option value="">Pilih Nama Pengguna</option>
@@ -280,17 +280,17 @@ $result = $pdo->query($sql);
                   <input type="number" class="form-control" name="skor_akhir" required>
                 </div>
               </div>
-              < class="modal-footer">
+              <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                 <button type="submit" class="btn btn-primary">Simpan</button>
                 <input type="hidden" name="action" value="create">
+              </div>
             </div>
+          </form>
         </div>
-        </form>
       </div>
-    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
