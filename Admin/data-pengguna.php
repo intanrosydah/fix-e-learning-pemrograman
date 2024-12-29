@@ -95,7 +95,7 @@ $result = $pdo->query($sql);
     <div class="content pt-5 mt-3">
         <div class="container mt-5">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3>user KURSUS</h3>
+                <h3>USER KURSUS</h3>
                 <div>
                     <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addModal">Tambah user</button>
                 </div>
@@ -108,7 +108,7 @@ $result = $pdo->query($sql);
                             <th>No</th>
                             <th>ID user</th>
                             <th>Nama user</th>
-                            <th>Harga user</th>
+                            <th>Email user</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -145,7 +145,7 @@ $result = $pdo->query($sql);
                                                         <input type='text' class='form-control' name='name' value='" . htmlspecialchars($row['name']) . "' required>
                                                     </div>
                                                     <div class='mb-3'>
-                                                        <label for='email' class='form-label'>Harga user</label>
+                                                        <label for='email' class='form-label'>Email user</label>
                                                         <input type='text' class='form-control' name='email' value='" . htmlspecialchars($row['email']) . "' required>
                                                     </div>
                                                 </div>
@@ -180,7 +180,7 @@ $result = $pdo->query($sql);
                                     <input type="text" class="form-control" name="name" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="email" class="form-label">Harga user</label>
+                                    <label for="email" class="form-label">Email user</label>
                                     <input type="text" class="form-control" name="email" required>
                                 </div>
                             </div>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,20 +9,17 @@
     <!-- Font Awesome CDN -->
     <link
         rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
 
     <!-- Bootstrap CSS -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-    />
+        rel="stylesheet" />
 
     <!-- Google Font -->
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap"
-        rel="stylesheet"
-    />
+        rel="stylesheet" />
 
     <style>
         body {
@@ -49,6 +47,7 @@
         }
     </style>
 </head>
+
 <body>
     <?php
     require 'config.php';
@@ -76,7 +75,9 @@
             // Eksekusi query
             $stmt->execute();
 
-            $message = "Registrasi berhasil!";
+            // Redirect ke halaman profil setelah registrasi berhasil
+            header("Location: loginfix.php");
+            exit(); // Menghentikan eksekusi script setelah redirect
         } catch (PDOException $e) {
             $message = "Error: " . $e->getMessage();
         }
@@ -86,18 +87,10 @@
     <section class="vh-100">
         <div class="container py-5 h-custom">
             <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col-md-9 col-lg-6 col-xl-5">
-                    <img
-                        src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-                        class="img-fluid"
-                        alt="Sample image"
-                    />
-                </div>
                 <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
                     <form method="post">
                         <div
-                            class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start mb-4"
-                        >
+                            class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start mb-4">
                             <p class="lead fw-normal text-center me-3">REGISTER</p>
                         </div>
 
@@ -115,8 +108,7 @@
                                 class="form-control form-control-lg"
                                 name="name"
                                 placeholder="Enter your name"
-                                required
-                            />
+                                required />
                             <label class="form-label" for="formName">Name</label>
                         </div>
 
@@ -128,8 +120,7 @@
                                 class="form-control form-control-lg"
                                 name="username"
                                 placeholder="Enter your username"
-                                required
-                            />
+                                required />
                             <label class="form-label" for="formUsername">Username</label>
                         </div>
 
@@ -141,8 +132,7 @@
                                 class="form-control form-control-lg"
                                 name="email"
                                 placeholder="Enter a valid email"
-                                required
-                            />
+                                required />
                             <label class="form-label" for="formEmail">Email address</label>
                         </div>
 
@@ -154,8 +144,7 @@
                                 class="form-control form-control-lg"
                                 name="password"
                                 placeholder="Enter password"
-                                required
-                            />
+                                required />
                             <label class="form-label" for="formPassword">Password</label>
                         </div>
 
@@ -164,8 +153,7 @@
                                 type="submit"
                                 class="btn btn-primary btn-lg"
                                 style="padding-left: 2.5rem; padding-right: 2.5rem"
-                                onclick="window.location.href='loginfix.php'"
-                            >
+                                onclick="window.location.href='loginfix.php'">
                                 Register
                             </button>
                         </div>
@@ -178,4 +166,5 @@
     <!-- Bootstrap JS and Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

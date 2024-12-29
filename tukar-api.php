@@ -48,10 +48,11 @@ $paketApi = $stmt->fetchAll(PDO::FETCH_ASSOC);
       font-family: "Montserrat", sans-serif;
       background-color: #092635;
       color: white;
+      margin-top: 100px;
     }
 
     .content {
-      margin-top: 130px;
+      padding-top: 100px;
     }
 
     .card {

@@ -128,7 +128,7 @@ $result = $pdo->query($sql);
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h3>HASIL KUIS PENGGUNA</h3>
                 <div>
-                    <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addModal">Tambah Kuis</button>
+                    <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addModal">Tambah Hasil Kuis</button>
                 </div>
             </div>
 
