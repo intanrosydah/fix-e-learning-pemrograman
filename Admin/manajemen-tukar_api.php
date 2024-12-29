@@ -118,7 +118,7 @@ $result = $pdo->query($sql);
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h3>TUKAR API</h3>
         <div>
-          <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addModal">Tambah Penukaran</button>
+          <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#addModal">Tambah Penukaran Api</button>
 
         </div>
       </div>
@@ -152,12 +152,75 @@ $result = $pdo->query($sql);
                           <a href='?action=delete&id=" . $row['id_tukar_api'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Yakin ingin menghapus data ini?\")'>Hapus</a>
                         </td>
                       </tr>";
-              }
-            }
-            ?>
-          </tbody>
-        </table>
-      </div>
+
+                // Modal Edit
+                echo "<div class='modal fade' id='editModal" . $row['id_tukar_api'] . "' tabindex='-1'>
+                <div class='modal-dialog'>
+                  <form method='POST'>
+                    <div class='modal-content'>
+                      <div class='modal-header'>
+                        <h5 class='modal-title'>Edit Penukaran Api</h5>
+                        <button type='button' class='btn-close' data-bs-dismiss='modal'></button>
+                      </div>
+                      <div class='modal-body'>
+                        <input type='hidden' name='id_tukar_api' value='" . htmlspecialchars($row['id_tukar_api']) . "'>
+
+                        <div class='mb-3'>
+                          <label for='id_user' class='form-label'>Nama Pengguna</label>
+                          <select class='form-control' name='id_user' required>";
+
+          $sql_users = "SELECT id, name FROM user";
+          $stmt_users = $pdo->query($sql_users);
+          while ($user = $stmt_users->fetch()) {
+            $selected = ($user['id'] == $row['id_user']) ? "selected" : "";
+            echo "<option value='" . $user['id'] . "' $selected>" . htmlspecialchars($user['name']) . "</option>";
+          }
+
+          echo "      </select>
+                        </div>
+
+                        <div class='mb-3'>
+                          <label for='id_paket_api' class='form-label'>Nama Paket</label>
+                          <select class='form-control' name='id_paket_api' required>";
+
+          $sql_paket = "SELECT id_paket, nama_paket FROM paket";
+          $stmt_paket = $pdo->query($sql_paket);
+          while ($paket = $stmt_paket->fetch()) {
+            $selected = ($paket['id_paket'] == $row['id_paket_api']) ? "selected" : "";
+            echo "<option value='" . $paket['id_paket'] . "' $selected>" . htmlspecialchars($paket['nama_paket']) . "</option>";
+          }
+
+          echo "      </select>
+                        </div>
+
+                        <div class='mb-3'>
+                          <label for='api_ditukarkan' class='form-label'>API Ditukarkan</label>
+                          <input type='number' class='form-control' name='api_ditukarkan' value='" . $row['api_ditukarkan'] . "' required>
+                        </div>
+
+                        <div class='mb-3'>
+                          <label for='status_penukaran' class='form-label'>Status Penukaran</label>
+                          <select class='form-control' name='status_penukaran' required>
+                            <option value='berhasil' " . ($row['status_penukaran'] === 'berhasil' ? 'selected' : '') . ">Berhasil</option>
+                            <option value='gagal' " . ($row['status_penukaran'] === 'gagal' ? 'selected' : '') . ">Gagal</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class='modal-footer'>
+                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Batal</button>
+                        <button type='submit' class='btn btn-primary'>Simpan</button>
+                        <input type='hidden' name='action' value='update'>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>";
+        }
+      }
+      ?>
+    </tbody>
+  </table>
+</div>
 
       <!-- Modal Tambah -->
       <div class="modal fade" id="addModal" tabindex="-1">
@@ -165,7 +228,7 @@ $result = $pdo->query($sql);
           <form method="POST">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Tambah Penukaran</h5>
+                <h5 class="modal-title">Tambah Penukaran Api</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
               </div>
               <div class="modal-body">
